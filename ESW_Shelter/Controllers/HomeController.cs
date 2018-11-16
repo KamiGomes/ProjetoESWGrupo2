@@ -4,9 +4,9 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using projetoESWG2.Models;
+using ESW_Shelter.Models;
 
-namespace projetoESWG2.Controllers
+namespace ESW_Shelter.Controllers
 {
     public class HomeController : Controller
     {

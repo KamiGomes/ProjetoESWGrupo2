@@ -1,6 +1,6 @@
 using System;
 
-namespace projetoESWG2.Models
+namespace ESW_Shelter.Models
 {
     public class ErrorViewModel
     {
