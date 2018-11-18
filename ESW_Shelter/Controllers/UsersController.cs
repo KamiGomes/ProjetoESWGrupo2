@@ -47,12 +47,6 @@ namespace ESW_Shelter.Controllers
         {
             return View();
         }
-
-        //GET: Users/Login
-        public IActionResult Login()
-        {
-            return View();
-        }
   
         // POST: Users/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
@@ -81,6 +75,7 @@ namespace ESW_Shelter.Controllers
             return View("~/Views/Home/Index.cshtml");
         }
 
+        //Post Login
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Login([Bind("Email,Password")] Users users)
@@ -91,8 +86,7 @@ namespace ESW_Shelter.Controllers
                 {
                     HttpContext.Session.SetString("User_Name", user_name);
                     TempData["Message"] = "Success Logging In User!";
-                    return RedirectToAction("", new { name = user_name });
-                    //return Redirect("~/Views/Home/Index.cshtml");
+                    return View("~/Views/Home/Index.cshtml");
                 }
                 else
                 {

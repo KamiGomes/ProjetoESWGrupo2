@@ -1,8 +1,16 @@
 ﻿/* Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification\ 
 for details on configuring this project to bundle and minify static web assets. */
+html {
+    height: 100%;
+}
 body {
+    height: 100%;
+    margin: 0%;
     padding-top: 50px;
     padding-bottom: 20px;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background: linear-gradient(to bottom, #ffffff 16%, #ffcc99 88%);
 }
 
 /* Wrapping element */
@@ -27,11 +35,77 @@ body {
 #qrCode {
     margin: 15px;
 }
+.item {
+    position: relative;
+    max-width: 100%; /* Maximum width */
+    margin: 0 auto; /* Center it */
+}
+.item .carousel-caption {
+    position: absolute;
+    bottom: 0;
+    background: rgb(0, 0, 0); /* Fallback color */
+    background: rgba(0, 0, 0, 0.5); /* Black background with 0.5 opacity */
+    color: #f1f1f1;
+    width: 100%;
+    padding: 20px;
+}
 
+.innerH2 {
+    border-bottom-style: dashed;
+    border-bottom-color: darkorange;
+    border-bottom-width: 2px;
+    font-weight: bold;
+}
+li:hover {
+    background-color: darkgoldenrod;
+}
+.row {
+    background-color: white;
+    margin-top: 5%;
+    border-color: orange;
+    border-style: solid;
+    border-width: 3px;
+}
 /* Hide/rearrange for smaller screens */
-@media screen and (max-width: 767px) {
+@media screen and (max-width: 100% ) {
     /* Hide captions */
     .carousel-caption {
         display: none;
     }
 }
+/*Tabs CSS - W3School*/
+/* Style the tab */
+.tab {
+    overflow: hidden;
+    border: 1px solid #ccc;
+    background-color: #f1f1f1;
+}
+
+    /* Style the buttons that are used to open the tab content */
+    .tab button {
+        background-color: inherit;
+        float: left;
+        border: none;
+        outline: none;
+        cursor: pointer;
+        padding: 14px 16px;
+        transition: 0.3s;
+    }
+
+        /* Change background color of buttons on hover */
+        .tab button:hover {
+            background-color: #ddd;
+        }
+
+        /* Create an active/current tablink class */
+        .tab button.active {
+            background-color: #ccc;
+        }
+
+/* Style the tab content */
+.tabcontent {
+    display: none;
+    padding: 6px 12px;
+    border: 1px solid #ccc;
+    border-top: none;
+} 
