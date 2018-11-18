@@ -1,13 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ESW_Shelter.Models;
-using Microsoft.VisualStudio.Web.CodeGeneration.Contracts.Messaging;
+using Microsoft.AspNetCore.Http;
 
+//hotfix -> Install-Package Microsoft.AspNet.Mvc -Version 5.2.3.0 | Install-Package httpsecurecookie -Version 0.1.1 | Install-Package Microsoft.AspNetCore.Session -Version 2.1.1 
 namespace ESW_Shelter.Controllers
 {
     public class UsersController : Controller
@@ -49,6 +48,12 @@ namespace ESW_Shelter.Controllers
             return View();
         }
 
+        //GET: Users/Login
+        public IActionResult Login()
+        {
+            return View();
+        }
+  
         // POST: Users/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
@@ -64,15 +69,37 @@ namespace ESW_Shelter.Controllers
                     _context.Add(users);
                     await _context.SaveChangesAsync();
                     TempData["Message"] = "Success creating User!";
-                    return RedirectToAction(nameof(Index));
+                    return View("~/Views/Home/Index.cshtml");
                 }
                 else
                 {
+                    
                     ModelState.AddModelError("Email", "Email already exists!");
                     return View(users);
                 }
             }
-            return View(users);
+            return View("~/Views/Home/Index.cshtml");
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Login([Bind("Email,Password")] Users users)
+        {
+            String user_name = (from user in _context.Users where user.Email == users.Email && user.Password == users.Password select user.Name).First();
+
+            if (user_name != null)
+                {
+                    HttpContext.Session.SetString("User_Name", user_name);
+                    TempData["Message"] = "Success Logging In User!";
+                    return RedirectToAction("", new { name = user_name });
+                    //return Redirect("~/Views/Home/Index.cshtml");
+                }
+                else
+                {
+                    ModelState.AddModelError("Email", "Email or Password incorrect!");
+                    return View(users);
+                }
+            
         }
 
         // GET: Users/Edit/5

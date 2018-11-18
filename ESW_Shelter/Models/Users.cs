@@ -13,13 +13,16 @@ namespace ESW_Shelter.Models
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int UserID { get; set; }
+        [StringLength(256, ErrorMessage = "Name cannot be longer than 100 characters!.", MinimumLength = 1)]
         [Required(ErrorMessage = "Missing email!")]
+        [EmailAddress(ErrorMessage = "This is not an Email Address!")]
         public String Email { get; set; }
+        [StringLength(256, ErrorMessage = "Name cannot be longer than 100 characters!.", MinimumLength = 1)]
         [Required(ErrorMessage = "Missing Name!")]
-        [RegularExpression(@"^[a-zA-Z]+$", ErrorMessage = "Please only use leters!")]
+        [RegularExpression(@"^[a-zA-Z\s]+$", ErrorMessage = "Please only use leters!")]
         public String Name { get; set; }
         [Required(ErrorMessage = "Missing Password!")]
-        //[Range(8, 12, ErrorMessage = "Password must contain between 8 to 12 characters!")]
+        [StringLength(12, ErrorMessage = "Name cannot be longer than 12 characters and shorter than 6!.", MinimumLength = 6)]
         public String Password { get; set; }
     }
 

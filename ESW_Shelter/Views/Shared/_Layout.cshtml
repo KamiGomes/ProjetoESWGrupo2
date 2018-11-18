@@ -1,4 +1,9 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.AspNetCore.Http;
+@{
+    ViewData["User_Name"] = Context.Session.GetString("User_Name");
+    ViewData["Title"] = "Index";
+}
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
@@ -33,6 +38,15 @@
                     <li><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
                     <li><a asp-area="" asp-controller="Home" asp-action="About">About</a></li>
                     <li><a asp-area="" asp-controller="Home" asp-action="Contact">Contact</a></li>
+                    @if (ViewData["User_Name"] != null)
+                    {
+                        <li><a asp-area="" asp-controller="Users" asp-action="Create">Welcome @ViewData["User_Name"]!</a></li>
+                    }
+                    else
+                    {
+                        <li><a asp-area="" asp-controller="Users" asp-action="Create">Register Account</a></li>
+                        <li><a asp-area="" asp-controller="Users" asp-action="Login">Login</a></li>
+                    }
                 </ul>
             </div>
         </div>
@@ -68,6 +82,13 @@
         </script>
         <script src="~/js/site.min.js" asp-append-version="true"></script>
     </environment>
+    @if (TempData["Message"] != null)
+    {
+        <div class="green">
+            <p><strong>Success:</strong> @TempData["Message"].ToString()</p>
+        </div>
+    }
+
     @RenderSection("Scripts", required: false)
 </body>
 </html>
