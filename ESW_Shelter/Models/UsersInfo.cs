@@ -34,7 +34,9 @@ namespace ESW_Shelter.Models
         public String Tumblr { get; set; }
         [StringLength(150, ErrorMessage = "Website cannot have more than 150 characters!", MinimumLength = 1)]
         public String Website { get; set; }
-
+        [Required]
         public int UserID { get; set; }
+        /*[ForeignKey("FK_UserInfoID_UserID")]
+        public Users User { get; set; }*/
     }
 }

@@ -28,6 +28,7 @@ namespace ESW_Shelter.Data.Migrations
 
                 b.Property<string>("Password").HasMaxLength(12);
 
+                b.Property<int>("UserInfoID");
                 //b.HasKey("Id");
 
                 b.HasIndex("Email")
@@ -37,10 +38,62 @@ namespace ESW_Shelter.Data.Migrations
                     .IsUnique()
                     .HasName("UserIDIndex")
                     .HasFilter("[UserID] IS NOT NULL");
-
-                b.ToTable("Users");*/
+                    */
+                b.ToTable("Users");
             });
 
+            modelBuilder.Entity("MicrosoftAspNetCore.Identity.IdentityUserInfo<int>", b =>
+            {
+                b.Property<int>("UserInfoID").ValueGeneratedOnAdd();
+
+                b.Property<string>("Street").HasMaxLength(100);
+
+                b.Property<string>("PostalCode").HasMaxLength(10);
+
+                b.Property<string>("City").HasMaxLength(40);
+
+                b.Property<int>("Phone");
+
+                b.Property<int>("AlternativePhone");
+
+                b.Property<string>("AlternativeEmail").HasMaxLength(150);
+
+                b.Property<string>("Facebook").HasMaxLength(150);
+
+                b.Property<string>("Twitter").HasMaxLength(150);
+
+                b.Property<string>("Tumblr").HasMaxLength(150);
+
+                b.Property<string>("Website").HasMaxLength(150);
+
+                b.Property<int>("UserID").IsRequired();
+
+
+                b.HasKey("UserInfoID");
+
+                b.HasIndex("Street")
+                    .HasName("StreetIndex");
+
+                b.HasIndex("PostalCode")
+                    .HasName("PostalCodeIndex");
+
+                b.HasIndex("City")
+                    .HasName("CityIndex");
+                /*b.HasIndex("UserID")
+                    .IsUnique()
+                    .HasName("UserIDIndex")
+                    .HasFilter("[UserID] IS NOT NULL");
+
+                b.ToTable("Users");*/
+
+                b.ToTable("UsersInfo");
+            }
+            );
+            /*
+            modelBuilder.Entity<UsersInfo>()
+                .HasOne<Users>(u => u.User)
+                .WithOne(ui => ui.UserInfo)
+                .HasForeignKey<UsersInfo>(ui => ui.UserInfoID);*/
 #pragma warning restore 612, 618
         }
     }

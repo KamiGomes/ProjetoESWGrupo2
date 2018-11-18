@@ -60,7 +60,11 @@ namespace ESW_Shelter.Controllers
 
                 if (!_context.Users.Any(x => x.Email == users.Email))
                 {
+                    UsersInfo newUserInfo = new UsersInfo();
                     _context.Add(users);
+                    _context.SaveChanges();
+                    newUserInfo.UserID = _context.Users.Max(user => users.UserID);
+                    _context.Add(newUserInfo);
                     await _context.SaveChangesAsync();
                     TempData["Message"] = "Success creating User!";
                     return View("~/Views/Home/Index.cshtml");
@@ -81,10 +85,12 @@ namespace ESW_Shelter.Controllers
         public async Task<IActionResult> Login([Bind("Email,Password")] Users users)
         {
             String user_name = (from user in _context.Users where user.Email == users.Email && user.Password == users.Password select user.Name).First();
+            int user_id = (from user in _context.Users where user.Email == users.Email && user.Password == users.Password select user.UserID).First();
 
             if (user_name != null)
                 {
                     HttpContext.Session.SetString("User_Name", user_name);
+                    HttpContext.Session.SetString("UserID", user_id.ToString());
                     TempData["Message"] = "Success Logging In User!";
                     return View("~/Views/Home/Index.cshtml");
                 }
@@ -109,6 +115,11 @@ namespace ESW_Shelter.Controllers
             {
                 return NotFound();
             }
+            /*var usersInfo = _context.UsersInfo.Where(ui => ui.UserID == id);
+            ViewModel mymodel = new ViewModel();
+            mymodel.User = users;
+            mymodel.UserInfo = (UsersInfo) usersInfo;*/
+
             return View(users);
         }
 

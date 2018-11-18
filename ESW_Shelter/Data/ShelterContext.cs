@@ -14,5 +14,6 @@ namespace ESW_Shelter.Models
         }
 
         public DbSet<ESW_Shelter.Models.Users> Users { get; set; }
+        public DbSet<ESW_Shelter.Models.UsersInfo> UsersInfo { get; set; }
     }
 }
