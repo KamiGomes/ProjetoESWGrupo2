@@ -23,9 +23,8 @@ namespace ESW_Shelter.Models
         public String Name { get; set; }
         [Required(ErrorMessage = "Missing Password!")]
         [StringLength(12, ErrorMessage = "Name cannot be longer than 12 characters and shorter than 6!.", MinimumLength = 6)]
+        [DataType(DataType.Password)]
         public String Password { get; set; }
-        //[ForeignKey("FK_UserInfoID_UserID")]
-        //public UsersInfo UserInfo { get; set; }
 
     }
 
