@@ -47,7 +47,7 @@ namespace ESW_Shelter.Controllers
         {
             return View();
         }
-  
+
         // POST: Users/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
@@ -71,7 +71,7 @@ namespace ESW_Shelter.Controllers
                 }
                 else
                 {
-                    
+
                     ModelState.AddModelError("Email", "Email already exists!");
                     return View(users);
                 }
@@ -84,10 +84,12 @@ namespace ESW_Shelter.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Login([Bind("Email,Password")] Users users)
         {
-            String user_name = (from user in _context.Users where user.Email == users.Email && user.Password == users.Password select user.Name).First();
-            int user_id = (from user in _context.Users where user.Email == users.Email && user.Password == users.Password select user.UserID).First();
+            try
+            {
+                String user_name = (from user in _context.Users where user.Email == users.Email && user.Password == users.Password select user.Name).First();
+                int user_id = (from user in _context.Users where user.Email == users.Email && user.Password == users.Password select user.UserID).First();
 
-            if (user_name != null)
+                if (user_name != null)
                 {
                     HttpContext.Session.SetString("User_Name", user_name);
                     HttpContext.Session.SetString("UserID", user_id.ToString());
@@ -99,7 +101,13 @@ namespace ESW_Shelter.Controllers
                     ModelState.AddModelError("Email", "Email or Password incorrect!");
                     return View(users);
                 }
-            
+            }
+            catch (InvalidOperationException e)
+            {
+                ModelState.AddModelError("Email", "Email or Password incorrect!");
+                return View(users);
+            }
+
         }
 
         // GET: Users/Edit/5
