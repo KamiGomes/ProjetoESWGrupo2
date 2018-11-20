@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace ESW_Shelter.Models
 {
-    public class Profile
+    public class ViewModel
     {
         public Users User { get; set; }
         public UsersInfo UserInfo { get; set; }
