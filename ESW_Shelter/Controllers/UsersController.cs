@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ESW_Shelter.Models;
 using Microsoft.AspNetCore.Http;
+using System.Dynamic;
 
 //hotfix -> Install-Package Microsoft.AspNet.Mvc -Version 5.2.3.0 | Install-Package httpsecurecookie -Version 0.1.1 | Install-Package Microsoft.AspNetCore.Session -Version 2.1.1 
 namespace ESW_Shelter.Controllers
@@ -99,15 +100,35 @@ namespace ESW_Shelter.Controllers
                 else
                 {
                     ModelState.AddModelError("Email", "Email or Password incorrect!");
-                    return View(users);
+                    return View("~/Views/Home/Account.cshtml");
                 }
             }
             catch (InvalidOperationException e)
             {
                 ModelState.AddModelError("Email", "Email or Password incorrect!");
-                return View(users);
+                return View("~/Views/Home/Account.cshtml");
             }
 
+        }
+        // GET: Users/Edit/5
+        public async Task<IActionResult> Profile(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var users = await _context.Users.FindAsync(id);
+            if (users == null)
+            {
+                return NotFound();
+            }
+
+            var usersInfo = _context.UsersInfo.Where(ui => ui.UserID == id).First();
+            Profile mymodel = new Profile();
+            mymodel.User = users;
+            mymodel.UserInfo = usersInfo;
+            return View("~/Views/Home/Profile.cshtml");
         }
 
         // GET: Users/Edit/5
@@ -123,10 +144,6 @@ namespace ESW_Shelter.Controllers
             {
                 return NotFound();
             }
-            /*var usersInfo = _context.UsersInfo.Where(ui => ui.UserID == id);
-            ViewModel mymodel = new ViewModel();
-            mymodel.User = users;
-            mymodel.UserInfo = (UsersInfo) usersInfo;*/
 
             return View(users);
         }

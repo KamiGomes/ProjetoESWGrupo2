@@ -1,7 +1,15 @@
-﻿@model ESW_Shelter.Models.ViewModel;
+﻿@model ESW_Shelter.Models.Profile
 @{
     ViewData["Title"] = "Profile";
     Layout = "~/Views/Shared/_Layout.cshtml";
+
 }
 
 <h2>Profile</h2>
+@using (Html.BeginForm())
+{
+    @Html.EditorFor(o => o.User.Email)
+    @Html.EditorFor(o => o.User.Name)
+    @Html.EditorFor(o => o.User.Password)
+
+}
