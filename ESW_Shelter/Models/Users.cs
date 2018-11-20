@@ -26,6 +26,9 @@ namespace ESW_Shelter.Models
         [DataType(DataType.Password)]
         public String Password { get; set; }
 
+        [ForeignKey("Roles")]
+        [Required(ErrorMessage = "Role Required!")]
+        public int RoleId { get; set; }
     }
 
 }
