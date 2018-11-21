@@ -1,5 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
+using ESW_Shelter.Models;
+using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
 
 namespace ESW_Shelter.Data.Migrations
 {
@@ -15,7 +18,9 @@ namespace ESW_Shelter.Data.Migrations
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     Email = table.Column<string>(nullable: false),
                     Name = table.Column<string>(nullable: false),
-                    Password =  table.Column<string>(nullable: false)
+                    Password = table.Column<string>(nullable: false),
+                    ConfirmedEmail = table.Column<bool>(nullable: false),
+                    RoleId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -53,6 +58,20 @@ namespace ESW_Shelter.Data.Migrations
                         onDelete: ReferentialAction.Cascade);*/
                 }
             );
+
+            migrationBuilder.CreateTable(
+                name: "Roles",
+                columns: table => new
+                {
+                    RoleID = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    RoleName = table.Column<string>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Roles", x => x.RoleID);
+            });
+
             migrationBuilder.CreateIndex(
                 name: "UsersByID",
                 table: "Users",
@@ -64,6 +83,12 @@ namespace ESW_Shelter.Data.Migrations
                 table: "UsersInfo",
                 column: "UserInfoID"
             );
+
+            migrationBuilder.CreateIndex(
+                name: "RolesByID",
+                table: "Roles",
+                column: "RoleID"
+            );
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -72,6 +97,26 @@ namespace ESW_Shelter.Data.Migrations
                 name: "Users");
             migrationBuilder.DropTable(
                 name: "UsersInfo");
+            migrationBuilder.DropTable(
+                name: "Roles");
+        }
+
+        protected void Seed(ShelterContext shelterContext)
+        {
+
+            shelterContext.Roles.Add( 
+                new Roles { RoleID = 1, RoleName = "Client" });
+            shelterContext.Roles.Add(
+                new Roles { RoleID = 2, RoleName = "Volunteer" });
+            shelterContext.Roles.Add(
+                new Roles { RoleID = 3, RoleName = "Employee" });
+            shelterContext.Roles.Add(
+                new Roles { RoleID = 4, RoleName = "Administrator" });
+
+            /*roles.RoleName = "Client";
+            roles.RoleName = "Volunteer";
+            roles.RoleName = "Employee";
+            roles.RoleName = "Administrator";*/
         }
     }
 }

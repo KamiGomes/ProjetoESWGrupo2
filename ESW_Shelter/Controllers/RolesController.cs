@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ESW_Shelter.Models;
 
@@ -38,7 +36,7 @@ namespace ESW_Shelter.Controllers
             }
 
             var roles = await _context.Roles
-                .FirstOrDefaultAsync(m => m.Id == id);
+                .FirstOrDefaultAsync(m => m.RoleID == id);
             if (roles == null)
             {
                 return NotFound();
@@ -58,7 +56,7 @@ namespace ESW_Shelter.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,RoleName")] Roles roles)
+        public async Task<IActionResult> Create([Bind("RoleID,RoleName")] Roles roles)
         {
             if (ModelState.IsValid)
             {
@@ -90,9 +88,9 @@ namespace ESW_Shelter.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,RoleName")] Roles roles)
+        public async Task<IActionResult> Edit(int id, [Bind("RoleID,RoleName")] Roles roles)
         {
-            if (id != roles.Id)
+            if (id != roles.RoleID)
             {
                 return NotFound();
             }
@@ -106,7 +104,7 @@ namespace ESW_Shelter.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!RolesExists(roles.Id))
+                    if (!RolesExists(roles.RoleID))
                     {
                         return NotFound();
                     }
@@ -129,7 +127,7 @@ namespace ESW_Shelter.Controllers
             }
 
             var roles = await _context.Roles
-                .FirstOrDefaultAsync(m => m.Id == id);
+                .FirstOrDefaultAsync(m => m.RoleID == id);
             if (roles == null)
             {
                 return NotFound();
@@ -151,7 +149,7 @@ namespace ESW_Shelter.Controllers
 
         private bool RolesExists(int id)
         {
-            return _context.Roles.Any(e => e.Id == id);
+            return _context.Roles.Any(e => e.RoleID == id);
         }
     }
 }

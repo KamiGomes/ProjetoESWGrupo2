@@ -28,6 +28,8 @@ namespace ESW_Shelter.Data.Migrations
 
                 b.Property<string>("Password").HasMaxLength(12);
 
+                b.Property<bool>("ConfirmedEmail");
+
                 b.Property<int>("UserInfoID");
                 //b.HasKey("Id");
 
@@ -87,6 +89,29 @@ namespace ESW_Shelter.Data.Migrations
                 b.ToTable("Users");*/
 
                 b.ToTable("UsersInfo");
+            }
+            );
+
+
+            modelBuilder.Entity("MicrosoftAspNetCore.Identity.IdentityRoles<int>", b =>
+            {
+                b.Property<int>("RoleID").ValueGeneratedOnAdd();
+
+                b.Property<string>("Name").HasMaxLength(100);
+
+                b.HasKey("RoleID");
+
+                b.HasIndex("Name")
+                    .HasName("NameIndex");
+
+                /*b.HasIndex("UserID")
+                    .IsUnique()
+                    .HasName("UserIDIndex")
+                    .HasFilter("[UserID] IS NOT NULL");
+
+                b.ToTable("Users");*/
+
+                b.ToTable("Roles");
             }
             );
             /*

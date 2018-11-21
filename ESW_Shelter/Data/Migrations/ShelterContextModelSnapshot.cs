@@ -20,14 +20,14 @@ namespace ESW_Shelter.Data.Migrations
 
             modelBuilder.Entity("ESW_Shelter.Models.Roles", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("RoleID")
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("RoleName")
                         .IsRequired();
 
-                    b.HasKey("Id");
+                    b.HasKey("RoleID");
 
                     b.ToTable("Roles");
                 });
@@ -50,7 +50,7 @@ namespace ESW_Shelter.Data.Migrations
                         .IsRequired()
                         .HasMaxLength(12);
 
-                    b.Property<int>("RoleId");
+                    b.Property<int>("RoleID");
 
                     b.HasKey("UserID");
 

@@ -11,6 +11,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
 using ESW_Shelter.Models;
+using System.Web.Mvc;
 
 namespace ESW_Shelter
 {
@@ -34,6 +35,7 @@ namespace ESW_Shelter
             });
 
             //Session cookies
+            services.AddSingleton<IConfiguration>(Configuration);
             services.AddDistributedMemoryCache();
             services.AddSession(options =>
             {
@@ -72,6 +74,11 @@ namespace ESW_Shelter
                 routes.MapRoute(
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
+                /*routes.MapRoute(
+                    "Default",
+                    "{action}/{id}",
+                    new { controller = "Home", action = "Index", id = UrlParameter.Optional }
+                );*/
             });
         }
     }

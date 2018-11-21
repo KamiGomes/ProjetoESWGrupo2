@@ -10,7 +10,7 @@ namespace ESW_Shelter.Models
     {
         [Key]
         [Required(ErrorMessage = "Id Required")]
-        public int Id { get; set; }
+        public int RoleID { get; set; }
 
         [Required(ErrorMessage = "Role Name Required")]
         public string RoleName { get; set; }
