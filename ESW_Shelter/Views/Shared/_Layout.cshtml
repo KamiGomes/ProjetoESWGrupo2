@@ -16,6 +16,7 @@
         <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
         <link rel="stylesheet" href="~/css/site.css" />
         <script src="~/js/site.js" asp-append-version="true"></script>
+        <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
     </environment>
     <environment exclude="Development">
         <link rel="stylesheet" href="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.7/css/bootstrap.min.css"
@@ -27,71 +28,69 @@
         <!-- <script src="~/js/site.js" asp-append-version="true"></script> -->
     </environment>
     </head>
-    <body>
-        <nav class="navbar navbar-inverse navbar-fixed-top" style="background-color: transparent; border-bottom-color: transparent">
-            <div class="container">
-                <div class="navbar-header">
-                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                        <span class="sr-only">Toggle navigation</span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </button>
-                    <a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand" style="color: black;font-weight: bold;">ESW_Shelter</a>
-                </div>
-                <div class="navbar-collapse collapse">
-                    <ul class="nav navbar-nav" style="background: linear-gradient(to bottom, #ff9933 32%, #ffcc99 88%);">
-                        <li><a asp-area="" asp-controller="Home" asp-action="Index" style="color: black;">Home</a></li>
-                        <li><a asp-area="" asp-controller="Home" asp-action="About" style="color: black;">About</a></li>
-                        <li><a asp-area="" asp-controller="Home" asp-action="Contact" style="color: black;">Contact</a></li>
-                        @if (ViewData["User_Name"] != null)
-                        {
-                            <li><a asp-area="" asp-controller="Users" asp-action="Edit" asp-route-id="@ViewData["UserID"]" style="color: black;font-weight: bold;">Welcome @ViewData["User_Name"]!</a></li>
-                        }
-                        else
-                        {
-                            <li><a asp-area="" asp-controller="Home" asp-action="Account" style="color: black;">Account</a></li>
-                        }
-                    </ul>
-                </div>
+<body>
+    <nav class="navbar navbar-inverse navbar-fixed-top" style="background-image: linear-gradient(to bottom left, #ff9933 21%, #ffffcc 103%); border-bottom-color: transparent">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand" style="color: black;font-weight: bold;">ESW_Shelter</a>
             </div>
-        </nav>
-
-        <partial name="_CookieConsentPartial" />
-
-        <div class="container body-content">
-            @RenderBody()
-            <hr />
-            <footer>
-                <p>&copy; ESW 2018/19 - Grupo 2 {Roberto Pato, Miguel Gomes, Rafael Botas, David Antunes, David Afonso}</p>
-            </footer>
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav" style="background: linear-gradient(to bottom, #ff9933 32%, #ffcc99 88%);">
+                    <li><a asp-area="" asp-controller="Home" asp-action="Index" style="color: black;">Home</a></li>
+                    <li><a asp-area="" asp-controller="Home" asp-action="About" style="color: black;">About</a></li>
+                    <li><a asp-area="" asp-controller="Home" asp-action="Contact" style="color: black;">Contact</a></li>
+                    @if (ViewData["User_Name"] != null)
+                    {
+                        <li><a asp-area="" asp-controller="Users" asp-action="Edit" asp-route-id="@ViewData["UserID"]" style="color: black;font-weight: bold;">Welcome @ViewData["User_Name"]!</a></li>
+                    }
+                    else
+                    {
+                        <li><a asp-area="" asp-controller="Home" asp-action="Account" style="color: black;">Account</a></li>
+                    }
+                </ul>
+            </div>
         </div>
+    </nav>
 
-        <environment include="Development">
-            <script src="~/lib/jquery/dist/jquery.js"></script>
-            <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
-        </environment>
-        <environment exclude="Development">
-            <script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-3.3.1.min.js"
-                    asp-fallback-src="~/lib/jquery/dist/jquery.min.js"
-                    asp-fallback-test="window.jQuery"
-                    crossorigin="anonymous"
-                    integrity="sha384-tsQFqpEReu7ZLhBV2VZlAu7zcOV+rXbYlF2cqB8txI/8aZajjp4Bqd+V6D5IgvKT">
-            </script>
-            <script src="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.7/bootstrap.min.js"
-                    asp-fallback-src="~/lib/bootstrap/dist/js/bootstrap.min.js"
-                    asp-fallback-test="window.jQuery && window.jQuery.fn && window.jQuery.fn.modal"
-                    crossorigin="anonymous"
-                    integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa">
-            </script>
-            <script src="~/js/site.min.js" asp-append-version="true"></script>
-        </environment>
-        @if (TempData["Message"] != null)
-        {
-            <div class="green">
-                <p><strong>Success:</strong> @TempData["Message"].ToString()</p>
-            </div>
-        }
-        @RenderSection("Scripts", required: false)
-    </body>
+    <partial name="_CookieConsentPartial" />
+
+    <div class="container body-content">
+        @RenderBody()
+        <hr />
+        <footer>
+            <p>&copy; ESW 2018/19 - Grupo 2 {Roberto Pato, Miguel Gomes, Rafael Botas, David Antunes, David Afonso}</p>
+        </footer>
+    </div>
+
+    <environment include="Development">
+        <script src="~/lib/jquery/dist/jquery.js"></script>
+        <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
+    </environment>
+    <environment exclude="Development">
+        <script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-3.3.1.min.js"
+                asp-fallback-src="~/lib/jquery/dist/jquery.min.js"
+                asp-fallback-test="window.jQuery"
+                crossorigin="anonymous"
+                integrity="sha384-tsQFqpEReu7ZLhBV2VZlAu7zcOV+rXbYlF2cqB8txI/8aZajjp4Bqd+V6D5IgvKT">
+        </script>
+        <script src="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.7/bootstrap.min.js"
+                asp-fallback-src="~/lib/bootstrap/dist/js/bootstrap.min.js"
+                asp-fallback-test="window.jQuery && window.jQuery.fn && window.jQuery.fn.modal"
+                crossorigin="anonymous"
+                integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa">
+        </script>
+        <script src="~/js/site.min.js" asp-append-version="true"></script>
+    </environment>
+    @if (TempData["Message"] != null)
+    {
+    <script> $(document).ready(function () { alert('@TempData["Message"].ToString()'); }); </script>
+    }
+    @RenderSection("Scripts", required: false)
+</body>
     </html>

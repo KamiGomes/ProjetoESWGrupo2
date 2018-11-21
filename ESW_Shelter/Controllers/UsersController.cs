@@ -91,7 +91,7 @@ namespace ESW_Shelter.Controllers
                         "<p><h2>Any questions can be sent to this same email. I hope you enjoy the experience</h2></p>";
                     await sender.PostMessage(subj, content, users.Email, users.Name);
                     /** End of Confirmation Email **/
-                    TempData["Message"] = "Success creating User!";
+                    TempData["Message"] = "Your account has been created!Please check your email and click on the link to confirm your email before trying to login!";
                     return View("~/Views/Home/Index.cshtml");
                 }
                 else
@@ -117,12 +117,12 @@ namespace ESW_Shelter.Controllers
                 {
                     if (userRetrieved.ConfirmedEmail == false)
                     {
-                        TempData["Message"] = "Id: "+userRetrieved.UserID.ToString()+"| Confirmed: "+userRetrieved.ConfirmedEmail.ToString() ;
+                        TempData["Message"] = "This email has not been confirmed yet! Please check your email!";
                         return View("~/Views/Home/Index.cshtml");
                     }
                     HttpContext.Session.SetString("User_Name", userRetrieved.Name);
                     HttpContext.Session.SetString("UserID", userRetrieved.UserID.ToString());
-                    TempData["Message"] = "Success Logging In User!";
+                    TempData["Message"] = "Login sucessfull!";
                     return View("~/Views/Home/Index.cshtml");
                 }
                 else
