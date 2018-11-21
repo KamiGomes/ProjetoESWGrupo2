@@ -83,7 +83,8 @@ namespace ESW_Shelter.Controllers
                     /** Send Confirmation Email **/
                     NotificationSender sender = new NotificationSender(_configuration);
                     int user_id = (from user in _context.Users select user.UserID).Max();
-                    string link = String.Format("<h3><a href=\"https://localhost:44359/Users/ConfirmEmail/{0}\">Click here to confirm your account so you can login with it!</a></h3>", user_id);
+                    string link = String.Format("<h3><a href=\"https://eswshelter.azurewebsites.net/Users/ConfirmEmail/{0}\">Click here to confirm your account so you can login with it!</a></h3>", user_id);
+                    //string link = String.Format("<h3><a href=\"https://localhost:44359/Users/ConfirmEmail/{0}\">Click here to confirm your account so you can login with it!</a></h3>", user_id);
                     string subj = "Welcome to our Shelter " + users.Name + "!";
                     string content = "<h1>We, ESW Group 2 Welcome you to our project!</h1>" +
                         "<p><h2>Please, to continue with your registration, we ask that you verify your account in the following link:</h2></p>"+
