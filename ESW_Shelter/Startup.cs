@@ -48,9 +48,6 @@ namespace ESW_Shelter
 
             services.AddDbContext<ShelterContext>(options =>
                     options.UseSqlServer(Configuration.GetConnectionString("ShelterContext")));
-
-            services.AddDbContext<ShelterContext>(options =>
-                    options.UseSqlServer(Configuration.GetConnectionString("RolesContext")));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
