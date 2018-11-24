@@ -19,7 +19,8 @@ namespace ESW_Shelter.Controllers
         // GET: Roles
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Roles.ToListAsync());
+            var roles = await _context.Roles.ToListAsync();
+            return View(roles);
         }
 
         private IActionResult View(object p)

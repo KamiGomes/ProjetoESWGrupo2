@@ -82,7 +82,7 @@ namespace ESW_Shelter.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return RedirectToAction("ErrorNotFoundOrSomeOtherError");
             }
 
             var userProfile = (from user in _context.Users
@@ -108,10 +108,30 @@ namespace ESW_Shelter.Controllers
                                    userInfo.Instagram,
                                    userInfo.Tumblr,
                                    userInfo.Website
-                               }).First();
+                               }).AsEnumerable().Select(x => new Profile
+                               {
+                                   UserID = x.UserID,
+                                   Email = x.Email,
+                                   Password = x.Password,
+                                   ConfirmedEmail = x.ConfirmedEmail,
+                                   RoleID = x.RoleID,
+                                   Name = x.Name,
+                                   UserInfoID = x.UserInfoID,
+                                   Street = x.Street,
+                                   PostalCode = x.PostalCode,
+                                   City = x.City,
+                                   Phone = x.Phone,
+                                   AlternativePhone = x.AlternativePhone,
+                                   AlternativeEmail = x.AlternativeEmail,
+                                   Facebook = x.Facebook,
+                                   Twitter = x.Twitter,
+                                   Instagram = x.Instagram,
+                                   Tumblr = x.Tumblr,
+                                   Website = x.Website
+                               }).First(); ;
             if (userProfile == null)
             {
-                return NotFound();
+                return RedirectToAction("ErrorNotFoundOrSomeOtherError");
             }
 
             return View(userProfile);
@@ -210,15 +230,13 @@ namespace ESW_Shelter.Controllers
         {
             if (id == null)
             {
-                TempData["Message"] = "Page not allowed!";
-                return View("~/Views/Home/Index.cshtml");
+                return RedirectToAction("ErrorNotFoundOrSomeOtherError");
             }
 
             Users users = await _context.Users.FindAsync(id);
             if (users == null)
             {
-                TempData["Message"] = "User not Found!";
-                return View("~/Views/Home/Index.cshtml");
+                return RedirectToAction("ErrorNotFoundOrSomeOtherError");
             }
             users.ConfirmedEmail = true;
             _context.Update(users);
@@ -237,7 +255,7 @@ namespace ESW_Shelter.Controllers
         {
             if (id == null || type == null)
             {
-                return NotFound();
+                return RedirectToAction("ErrorNotFoundOrSomeOtherError");
             }
             var users = await _context.Users.FindAsync(id);
             var userProfile = (from user in _context.Users
@@ -288,16 +306,16 @@ namespace ESW_Shelter.Controllers
             };
             if (users == null)
             {
-                return NotFound();
+                return RedirectToAction("ErrorNotFoundOrSomeOtherError");
             }
             if (type == false)
             {
-                return View("Profile", profile);
+                return View("~/Views/Home/Profile.cshtml", profile);
             } else if (type == true)
             {
                 return View("Edit", profile);
             }
-            return View();
+            return View("~/Views/Home/Index.cshtml");
         }
 
 
@@ -307,7 +325,7 @@ namespace ESW_Shelter.Controllers
         {
             if (id != profile.UserID)
             {
-                return NotFound();
+                return RedirectToAction("ErrorNotFoundOrSomeOtherError");
             }
             if (ModelState.IsValid)
             {
@@ -324,13 +342,12 @@ namespace ESW_Shelter.Controllers
                         RoleID = profile.RoleID
                     };
                     _context.Users.Update(updateUser);
-                    await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
                     if (!UsersExists(profile.UserID))
                     {
-                        return NotFound();
+                        return RedirectToAction("ErrorNotFoundOrSomeOtherError");
                     }
                     else
                     {
@@ -357,7 +374,6 @@ namespace ESW_Shelter.Controllers
                         UserID = profile.UserID
                     };
                     _context.UsersInfo.Update(updateUserInfo);
-                    await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -370,11 +386,11 @@ namespace ESW_Shelter.Controllers
                         throw;
                     }
                 }
-
+                await _context.SaveChangesAsync();
                 TempData["Message"] = "Profile updated sucessfully!";
-                return View("~/Views/Home/Index.cshtml");
+                return RedirectToAction("Edit", new { id = profile.UserID, type = false });
             }
-            return View();
+            return View("~/Views/Home/Index.cshtml");
         }
 
         // GET: Users/Delete/5
@@ -382,14 +398,14 @@ namespace ESW_Shelter.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return RedirectToAction("ErrorNotFoundOrSomeOtherError");
             }
 
             var users = await _context.Users
                 .FirstOrDefaultAsync(m => m.UserID == id);
             if (users == null)
             {
-                return NotFound();
+                return RedirectToAction("ErrorNotFoundOrSomeOtherError");
             }
 
             return View(users);
@@ -410,6 +426,13 @@ namespace ESW_Shelter.Controllers
 
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
+        }
+
+        //Goes here if anything goes wrong
+        public async Task<IActionResult> ErrorNotFoundOrSomeOtherError()
+        {
+            TempData["Message"] = "Access Denied";
+            return View("~/Views/Home/Index.cshtml");
         }
 
         private bool UsersExists(int id)

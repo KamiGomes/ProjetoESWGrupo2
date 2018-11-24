@@ -1,4 +1,4 @@
-﻿@model ESW_Shelter.Models.Users
+﻿@model ESW_Shelter.Models.Profile
 
 @{
     ViewData["Title"] = "Details";
@@ -29,9 +29,75 @@
         <dd>
             @Html.DisplayFor(model => model.Password)
         </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.ConfirmedEmail)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ConfirmedEmail)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.RoleID)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.RoleID)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Street)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Street)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.PostalCode)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.PostalCode)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.AlternativePhone)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.AlternativePhone)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.AlternativeEmail)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.AlternativeEmail)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Facebook)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Facebook)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Twitter)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Twitter)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Instagram)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Instagram)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Tumblr)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Tumblr)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Website)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Website)
+        </dd>
     </dl>
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model.UserID">Edit</a> |
+    <a asp-action="Edit" asp-route-id="@Model.UserID" asp-route-type="@true">Edit</a> |
     <a asp-action="Index">Back to List</a>
 </div>
