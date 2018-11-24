@@ -2,14 +2,13 @@
 @{
     ViewData["User_Name"] = Context.Session.GetString("User_Name");
     ViewData["UserID"] = Context.Session.GetString("UserID");
-    ViewData["Title"] = "Index";
 }
 <!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - ESW_Shelter</title>
+    <title>@System.Reflection.Assembly.GetEntryAssembly().GetName().Name</title>
 
     <environment include="Development">
         <!-- Manter aqui o  css e o js quando abrir no visual studio -->
