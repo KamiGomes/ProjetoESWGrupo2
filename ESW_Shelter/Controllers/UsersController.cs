@@ -12,6 +12,7 @@ using System.Collections.Generic;
 using Microsoft.Extensions.Configuration;
 using System.Security.Cryptography;
 using System.Text;
+using Microsoft.AspNetCore.Routing;
 //hotfix -> Install-Package Microsoft.AspNet.Mvc -Version 5.2.3.0 | Install-Package httpsecurecookie -Version 0.1.1 | Install-Package Microsoft.AspNetCore.Session -Version 2.1.1 
 namespace ESW_Shelter.Controllers
 {
@@ -26,13 +27,57 @@ namespace ESW_Shelter.Controllers
             _configuration = configuration;
         }
 
-        // GET: Users
+        // Backoffice - GET: Users
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Users.ToListAsync());
+
+            var userProfile = (from user in _context.Users
+                               join userInfo in _context.UsersInfo on user.UserID equals userInfo.UserID
+                               select new
+                               {
+                                   user.UserID,
+                                   user.Email,
+                                   user.Password,
+                                   user.Name,
+                                   user.ConfirmedEmail,
+                                   user.RoleID,
+                                   userInfo.UserInfoID,
+                                   userInfo.Street,
+                                   userInfo.PostalCode,
+                                   userInfo.City,
+                                   userInfo.Phone,
+                                   userInfo.AlternativePhone,
+                                   userInfo.AlternativeEmail,
+                                   userInfo.Facebook,
+                                   userInfo.Twitter,
+                                   userInfo.Instagram,
+                                   userInfo.Tumblr,
+                                   userInfo.Website
+                               }).AsEnumerable().Select(x => new Profile
+                               {
+                                   UserID = x.UserID,
+                                   Email = x.Email,
+                                   Password = x.Password,
+                                   ConfirmedEmail = x.ConfirmedEmail,
+                                   RoleID = x.RoleID,
+                                   Name = x.Name,
+                                   UserInfoID = x.UserInfoID,
+                                   Street = x.Street,
+                                   PostalCode = x.PostalCode,
+                                   City = x.City,
+                                   Phone = x.Phone,
+                                   AlternativePhone = x.AlternativePhone,
+                                   AlternativeEmail = x.AlternativeEmail,
+                                   Facebook = x.Facebook,
+                                   Twitter = x.Twitter,
+                                   Instagram = x.Instagram,
+                                   Tumblr = x.Tumblr,
+                                   Website = x.Website
+                               }).ToList();
+            return View(userProfile);
         }
 
-        // GET: Users/Details/5
+        // Backoffice - GET: Users/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -40,25 +85,45 @@ namespace ESW_Shelter.Controllers
                 return NotFound();
             }
 
-            var users = await _context.Users
-                .FirstOrDefaultAsync(m => m.UserID == id);
-            if (users == null)
+            var userProfile = (from user in _context.Users
+                               join userInfo in _context.UsersInfo on user.UserID equals userInfo.UserID
+                               where user.UserID == id
+                               select new
+                               {
+                                   user.UserID,
+                                   user.Email,
+                                   user.Password,
+                                   user.Name,
+                                   user.ConfirmedEmail,
+                                   user.RoleID,
+                                   userInfo.UserInfoID,
+                                   userInfo.Street,
+                                   userInfo.PostalCode,
+                                   userInfo.City,
+                                   userInfo.Phone,
+                                   userInfo.AlternativePhone,
+                                   userInfo.AlternativeEmail,
+                                   userInfo.Facebook,
+                                   userInfo.Twitter,
+                                   userInfo.Instagram,
+                                   userInfo.Tumblr,
+                                   userInfo.Website
+                               }).First();
+            if (userProfile == null)
             {
                 return NotFound();
             }
 
-            return View(users);
+            return View(userProfile);
         }
 
-        // GET: Users/Create
+        //Backoffice - GET: Users/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Users/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        //Frontoffice - POST: Users/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("UserID,Email,Name,Password,RoleID,ConfirmedEmail")] Users users)
@@ -86,7 +151,7 @@ namespace ESW_Shelter.Controllers
                     string link = String.Format("<h3><a href=\"https://localhost:44359/Users/ConfirmEmail/{0}\">Click here to confirm your account so you can login with it!</a></h3>", user_id);
                     string subj = "Welcome to our Shelter " + users.Name + "!";
                     string content = "<h1>We, ESW Group 2 Welcome you to our project!</h1>" +
-                        "<p><h2>Please, to continue with your registration, we ask that you verify your account in the following link:</h2></p>"+
+                        "<p><h2>Please, to continue with your registration, we ask that you verify your account in the following link:</h2></p>" +
                         link +
                         "<p><h2>Any questions can be sent to this same email. I hope you enjoy the experience</h2></p>";
                     await sender.PostMessage(subj, content, users.Email, users.Name);
@@ -104,7 +169,7 @@ namespace ESW_Shelter.Controllers
             return View("~/Views/Home/Index.cshtml");
         }
 
-        //Post Login
+        //Frontoffice - Post Login
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Login([Bind("Email,Password")] Users users)
@@ -138,8 +203,9 @@ namespace ESW_Shelter.Controllers
             }
 
         }
+
         //[Route("")]
-        // GET: Users/Edit/5
+        //Frontoffice - GET: Users/ConfirmEmail/5
         public async Task<IActionResult> ConfirmEmail(int? id)
         {
             if (id == null)
@@ -164,31 +230,41 @@ namespace ESW_Shelter.Controllers
             TempData["Message"] = "Account activated! Proceed to login in!";
             return View("~/Views/Home/Index.cshtml");
         }
-        // GET: Profile/5
-        public async Task<IActionResult> Profile(int? id)
+
+        /***************** Unchecked if correct **************************************************/
+
+        public async Task<IActionResult> Edit(int? id, Boolean? type)
         {
-            if (id == null)
+            if (id == null || type == null)
             {
                 return NotFound();
             }
-
             var users = await _context.Users.FindAsync(id);
-            if (users == null)
-            {
-                return NotFound();
-            }
-            /*var usersInfo = _context.UsersInfo.Where(ui => ui.UserID == id);
-            ViewModel mymodel = new ViewModel();
-            mymodel.User = users;
-            mymodel.UserInfo = (UsersInfo) usersInfo;*/
-
             var userProfile = (from user in _context.Users
-                              join userInfo in _context.UsersInfo on user.UserID equals userInfo.UserID
-                              where user.UserID == id
-                              select new {user.UserID, user.Email, user.Password,user.Name,user.ConfirmedEmail,user.RoleID, userInfo.UserInfoID, userInfo.Street,
-                                userInfo.PostalCode, userInfo.City, userInfo.Phone, userInfo.AlternativePhone,
-                                userInfo.AlternativeEmail, userInfo.Facebook, userInfo.Twitter,
-                                userInfo.Instagram, userInfo.Tumblr, userInfo.Website}).First();
+                               join userInfo in _context.UsersInfo on user.UserID equals userInfo.UserID
+                               where user.UserID == id
+                               select new
+                               {
+                                   user.UserID,
+                                   user.Email,
+                                   user.Password,
+                                   user.Name,
+                                   user.ConfirmedEmail,
+                                   user.RoleID,
+                                   userInfo.UserInfoID,
+                                   userInfo.Street,
+                                   userInfo.PostalCode,
+                                   userInfo.City,
+                                   userInfo.Phone,
+                                   userInfo.AlternativePhone,
+                                   userInfo.AlternativeEmail,
+                                   userInfo.Facebook,
+                                   userInfo.Twitter,
+                                   userInfo.Instagram,
+                                   userInfo.Tumblr,
+                                   userInfo.Website
+                               }).First();
+
             Profile profile = new Profile()
             {
                 UserID = userProfile.UserID,
@@ -210,12 +286,24 @@ namespace ESW_Shelter.Controllers
                 Tumblr = userProfile.Tumblr,
                 Website = userProfile.Website
             };
-            return View(profile);
+            if (users == null)
+            {
+                return NotFound();
+            }
+            if (type == false)
+            {
+                return View("Profile", profile);
+            } else if (type == true)
+            {
+                return View("Edit", profile);
+            }
+            return View();
         }
+
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Profile(int id, [Bind("UserID, Email, Password, Name, ConfirmedEmail, RoleID, UserInfoID, Street, PostalCode, City, Phone, AlternativePhone, AlternativeEmail, Facebook, Twitter, Instagram, Tumblr, Website")] Profile profile)
+        public async Task<IActionResult> Edit(int id, [Bind("UserID, Email, Password, Name, ConfirmedEmail, RoleID, UserInfoID, Street, PostalCode, City, Phone, AlternativePhone, AlternativeEmail, Facebook, Twitter, Instagram, Tumblr, Website")] Profile profile)
         {
             if (id != profile.UserID)
             {
@@ -287,113 +375,6 @@ namespace ESW_Shelter.Controllers
                 return View("~/Views/Home/Index.cshtml");
             }
             return View();
-            /*if (id == null)
-            {
-                return NotFound();
-            }
-
-            var users = await _context.Users.FindAsync(id);
-            if (users == null)
-            {
-                return NotFound();
-            }
-            var usersInfo = _context.UsersInfo.Where(ui => ui.UserID == id);
-            ViewModel mymodel = new ViewModel();
-            mymodel.User = users;
-            mymodel.UserInfo = (UsersInfo) usersInfo;*/
-            /*
-            var userProfile = (from user in _context.Users
-                               join userInfo in _context.UsersInfo on user.UserID equals userInfo.UserID
-                               where user.UserID == id
-                               select new
-                               {
-                                   user.UserID,
-                                   user.Email,
-                                   user.Password,
-                                   user.Name,
-                                   userInfo.UserInfoID,
-                                   userInfo.Street,
-                                   userInfo.PostalCode,
-                                   userInfo.City,
-                                   userInfo.Phone,
-                                   userInfo.AlternativePhone,
-                                   userInfo.AlternativeEmail,
-                                   userInfo.Facebook,
-                                   userInfo.Twitter,
-                                   userInfo.Instagram,
-                                   userInfo.Tumblr,
-                                   userInfo.Website
-                               }).First();
-            Profile profile = new Profile()
-            {
-                Email = userProfile.Email,
-                Password = userProfile.Password,
-                Name = userProfile.Name,
-                Street = userProfile.Street,
-                PostalCode = userProfile.PostalCode,
-                City = userProfile.City,
-                Phone = userProfile.Phone,
-                AlternativePhone = userProfile.AlternativePhone,
-                AlternativeEmail = userProfile.AlternativeEmail,
-                Facebook = userProfile.Facebook,
-                Twitter = userProfile.Twitter,
-                Instagram = userProfile.Instagram,
-                Tumblr = userProfile.Tumblr,
-                Website = userProfile.Website
-            };
-            return View(profile);*/
-        }
-
-        // GET: Users/Edit/5
-        public async Task<IActionResult> Edit(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var users = await _context.Users.FindAsync(id);
-            if (users == null)
-            {
-                return NotFound();
-            }
-
-            return View(users);
-        }
-
-        // POST: Users/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("UserID,Email,Name,Password")] Users users)
-        {
-            if (id != users.UserID)
-            {
-                return NotFound();
-            }
-
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(users);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!UsersExists(users.UserID))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            return View(users);
         }
 
         // GET: Users/Delete/5
@@ -419,8 +400,14 @@ namespace ESW_Shelter.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
+            var userInfo = (from ui in _context.UsersInfo
+                            where ui.UserID == id
+                            select ui).First();
+            _context.UsersInfo.Remove(userInfo);
+
             var users = await _context.Users.FindAsync(id);
             _context.Users.Remove(users);
+
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }

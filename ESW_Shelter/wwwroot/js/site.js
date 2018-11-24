@@ -3,8 +3,7 @@
 
 // Write your JavaScript code.
 //Tabs JS - W3School
-document.getElementById("defaultOpen").click();
-function openCity(evt, tabName) {
+function openTab(evt, tabName) {
     // Declare all variables
     var i, tabcontent, tablinks;
 
@@ -24,3 +23,4 @@ function openCity(evt, tabName) {
     document.getElementById(tabName).style.display = "block";
     evt.currentTarget.className += " active";
 } 
+document.getElementById("defaultOpen").click();

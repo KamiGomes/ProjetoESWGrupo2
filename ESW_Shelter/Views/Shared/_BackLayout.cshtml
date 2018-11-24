@@ -1,4 +1,9 @@
-﻿@using Microsoft.AspNetCore.Http;
+﻿
+@{
+    Layout = null;
+}
+
+@using Microsoft.AspNetCore.Http;
 @{
     ViewData["User_Name"] = Context.Session.GetString("User_Name");
     ViewData["UserID"] = Context.Session.GetString("UserID");
@@ -27,45 +32,62 @@
         <!-- <link rel="stylesheet" href="~/css/site.css" /> -->
         <!-- <script src="~/js/site.js" asp-append-version="true"></script> -->
     </environment>
-    </head>
+</head>
 <body>
-    <div class="body-content">
-        <nav class="navbar navbar-inverse navbar-fixed-top" style="background-image: linear-gradient(to bottom left, #ff9933 21%, #ffffcc 103%); border-bottom-color: transparent">
-            <div class="container">
-                <div class="navbar-header">
-                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                        <span class="sr-only">Toggle navigation</span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </button>
-                    <a asp-area="" asp-controller="Home" asp-action="Index" style="color: black;">
-                        <img src="~/images/navIcon.png" alt="ASP.NET" class="img-responsive" />
-                    </a>
-                </div>
-                <div class="navbar-collapse collapse">
-                    <ul class="nav navbar-nav" style="background: linear-gradient(to bottom, #ff9933 32%, #ffcc99 88%);">
-                        <li><a asp-area="" asp-controller="Home" asp-action="Index" style="color: black;">Home</a></li>
-                        <li><a asp-area="" asp-controller="Home" asp-action="About" style="color: black;">About</a></li>
-                        <li><a asp-area="" asp-controller="Home" asp-action="Contact" style="color: black;">Contact</a></li>
-                        @if (ViewData["User_Name"] != null)
-                        {
-                            <li><a asp-area="" asp-controller="Users" asp-action="Edit" asp-route-id="@ViewData["UserID"]" asp-route-type="@false" style="color: black;font-weight: bold;">Welcome @ViewData["User_Name"]!</a></li>
-                        }
-                        else
-                        {
-                            <li><a asp-area="" asp-controller="Home" asp-action="Account" style="color: black;">Account</a></li>
-                        }
-                    </ul>
-                </div>
+    <nav class="navbar navbar-inverse navbar-fixed-top" style="background-image: linear-gradient(to bottom left, #ff9933 21%, #ffffcc 103%); border-bottom-color: transparent">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a asp-area="" asp-controller="Home" asp-action="Index" style="color: black;">
+                    <img src="~/images/navIcon.png" alt="ASP.NET" class="img-responsive" />
+                </a>
             </div>
-        </nav>
-    </div>
-    <div class="body-content">
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav" style="background: linear-gradient(to bottom, #ff9933 32%, #ffcc99 88%);">
+                    <li><a asp-area="" asp-controller="Home" asp-action="Index" style="color: black;">Home</a></li>
+                    <li><a asp-area="" asp-controller="Home" asp-action="About" style="color: black;">About</a></li>
+                    <li><a asp-area="" asp-controller="Home" asp-action="Contact" style="color: black;">Contact</a></li>
+                    @if (ViewData["User_Name"] != null)
+                    {
+                        <li><a asp-area="" asp-controller="Users" asp-action="Profile" asp-route-id="@ViewData["UserID"]" style="color: black;font-weight: bold;">Welcome @ViewData["User_Name"]!</a></li>
+                    }
+                    else
+                    {
+                        <li><a asp-area="" asp-controller="Home" asp-action="Account" style="color: black;">Account</a></li>
+                    }
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <partial name="_CookieConsentPartial" />
+
+    <div class="container body-content">
         @RenderBody()
         <hr />
-    </div>
-    <div class="body-content">
+        <div class="row">
+            <h2>Management</h2>
+        </div>
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-4 col-sm-6">
+                    <div class="vertical-menu">
+                        <a href="#" class="active">Home</a>
+                        <a asp-area="" asp-controller="Users" asp-action="Get" style="color: black;">Users</a>
+                        <a href="#">Donations</a>
+                        <a href="#">Animals</a>
+                    </div>
+                </div>
+                <div class="col-8 col-sm-6">
+                    <p>This Page is for backend! Administrators only!</p>
+                </div>
+            </div>
+        </div>
         <!-- Footer -->
         <footer class="page-footer font-small blue">
 
@@ -79,8 +101,6 @@
 
         </footer>
     </div>
-
-    <partial name="_CookieConsentPartial" />
 
     <environment include="Development">
         <script src="~/lib/jquery/dist/jquery.js"></script>
@@ -111,4 +131,5 @@
     }
     @RenderSection("Scripts", required: false)
 </body>
-    </html>
+</html>
+
