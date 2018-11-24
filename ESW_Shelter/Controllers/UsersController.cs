@@ -164,9 +164,8 @@ namespace ESW_Shelter.Controllers
             TempData["Message"] = "Account activated! Proceed to login in!";
             return View("~/Views/Home/Index.cshtml");
         }
-
-        // GET: Users/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        // GET: Profile/5
+        public async Task<IActionResult> Profile(int? id)
         {
             if (id == null)
             {
@@ -182,6 +181,182 @@ namespace ESW_Shelter.Controllers
             ViewModel mymodel = new ViewModel();
             mymodel.User = users;
             mymodel.UserInfo = (UsersInfo) usersInfo;*/
+
+            var userProfile = (from user in _context.Users
+                              join userInfo in _context.UsersInfo on user.UserID equals userInfo.UserID
+                              where user.UserID == id
+                              select new {user.UserID, user.Email, user.Password,user.Name,user.ConfirmedEmail,user.RoleID, userInfo.UserInfoID, userInfo.Street,
+                                userInfo.PostalCode, userInfo.City, userInfo.Phone, userInfo.AlternativePhone,
+                                userInfo.AlternativeEmail, userInfo.Facebook, userInfo.Twitter,
+                                userInfo.Instagram, userInfo.Tumblr, userInfo.Website}).First();
+            Profile profile = new Profile()
+            {
+                UserID = userProfile.UserID,
+                Email = userProfile.Email,
+                Password = userProfile.Password,
+                ConfirmedEmail = userProfile.ConfirmedEmail,
+                RoleID = userProfile.RoleID,
+                Name = userProfile.Name,
+                UserInfoID = userProfile.UserInfoID,
+                Street = userProfile.Street,
+                PostalCode = userProfile.PostalCode,
+                City = userProfile.City,
+                Phone = userProfile.Phone,
+                AlternativePhone = userProfile.AlternativePhone,
+                AlternativeEmail = userProfile.AlternativeEmail,
+                Facebook = userProfile.Facebook,
+                Twitter = userProfile.Twitter,
+                Instagram = userProfile.Instagram,
+                Tumblr = userProfile.Tumblr,
+                Website = userProfile.Website
+            };
+            return View(profile);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Profile(int id, [Bind("UserID, Email, Password, Name, ConfirmedEmail, RoleID, UserInfoID, Street, PostalCode, City, Phone, AlternativePhone, AlternativeEmail, Facebook, Twitter, Instagram, Tumblr, Website")] Profile profile)
+        {
+            if (id != profile.UserID)
+            {
+                return NotFound();
+            }
+            if (ModelState.IsValid)
+            {
+                //Update Users table
+                try
+                {
+                    Users updateUser = new Users()
+                    {
+                        UserID = profile.UserID,
+                        Email = profile.Email,
+                        Name = profile.Name,
+                        Password = profile.Password,
+                        ConfirmedEmail = profile.ConfirmedEmail,
+                        RoleID = profile.RoleID
+                    };
+                    _context.Users.Update(updateUser);
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!UsersExists(profile.UserID))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                // Update UsersInfo table
+                try
+                {
+                    UsersInfo updateUserInfo = new UsersInfo()
+                    {
+                        UserInfoID = profile.UserInfoID,
+                        Street = profile.Street,
+                        PostalCode = profile.PostalCode,
+                        City = profile.City,
+                        Phone = profile.Phone,
+                        AlternativePhone = profile.AlternativePhone,
+                        AlternativeEmail = profile.AlternativeEmail,
+                        Facebook = profile.Facebook,
+                        Twitter = profile.Twitter,
+                        Instagram = profile.Instagram,
+                        Tumblr = profile.Tumblr,
+                        Website = profile.Website,
+                        UserID = profile.UserID
+                    };
+                    _context.UsersInfo.Update(updateUserInfo);
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!UsersInfoExists(profile.UserInfoID))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+
+                TempData["Message"] = "Profile updated sucessfully!";
+                return View("~/Views/Home/Index.cshtml");
+            }
+            return View();
+            /*if (id == null)
+            {
+                return NotFound();
+            }
+
+            var users = await _context.Users.FindAsync(id);
+            if (users == null)
+            {
+                return NotFound();
+            }
+            var usersInfo = _context.UsersInfo.Where(ui => ui.UserID == id);
+            ViewModel mymodel = new ViewModel();
+            mymodel.User = users;
+            mymodel.UserInfo = (UsersInfo) usersInfo;*/
+            /*
+            var userProfile = (from user in _context.Users
+                               join userInfo in _context.UsersInfo on user.UserID equals userInfo.UserID
+                               where user.UserID == id
+                               select new
+                               {
+                                   user.UserID,
+                                   user.Email,
+                                   user.Password,
+                                   user.Name,
+                                   userInfo.UserInfoID,
+                                   userInfo.Street,
+                                   userInfo.PostalCode,
+                                   userInfo.City,
+                                   userInfo.Phone,
+                                   userInfo.AlternativePhone,
+                                   userInfo.AlternativeEmail,
+                                   userInfo.Facebook,
+                                   userInfo.Twitter,
+                                   userInfo.Instagram,
+                                   userInfo.Tumblr,
+                                   userInfo.Website
+                               }).First();
+            Profile profile = new Profile()
+            {
+                Email = userProfile.Email,
+                Password = userProfile.Password,
+                Name = userProfile.Name,
+                Street = userProfile.Street,
+                PostalCode = userProfile.PostalCode,
+                City = userProfile.City,
+                Phone = userProfile.Phone,
+                AlternativePhone = userProfile.AlternativePhone,
+                AlternativeEmail = userProfile.AlternativeEmail,
+                Facebook = userProfile.Facebook,
+                Twitter = userProfile.Twitter,
+                Instagram = userProfile.Instagram,
+                Tumblr = userProfile.Tumblr,
+                Website = userProfile.Website
+            };
+            return View(profile);*/
+        }
+
+        // GET: Users/Edit/5
+        public async Task<IActionResult> Edit(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var users = await _context.Users.FindAsync(id);
+            if (users == null)
+            {
+                return NotFound();
+            }
 
             return View(users);
         }
@@ -254,5 +429,14 @@ namespace ESW_Shelter.Controllers
         {
             return _context.Users.Any(e => e.UserID == id);
         }
+
+        private bool UsersInfoExists(int id)
+        {
+            return _context.UsersInfo.Any(e => e.UserInfoID == id);
+        }
+    }
+
+    internal class UserProfile
+    {
     }
 }

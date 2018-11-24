@@ -2,6 +2,7 @@
 for details on configuring this project to bundle and minify static web assets. */
 html {
     height: 100%;
+    position: relative;;
 }
 body {
     height: 100%;
@@ -11,6 +12,14 @@ body {
     background-repeat: no-repeat;
     background-attachment: fixed;
     background: linear-gradient(to bottom, #ffffff 16%, #ffcc99 88%);
+    position: relative;
+}
+footer {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background: linear-gradient(to bottom right, #ff9933 21%, #ffffcc 103%);
 }
 
 /* Wrapping element */
