@@ -8,8 +8,20 @@ using System.Threading.Tasks;
 
 namespace ESW_Shelter.Models
 {
-    public class Users
+    public class Users : IValidatableObject
     {
+        public string Honeypot { get; set; }
+
+        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+        {
+            if (!String.IsNullOrEmpty(this.Honeypot))
+            {
+                return new[] { new ValidationResult("An error occured") };
+            }
+            return null;
+        }
+
+
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int UserID { get; set; }
