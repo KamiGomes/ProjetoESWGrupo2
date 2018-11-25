@@ -76,10 +76,10 @@ footer {
 }
 
 #myNavBar {
-    width: 80%;
+    width: 85%;
     background: #ff9933;
     position: relative;
-    margin-left: 10%;
+    margin-left: 7%;
 }
 
 #myNavBar > ul {
