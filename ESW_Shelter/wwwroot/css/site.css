@@ -215,3 +215,32 @@ li:hover {
     padding: 6px 12px;
     border-top: none;
 } 
+
+/*Vertical menu*/
+.vertical-menu {
+    width: 200px;
+}
+
+.vertical-menu a {
+    background-color: #ff9933;
+    color: white;
+    display: block;
+    padding: 12px;
+    text-decoration: none;
+}
+.vertical-menu a:hover {
+    background-color: #ccc;
+
+}
+.vertical-menu a.active {
+    background-color: darkorange;
+    color: white;
+}
+/* table css*/
+@media only screen and (max-width: 480px) {
+    /* horizontal scrollbar for tables if mobile screen */
+    .tablemobile {
+        overflow-x: auto;
+        display: block;
+    }
+}

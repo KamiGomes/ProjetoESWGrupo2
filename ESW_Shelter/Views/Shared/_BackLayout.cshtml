@@ -12,21 +12,19 @@
 }
 
 <div class="row">
-    <h2>Management</h2>
+    <h2 style="margin-left: 15%;">Management</h2>
 </div>
 <div class="container-fluid">
     <div class="row">
-        <div class="col-4 col-sm-6">
+        <div class="col-md-2 no-float">
             <div class="vertical-menu">
                 <a href="#" class="active">Home</a>
-                <a asp-area="" asp-controller="Users" asp-action="Index" style="color: black;">Users</a>
-                <a asp-area="" asp-controller="Roles" asp-action="Index" style="color: black;">Roles</a>
+                <a asp-area="" asp-controller="Users" asp-action="Index">Users</a>
+                <a asp-area="" asp-controller="Roles" asp-action="Index">Roles</a>
                 <a href="#">Donations</a>
                 <a href="#">Animals</a>
             </div>
         </div>
-        <div class="col-8 col-sm-6">
-            @RenderBody()
-        </div>
+        <div class="col-md-9 no-float"> @RenderBody()</div>
     </div>
 </div>

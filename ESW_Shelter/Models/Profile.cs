@@ -47,17 +47,16 @@ namespace ESW_Shelter.Models
         public String City { get; set; }
 
         [DataType(DataType.PhoneNumber)]
-        [RegularExpression("^[0-9]{9,12}$", ErrorMessage = "Phone must have atleast 9! Maximum 12!")]
+        [RegularExpression("^[0-9]{0,12}$", ErrorMessage = "Phone maximum numbers is 12!")]
         [Display(Prompt = "Example: 910000000")]
         public int Phone { get; set; }
 
         [DataType(DataType.PhoneNumber)]
-        [RegularExpression("^[0-9]{9,12}$", ErrorMessage = "Phone must have atleast 9! Maximum 12!")]
+        [RegularExpression("^[0-9]{0,12}$", ErrorMessage = "Phone maximum numbers is 12")]
         [Display(Prompt = "Example: 910000000")]
         public int AlternativePhone { get; set; }
 
         [StringLength(256, ErrorMessage = "Name cannot be longer than 256 characters!.", MinimumLength = 1)]
-        [Required(ErrorMessage = "Missing email!")]
         [EmailAddress(ErrorMessage = "This is not an Email Address!")]
         [Display(Prompt = "Example: example@domain.com")]
         public String AlternativeEmail { get; set; }

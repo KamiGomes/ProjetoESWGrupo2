@@ -168,7 +168,8 @@ namespace ESW_Shelter.Controllers
                     /** Send Confirmation Email **/
                     NotificationSender sender = new NotificationSender(_configuration);
                     int user_id = (from user in _context.Users select user.UserID).Max();
-                    string link = String.Format("<h3><a href=\"https://localhost:44359/Users/ConfirmEmail/{0}\">Click here to confirm your account so you can login with it!</a></h3>", user_id);
+                    //string link = String.Format("<h3><a href=\"https://localhost:44359/Users/ConfirmEmail/{0}\">Click here to confirm your account so you can login with it!</a></h3>", user_id);
+                    string link = String.Format("<h3><a href=\"https://eswshelter.azurewebsites.net/Users/ConfirmEmail/{0}\">Click here to confirm your account so you can login with it!</a></h3>", user_id);
                     string subj = "Welcome to our Shelter " + users.Name + "!";
                     string content = "<h1>We, ESW Group 2 Welcome you to our project!</h1>" +
                         "<p><h2>Please, to continue with your registration, we ask that you verify your account in the following link:</h2></p>" +
@@ -310,6 +311,8 @@ namespace ESW_Shelter.Controllers
             }
             if (type == false)
             {
+                HttpContext.Session.SetString("User_Name", profile.Name);
+                HttpContext.Session.SetString("UserID", profile.UserID.ToString());
                 return View("~/Views/Home/Profile.cshtml", profile);
             } else if (type == true)
             {
@@ -330,6 +333,33 @@ namespace ESW_Shelter.Controllers
             if (ModelState.IsValid)
             {
                 //Update Users table
+               /* Users updateUser = new Users()
+                {
+                    UserID = profile.UserID,
+                    Email = profile.Email,
+                    Name = profile.Name,
+                    Password = profile.Password,
+                    ConfirmedEmail = profile.ConfirmedEmail,
+                    RoleID = profile.RoleID
+                };
+                _context.Users.Update(updateUser);
+                UsersInfo updateUserInfo = new UsersInfo()
+                {
+                    UserInfoID = profile.UserInfoID,
+                    Street = profile.Street,
+                    PostalCode = profile.PostalCode,
+                    City = profile.City,
+                    Phone = profile.Phone,
+                    AlternativePhone = profile.AlternativePhone,
+                    AlternativeEmail = profile.AlternativeEmail,
+                    Facebook = profile.Facebook,
+                    Twitter = profile.Twitter,
+                    Instagram = profile.Instagram,
+                    Tumblr = profile.Tumblr,
+                    Website = profile.Website,
+                    UserID = profile.UserID
+                };
+                _context.UsersInfo.Update(updateUserInfo);*/
                 try
                 {
                     Users updateUser = new Users()
@@ -388,7 +418,7 @@ namespace ESW_Shelter.Controllers
                 }
                 await _context.SaveChangesAsync();
                 TempData["Message"] = "Profile updated sucessfully!";
-                return RedirectToAction("Edit", new { id = profile.UserID, type = false });
+                return RedirectToAction("Edit", "Users", new {id = profile.UserID, type = false });
             }
             return View("~/Views/Home/Index.cshtml");
         }
