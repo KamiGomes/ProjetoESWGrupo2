@@ -113,11 +113,6 @@ footer {
     margin:0;
 }
 
-/* Carousel */
-.carousel-caption p {
-    font-size: 20px;
-    line-height: 1.4;
-}
 
 /* Make .svg files in the carousel display properly in older browsers */
 .carousel-inner .item img[src$=".svg"] {
@@ -134,25 +129,40 @@ footer {
     max-width: 100%; 
     margin: 0 auto; 
 }
+
 .item .carousel-caption {
     position: absolute;
     bottom: 0;
-    background: rgb(0, 0, 0); 
-    background: rgba(0, 0, 0, 0.5); 
-    color: #f1f1f1;
+    left: 0;
+    background: rgba(53, 53, 53, 0.75); 
+    color: white;
     width: 100%;
-    padding: 20px;
+    height: 20%;
+    padding: 0;
 }
 
-    .item .carousel-caption {
-        position: absolute;
-        bottom: 0;
-        background: rgb(0, 0, 0); /* Fallback color */
-        background: rgba(0, 0, 0, 0.5); /* Black background with 0.5 opacity */
-        color: #f1f1f1;
-        width: 100%;
-        padding: 20px;
-    }
+.carousel-caption > p {
+    font-size: 20px;
+    position: absolute;
+    width: 100%;
+    line-height: 70px;
+    text-shadow: 0px 0px 2px black, 0px 0px 5px black;
+}
+
+.carousel-indicators > li {
+    width: 5px;
+    height: 5px;
+    background-color: white;
+}
+
+.carousel-indicators > li.active {
+    width: 8px;
+    height: 8px;
+}
+
+.carousel-indicators {
+    bottom: 0;
+}
 
 .innerH2 {
     border-bottom-style: dashed;
