@@ -13,9 +13,11 @@
     <environment include="Development">
         <!-- Manter aqui o  css e o js quando abrir no visual studio -->
         <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
-        <!-- <link rel="stylesheet" href="~/css/site.css" />
-    <script src="~/js/site.js" asp-append-version="true"></script>-->
+        <link rel="stylesheet" href="~/css/site.css" />
+        <script src="~/js/site.js" asp-append-version="true"></script>
         <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+        <link rel="stylesheet" href="~/css/site.css" />
+
     </environment>
     <environment exclude="Development">
         <link rel="stylesheet" href="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.7/css/bootstrap.min.css"
@@ -66,15 +68,16 @@
         @RenderBody()
     </div>
 
-    <hr />
     <!-- Footer -->
     <footer class="page-footer font-small blue">
 
         <!-- Copyright -->
         <div class="footer-copyright text-center py-3">
-            © 2018 Copyright:
-            <a href="https://mdbootstrap.com/education/bootstrap/"> MDBootstrap.com</a>
-            <p>&copy; ESW 2018/19 - Grupo 2 { Roberto Pato, Miguel Gomes, Rafael Botas, David Antunes, David Afonso }</p>
+            <p>
+                &copy; 2018 Copyright:
+                <a href="https://mdbootstrap.com/education/bootstrap/"> MDBootstrap.com</a>
+            </br>
+            &copy; ESW 2018/19 - Grupo 2 { Roberto Pato, Miguel Gomes, Rafael Botas, David Antunes, David Afonso }</p>
         </div>
         <!-- Copyright -->
 
