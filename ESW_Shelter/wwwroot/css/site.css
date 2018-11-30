@@ -181,6 +181,21 @@ li:hover {
     background-color: darkgoldenrod;
 }
 
+.dropdown-menu {
+    background: #ffcc99;
+    width: 300px;
+    height: 175px;
+    padding: 0;
+}
+
+    .dropdown-menu .dropdown-item {
+        margin: 0;
+        width: 100%;
+        height: 100%;
+        padding: 10px;
+        font-size: 12px;
+    }
+
 /* Hide/rearrange for smaller screens */
 @media screen and (max-width: 100% ) {
     .carousel-caption {
@@ -191,6 +206,30 @@ li:hover {
 .img-responsive {
     width: 100%;
 }
+
+.dropdown-menu .dropdown-item .form-group {
+    margin: 0 0 5px 0;
+}
+
+.dropdown-menu .dropdown-item label {
+    color: grey !important;
+}
+
+.dropdown-menu .dropdown-item input {
+    font-size: 12px;
+    color: white;
+}
+
+.dropdown-menu a {
+    position: relative !important;
+    padding: 0 !important;
+    left: 10px !important;
+    top: 10px !important;
+    font-weight: normal !important;
+    color: grey !important;
+    font-size: 10px !important;
+}
+
 /*Tabs CSS - W3School*/
 /* Style the tab */
 .tab {
@@ -211,15 +250,21 @@ li:hover {
         background-image: linear-gradient(to bottom, #ff9933 32%, #ffcc99 88%);
     }
 
-        /* Change background color of buttons on hover */
-        .tab button:hover {
-            background-color: #ddd;
-        }
+.right {
+    position: absolute;
+    right: 15px;
+    bottom: 10px;
+}
 
-        /* Create an active/current tablink class */
-        .tab button.active {
-            background-color: black;
-        }
+/* Change background color of buttons on hover */
+.tab button:hover {
+    background-color: #ddd;
+}
+
+/* Create an active/current tablink class */
+.tab button.active {
+    background-color: black;
+}
 
 
 /* Style the tab content */
