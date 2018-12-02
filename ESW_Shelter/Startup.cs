@@ -12,6 +12,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
 using ESW_Shelter.Models;
 using System.Web.Mvc;
+using ESW_Shelter.Data;
 
 namespace ESW_Shelter
 {
@@ -43,7 +44,6 @@ namespace ESW_Shelter
                 options.IdleTimeout = TimeSpan.FromSeconds(10);
                 options.Cookie.HttpOnly = true;
             });
-
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
             services.AddDbContext<ShelterContext>(options =>

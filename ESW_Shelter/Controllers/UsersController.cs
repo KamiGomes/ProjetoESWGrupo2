@@ -4,15 +4,13 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ESW_Shelter.Models;
-using ESW_Shelter.Controllers;
 using Microsoft.AspNetCore.Http;
-using SendGrid;
-using SendGrid.Helpers.Mail;
 using System.Collections.Generic;
 using Microsoft.Extensions.Configuration;
-using System.Security.Cryptography;
-using System.Text;
-using Microsoft.AspNetCore.Routing;
+using ESW_Shelter.Data;
+using RestSharp;
+using RestSharp.Authenticators;
+
 //hotfix -> Install-Package Microsoft.AspNet.Mvc -Version 5.2.3.0 | Install-Package httpsecurecookie -Version 0.1.1 | Install-Package Microsoft.AspNetCore.Session -Version 2.1.1 
 namespace ESW_Shelter.Controllers
 {
@@ -166,16 +164,18 @@ namespace ESW_Shelter.Controllers
                     _context.Add(newUserInfo);
                     await _context.SaveChangesAsync();
                     /** Send Confirmation Email **/
-                    NotificationSender sender = new NotificationSender(_configuration);
+
                     int user_id = (from user in _context.Users select user.UserID).Max();
+                    //SendSimpleMessage();
                     //string link = String.Format("<h3><a href=\"https://localhost:44359/Users/ConfirmEmail/{0}\">Click here to confirm your account so you can login with it!</a></h3>", user_id);
+                    var result = new MailSenderController(_configuration).PostMessage();
                     string link = String.Format("<h3><a href=\"https://eswshelter.azurewebsites.net/Users/ConfirmEmail/{0}\">Click here to confirm your account so you can login with it!</a></h3>", user_id);
                     string subj = "Welcome to our Shelter " + users.Name + "!";
                     string content = "<h1>We, ESW Group 2 Welcome you to our project!</h1>" +
                         "<p><h2>Please, to continue with your registration, we ask that you verify your account in the following link:</h2></p>" +
                         link +
                         "<p><h2>Any questions can be sent to this same email. I hope you enjoy the experience</h2></p>";
-                    await sender.PostMessage(subj, content, users.Email, users.Name);
+                    //await sender.PostMessage(subj, content, users.Email, users.Name);
                     /** End of Confirmation Email **/
                     TempData["Message"] = "Your account has been created!Please check your email and click on the link to confirm your email before trying to login!";
                     return View("~/Views/Home/Index.cshtml");
