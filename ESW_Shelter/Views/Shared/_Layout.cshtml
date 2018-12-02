@@ -1,9 +1,9 @@
 ﻿@using Microsoft.AspNetCore.Http;
 @model ESW_Shelter.Models.Users;
-@*@{
+@{
     ViewData["User_Name"] = Context.Session.GetString("User_Name");
     ViewData["UserID"] = Context.Session.GetString("UserID");
-}*@
+}
 <!DOCTYPE html>
 <html>
 <head>
@@ -50,6 +50,7 @@
                     @if (ViewData["User_Name"] != null)
                     {
                         <li class="navbar-right"><a class="nav-item nav-link active" asp-area="" asp-controller="Users" asp-action="Edit" asp-route-id="@ViewData["UserID"]" asp-route-type="@false" style="color: black;font-weight: bold;">Welcome @ViewData["User_Name"]!</a></li>
+                        <li class="navbar-right"><a class="nav-item nav-link active" asp-area="" asp-controller="Users" asp-action="Logout" asp-route-id="@ViewData["UserID"]" asp-route-type="@false" style="color: black;font-weight: bold;">Logout</a></li>
                     }
                     else
                     {
@@ -71,7 +72,7 @@
                                             <input asp-for="Password" class="form-control" />
                                             <span asp-validation-for="Password" class="text-danger"></span>
                                         </div>
-                                        <div class="form-group" >
+                                        <div class="form-group">
                                             <a href="#">Register</a>
                                             <input type="submit" value="Login" class="btn btn-primary button-image right" />
                                         </div>

@@ -72,6 +72,7 @@ namespace ESW_Shelter.Controllers
                                    Tumblr = x.Tumblr,
                                    Website = x.Website
                                }).ToList();
+            GetLogin();
             return View(userProfile);
         }
 
@@ -131,7 +132,7 @@ namespace ESW_Shelter.Controllers
             {
                 return RedirectToAction("ErrorNotFoundOrSomeOtherError");
             }
-
+            GetLogin();
             return View(userProfile);
         }
 
@@ -206,8 +207,7 @@ namespace ESW_Shelter.Controllers
                         TempData["Message"] = "This email has not been confirmed yet! Please check your email!";
                         return View("~/Views/Home/Index.cshtml");
                     }
-                    HttpContext.Session.SetString("User_Name", userRetrieved.Name);
-                    HttpContext.Session.SetString("UserID", userRetrieved.UserID.ToString());
+                    MaintainLogin(userRetrieved.Name, userRetrieved.UserID.ToString());
                     TempData["Message"] = "Login sucessfull!";
                     return View("~/Views/Home/Index.cshtml");
                 }
@@ -250,6 +250,13 @@ namespace ESW_Shelter.Controllers
             return View("~/Views/Home/Index.cshtml");
         }
 
+        public async Task<IActionResult> Logout(int? id, Boolean? type)
+        {
+            var users = await _context.Users.FindAsync(id);
+            MaintainLogin("","");
+            TempData["Message"] = "Logout sucessfull! Come Back Soon!";
+            return View("~/Views/Home/Index.cshtml");
+        }
         /***************** Unchecked if correct **************************************************/
 
         public async Task<IActionResult> Edit(int? id, Boolean? type)
@@ -258,7 +265,6 @@ namespace ESW_Shelter.Controllers
             {
                 return RedirectToAction("ErrorNotFoundOrSomeOtherError");
             }
-            var users = await _context.Users.FindAsync(id);
             var userProfile = (from user in _context.Users
                                join userInfo in _context.UsersInfo on user.UserID equals userInfo.UserID
                                where user.UserID == id
@@ -283,7 +289,10 @@ namespace ESW_Shelter.Controllers
                                    userInfo.Tumblr,
                                    userInfo.Website
                                }).First();
-
+            if (userProfile == null)
+            {
+                return RedirectToAction("ErrorNotFoundOrSomeOtherError");
+            }
             Profile profile = new Profile()
             {
                 UserID = userProfile.UserID,
@@ -305,17 +314,13 @@ namespace ESW_Shelter.Controllers
                 Tumblr = userProfile.Tumblr,
                 Website = userProfile.Website
             };
-            if (users == null)
-            {
-                return RedirectToAction("ErrorNotFoundOrSomeOtherError");
-            }
             if (type == false)
             {
-                HttpContext.Session.SetString("User_Name", profile.Name);
-                HttpContext.Session.SetString("UserID", profile.UserID.ToString());
+                //GetLogin();
                 return View("~/Views/Home/Profile.cshtml", profile);
             } else if (type == true)
             {
+                GetLogin();
                 return View("Edit", profile);
             }
             return View("~/Views/Home/Index.cshtml");
@@ -332,34 +337,6 @@ namespace ESW_Shelter.Controllers
             }
             if (ModelState.IsValid)
             {
-                //Update Users table
-               /* Users updateUser = new Users()
-                {
-                    UserID = profile.UserID,
-                    Email = profile.Email,
-                    Name = profile.Name,
-                    Password = profile.Password,
-                    ConfirmedEmail = profile.ConfirmedEmail,
-                    RoleID = profile.RoleID
-                };
-                _context.Users.Update(updateUser);
-                UsersInfo updateUserInfo = new UsersInfo()
-                {
-                    UserInfoID = profile.UserInfoID,
-                    Street = profile.Street,
-                    PostalCode = profile.PostalCode,
-                    City = profile.City,
-                    Phone = profile.Phone,
-                    AlternativePhone = profile.AlternativePhone,
-                    AlternativeEmail = profile.AlternativeEmail,
-                    Facebook = profile.Facebook,
-                    Twitter = profile.Twitter,
-                    Instagram = profile.Instagram,
-                    Tumblr = profile.Tumblr,
-                    Website = profile.Website,
-                    UserID = profile.UserID
-                };
-                _context.UsersInfo.Update(updateUserInfo);*/
                 try
                 {
                     Users updateUser = new Users()
@@ -437,7 +414,7 @@ namespace ESW_Shelter.Controllers
             {
                 return RedirectToAction("ErrorNotFoundOrSomeOtherError");
             }
-
+            GetLogin();
             return View(users);
         }
 
@@ -455,6 +432,7 @@ namespace ESW_Shelter.Controllers
             _context.Users.Remove(users);
 
             await _context.SaveChangesAsync();
+            GetLogin();
             return RedirectToAction(nameof(Index));
         }
 
@@ -473,6 +451,27 @@ namespace ESW_Shelter.Controllers
         private bool UsersInfoExists(int id)
         {
             return _context.UsersInfo.Any(e => e.UserInfoID == id);
+        }
+
+        private void MaintainLogin(String name, String id)
+        {
+            if(name.Equals(""))
+            {
+                HttpContext.Session.Remove("User_Name");
+                HttpContext.Session.Remove("UserID");
+            } else
+            {
+                HttpContext.Session.SetString("User_Name", name);
+                HttpContext.Session.SetString("UserID", id);
+            }
+        }
+        private void GetLogin()
+        {
+            if (HttpContext.Session.GetString("User_Name") != null && HttpContext.Session.GetString("UserID") != null)
+            {
+                HttpContext.Session.SetString("User_Name", HttpContext.Session.GetString("User_Name"));
+                HttpContext.Session.SetString("UserID", HttpContext.Session.GetString("UserID"));
+            }
         }
     }
 
