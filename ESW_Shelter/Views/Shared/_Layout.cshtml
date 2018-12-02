@@ -1,15 +1,15 @@
 ﻿@using Microsoft.AspNetCore.Http;
-@{
+@model ESW_Shelter.Models.Users;
+@*@{
     ViewData["User_Name"] = Context.Session.GetString("User_Name");
     ViewData["UserID"] = Context.Session.GetString("UserID");
-}
+}*@
 <!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@System.Reflection.Assembly.GetEntryAssembly().GetName().Name</title>
-
     <environment include="Development">
         <!-- Manter aqui o  css e o js quando abrir no visual studio -->
         <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
@@ -27,7 +27,7 @@
         <!-- <link rel="stylesheet" href="~/css/site.css" />
         <script src="~/js/site.js" asp-append-version="true"></script> -->
     </environment>
-    </head>
+</head>
 <body>
     <nav class="navbar navbar-static-top">
         <div class="container">
@@ -53,7 +53,33 @@
                     }
                     else
                     {
-                        <li class="navbar-right"><a class="nav-item nav-link active" asp-area="" asp-controller="Home" asp-action="Account">Account</a></li>
+                        <li class="nav-item dropdown navbar-right">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Dropdown
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <div class="dropdown-item">
+                                    <form asp-action="Login" asp-controller="Users">
+                                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                                        <div class="form-group">
+                                            <label asp-for="Email" class="control-label"></label>
+                                            <input asp-for="Email" class="form-control" />
+                                            <span asp-validation-for="Email" class="text-danger"></span>
+                                        </div>
+                                        <div class="form-group">
+                                            <label asp-for="Password" class="control-label"></label>
+                                            <input asp-for="Password" class="form-control" />
+                                            <span asp-validation-for="Password" class="text-danger"></span>
+                                        </div>
+                                        <div class="form-group" >
+                                            <a href="#">Register</a>
+                                            <input type="submit" value="Login" class="btn btn-primary button-image right" />
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </li>
+                        <!--<li class="navbar-right"><a class="nav-item nav-link active" asp-area="" asp-controller="Home" asp-action="Account">Account</a></li>-->
                     }
                 </ul>
             </div>
@@ -76,8 +102,9 @@
             <p>
                 &copy; 2018 Copyright:
                 <a href="https://mdbootstrap.com/education/bootstrap/"> MDBootstrap.com</a>
-            </br>
-            &copy; ESW 2018/19 - Grupo 2 { Roberto Pato, Miguel Gomes, Rafael Botas, David Antunes, David Afonso }</p>
+                </br>
+                &copy; ESW 2018/19 - Grupo 2 { Roberto Pato, Miguel Gomes, Rafael Botas, David Antunes, David Afonso }
+            </p>
         </div>
         <!-- Copyright -->
 
@@ -111,4 +138,4 @@
     }
     @RenderSection("Scripts", required: false)
 </body>
-    </html>
+</html>
