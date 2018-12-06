@@ -28,7 +28,6 @@ namespace ESW_Shelter.Controllers
         // Backoffice - GET: Users
         public async Task<IActionResult> Index()
         {
-
             var userProfile = (from user in _context.Users
                                join userInfo in _context.UsersInfo on user.UserID equals userInfo.UserID
                                select new
@@ -191,6 +190,11 @@ namespace ESW_Shelter.Controllers
             return View("~/Views/Home/Index.cshtml");
         }
 
+        [HttpGet]
+        public ActionResult Login()
+        {
+            return View("~/Views/Home/Index.cshtml");
+        }
         //Frontoffice - Post Login
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -207,9 +211,10 @@ namespace ESW_Shelter.Controllers
                         TempData["Message"] = "This email has not been confirmed yet! Please check your email!";
                         return View("~/Views/Home/Index.cshtml");
                     }
-                    MaintainLogin(userRetrieved.Name, userRetrieved.UserID.ToString());
+                    LoginSV(userRetrieved.Name, userRetrieved.UserID.ToString());
                     TempData["Message"] = "Login sucessfull!";
-                    return View("~/Views/Home/Index.cshtml");
+
+                    return RedirectToAction("Login");
                 }
                 else
                 {
@@ -250,18 +255,17 @@ namespace ESW_Shelter.Controllers
             return View("~/Views/Home/Index.cshtml");
         }
 
-        public async Task<IActionResult> Logout(int? id, Boolean? type)
+        public async Task<IActionResult> Logout(int? id)
         {
             var users = await _context.Users.FindAsync(id);
-            MaintainLogin("","");
+            LoginSV("","");
             TempData["Message"] = "Logout sucessfull! Come Back Soon!";
             return View("~/Views/Home/Index.cshtml");
         }
-        /***************** Unchecked if correct **************************************************/
 
-        public async Task<IActionResult> Edit(int? id, Boolean? type)
+        public async Task<IActionResult> Profile(int? id)
         {
-            if (id == null || type == null)
+            if (id == null || HttpContext.Session.GetString("User_Name").Equals("") || HttpContext.Session.GetString("UserID").Equals(""))
             {
                 return RedirectToAction("ErrorNotFoundOrSomeOtherError");
             }
@@ -314,13 +318,73 @@ namespace ESW_Shelter.Controllers
                 Tumblr = userProfile.Tumblr,
                 Website = userProfile.Website
             };
-            if (type == false)
-            {
-                //GetLogin();
+                GetLogin();
                 return View("~/Views/Home/Profile.cshtml", profile);
-            } else if (type == true)
+        }
+
+        /***************** Unchecked if correct **************************************************/
+
+        public async Task<IActionResult> Edit(int? id)
+        {
+            if (id == null || !GetLogin())
+            {
+                return RedirectToAction("ErrorNotFoundOrSomeOtherError");
+            }
+            var userProfile = (from user in _context.Users
+                               join userInfo in _context.UsersInfo on user.UserID equals userInfo.UserID
+                               where user.UserID == id
+                               select new
+                               {
+                                   user.UserID,
+                                   user.Email,
+                                   user.Password,
+                                   user.Name,
+                                   user.ConfirmedEmail,
+                                   user.RoleID,
+                                   userInfo.UserInfoID,
+                                   userInfo.Street,
+                                   userInfo.PostalCode,
+                                   userInfo.City,
+                                   userInfo.Phone,
+                                   userInfo.AlternativePhone,
+                                   userInfo.AlternativeEmail,
+                                   userInfo.Facebook,
+                                   userInfo.Twitter,
+                                   userInfo.Instagram,
+                                   userInfo.Tumblr,
+                                   userInfo.Website
+                               }).First();
+            if (userProfile == null)
+            {
+                return RedirectToAction("ErrorNotFoundOrSomeOtherError");
+            }
+            Profile profile = new Profile()
+            {
+                UserID = userProfile.UserID,
+                Email = userProfile.Email,
+                Password = userProfile.Password,
+                ConfirmedEmail = userProfile.ConfirmedEmail,
+                RoleID = userProfile.RoleID,
+                Name = userProfile.Name,
+                UserInfoID = userProfile.UserInfoID,
+                Street = userProfile.Street,
+                PostalCode = userProfile.PostalCode,
+                City = userProfile.City,
+                Phone = userProfile.Phone,
+                AlternativePhone = userProfile.AlternativePhone,
+                AlternativeEmail = userProfile.AlternativeEmail,
+                Facebook = userProfile.Facebook,
+                Twitter = userProfile.Twitter,
+                Instagram = userProfile.Instagram,
+                Tumblr = userProfile.Tumblr,
+                Website = userProfile.Website
+            };
+            if (!GetLogin())
             {
                 GetLogin();
+                return View("~/Views/Home/Profile.cshtml", profile);
+            } else if (GetLogin())
+            {
                 return View("Edit", profile);
             }
             return View("~/Views/Home/Index.cshtml");
@@ -395,7 +459,7 @@ namespace ESW_Shelter.Controllers
                 }
                 await _context.SaveChangesAsync();
                 TempData["Message"] = "Profile updated sucessfully!";
-                return RedirectToAction("Edit", "Users", new {id = profile.UserID, type = false });
+                return RedirectToAction("Edit", "Users", new {id = profile.UserID});
             }
             return View("~/Views/Home/Index.cshtml");
         }
@@ -453,7 +517,7 @@ namespace ESW_Shelter.Controllers
             return _context.UsersInfo.Any(e => e.UserInfoID == id);
         }
 
-        private void MaintainLogin(String name, String id)
+        private void LoginSV(String name, String id)
         {
             if(name.Equals(""))
             {
@@ -463,15 +527,28 @@ namespace ESW_Shelter.Controllers
             {
                 HttpContext.Session.SetString("User_Name", name);
                 HttpContext.Session.SetString("UserID", id);
+                int idint = Int32.Parse(id);
+                var role = (from user in _context.Users where user.UserID == idint select user.RoleID).First();
+                if (role == 4)
+                {
+                    HttpContext.Session.SetString("Ad", "Ad");
+                }
             }
         }
-        private void GetLogin()
+
+        private bool GetLogin()
         {
             if (HttpContext.Session.GetString("User_Name") != null && HttpContext.Session.GetString("UserID") != null)
             {
                 HttpContext.Session.SetString("User_Name", HttpContext.Session.GetString("User_Name"));
                 HttpContext.Session.SetString("UserID", HttpContext.Session.GetString("UserID"));
             }
+            if (HttpContext.Session.GetString("Ad") != null)
+            {
+                HttpContext.Session.SetString("Ad", HttpContext.Session.GetString("Ad"));
+                return true;
+            }
+            return false;
         }
     }
 

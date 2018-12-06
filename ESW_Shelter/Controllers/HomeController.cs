@@ -11,6 +11,11 @@ namespace ESW_Shelter.Controllers
 {
     public class HomeController : Controller
     {
+        public ActionResult Menu()
+        {
+            return PartialView("~/Views/Shared/_Menu.cshtml");
+        }
+
         public IActionResult Index()
         {
             GetLogin();

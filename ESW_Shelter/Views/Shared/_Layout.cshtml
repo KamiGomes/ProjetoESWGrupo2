@@ -1,8 +1,9 @@
 ﻿@using Microsoft.AspNetCore.Http;
-@model ESW_Shelter.Models.Users;
+
 @{
     ViewData["User_Name"] = Context.Session.GetString("User_Name");
     ViewData["UserID"] = Context.Session.GetString("UserID");
+    ViewData["Ad"] = Context.Session.GetString("Ad");
 }
 <!DOCTYPE html>
 <html>
@@ -45,42 +46,20 @@
             <div class="navbar-collapse collapse" id="myNavBar">
                 <ul class="nav navbar-nav">
                     <li class="nav-item"><a class="nav-item nav-link active" asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
-                    <li class="nav-item"><a class="nav-item nav-link active" asp-area="" asp-controller="Home" asp-action="About">About</a></li>
-                    <li><a class="nav-item nav-link active" asp-area="" asp-controller="Home" asp-action="Contact">Contact</a></li>
+                    <li class="nav-item"><a class="nav-item nav-link active" asp-area="" asp-controller="Home" asp-action="About">Donativos</a></li>
+                    <li><a class="nav-item nav-link active" asp-area="" asp-controller="Home" asp-action="Contact">Animais</a></li>
                     @if (ViewData["User_Name"] != null)
                     {
-                        <li class="navbar-right"><a class="nav-item nav-link active" asp-area="" asp-controller="Users" asp-action="Edit" asp-route-id="@ViewData["UserID"]" asp-route-type="@false" style="color: black;font-weight: bold;">Welcome @ViewData["User_Name"]!</a></li>
-                        <li class="navbar-right"><a class="nav-item nav-link active" asp-area="" asp-controller="Users" asp-action="Logout" asp-route-id="@ViewData["UserID"]" asp-route-type="@false" style="color: black;font-weight: bold;">Logout</a></li>
+                        if (ViewData["Ad"] != null)
+                        {
+                            <li class="navbar-right"><a class="nav-item nav-link active" asp-area="" asp-controller="Users" asp-action="Index" asp-route-id="@ViewData["UserID"]" style="color: black;font-weight: bold;"></a></li>
+                        }
+                        <li class="navbar-right"><a class="nav-item nav-link active" asp-area="" asp-controller="Users" asp-action="Profile" asp-route-id="@ViewData["UserID"]" style="color: black;font-weight: bold;">Welcome @ViewData["User_Name"]!</a></li>
+                        <li class="navbar-right"><a class="nav-item nav-link active" asp-area="" asp-controller="Users" asp-action="Logout" asp-route-id="@ViewData["UserID"]" style="color: black;font-weight: bold;">Logout</a></li>
                     }
                     else
                     {
-                        <li class="nav-item dropdown navbar-right">
-                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                Dropdown
-                            </a>
-                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <div class="dropdown-item">
-                                    <form asp-action="Login" asp-controller="Users">
-                                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                                        <div class="form-group">
-                                            <label asp-for="Email" class="control-label"></label>
-                                            <input asp-for="Email" class="form-control" />
-                                            <span asp-validation-for="Email" class="text-danger"></span>
-                                        </div>
-                                        <div class="form-group">
-                                            <label asp-for="Password" class="control-label"></label>
-                                            <input asp-for="Password" class="form-control" />
-                                            <span asp-validation-for="Password" class="text-danger"></span>
-                                        </div>
-                                        <div class="form-group">
-                                            <a href="#">Register</a>
-                                            <input type="submit" value="Login" class="btn btn-primary button-image right" />
-                                        </div>
-                                    </form>
-                                </div>
-                            </div>
-                        </li>
-                        <!--<li class="navbar-right"><a class="nav-item nav-link active" asp-area="" asp-controller="Home" asp-action="Account">Account</a></li>-->
+                         Html.RenderPartial("_Menu"); 
                     }
                 </ul>
             </div>
