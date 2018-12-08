@@ -219,13 +219,13 @@ namespace ESW_Shelter.Controllers
                 else
                 {
                     ModelState.AddModelError("Email", "Email or Password incorrect!");
-                    return View(("~/Views/Homes/Account.cshtml"));
+                    return View("~/Views/Home/Register.cshtml");
                 }
             }
             catch (InvalidOperationException e)
             {
                 ModelState.AddModelError("Email", "Email or Password incorrect!");
-                return View("~/Views/Homes/Account.cshtml");
+                return View("~/Views/Home/Register.cshtml");
             }
 
         }
