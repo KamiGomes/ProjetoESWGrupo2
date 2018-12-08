@@ -33,6 +33,7 @@ footer {
     margin: 0 !important;
 }
 
+
 .navbar-static-top {
     border-width: 0 !important;
 }
@@ -109,9 +110,14 @@ footer {
         font-size: 13px;
     }
 
-.navbar-right {
-    margin-right: 0 !important;
+#myNavBar a:focus {
+    background-color: inherit !important;
+    border: none !important;
 }
+
+        .navbar-right {
+            margin-right: 0 !important;
+        }
 
 /* Wrapping element */
 /* Set some basic padding to keep content from hitting the edges */
@@ -230,6 +236,11 @@ li:hover {
     font-size: 10px !important;
 }
 
+.dropdown-toggle:hover .dropdown-menu{
+    display: block;
+}
+
+
 /*Tabs CSS - W3School*/
 /* Style the tab */
 .tab {
@@ -255,6 +266,7 @@ li:hover {
     right: 15px;
     bottom: 10px;
 }
+
 
 /* Change background color of buttons on hover */
 .tab button:hover {
