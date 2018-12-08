@@ -12,6 +12,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
 using ESW_Shelter.Models;
 using System.Web.Mvc;
+using ESW_Shelter.Data;
 
 namespace ESW_Shelter
 {
@@ -37,13 +38,13 @@ namespace ESW_Shelter
             //Session cookies
             services.AddSingleton<IConfiguration>(Configuration);
             services.AddDistributedMemoryCache();
+            services.AddMvc().AddControllersAsServices();
             services.AddSession(options =>
             {
                 // Set a short timeout for easy testing.
                 options.IdleTimeout = TimeSpan.FromSeconds(10);
                 options.Cookie.HttpOnly = true;
             });
-
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
             services.AddDbContext<ShelterContext>(options =>
@@ -68,18 +69,11 @@ namespace ESW_Shelter
             app.UseCookiePolicy();
             app.UseMvc(routes =>
             {
-                /*routes.MapRoute(
-                    name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");*/
                 routes.MapRoute(
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}/{type?}"
                     );
-                /*routes.MapRoute(
-                    "Default",
-                    "{action}/{id}",
-                    new { controller = "Home", action = "Index", id = UrlParameter.Optional }
-                );*/
+
             });
         }
     }

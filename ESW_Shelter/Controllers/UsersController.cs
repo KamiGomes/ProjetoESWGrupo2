@@ -4,15 +4,13 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ESW_Shelter.Models;
-using ESW_Shelter.Controllers;
 using Microsoft.AspNetCore.Http;
-using SendGrid;
-using SendGrid.Helpers.Mail;
 using System.Collections.Generic;
 using Microsoft.Extensions.Configuration;
-using System.Security.Cryptography;
-using System.Text;
-using Microsoft.AspNetCore.Routing;
+using ESW_Shelter.Data;
+using RestSharp;
+using RestSharp.Authenticators;
+
 //hotfix -> Install-Package Microsoft.AspNet.Mvc -Version 5.2.3.0 | Install-Package httpsecurecookie -Version 0.1.1 | Install-Package Microsoft.AspNetCore.Session -Version 2.1.1 
 namespace ESW_Shelter.Controllers
 {
@@ -30,7 +28,6 @@ namespace ESW_Shelter.Controllers
         // Backoffice - GET: Users
         public async Task<IActionResult> Index()
         {
-
             var userProfile = (from user in _context.Users
                                join userInfo in _context.UsersInfo on user.UserID equals userInfo.UserID
                                select new
@@ -74,6 +71,7 @@ namespace ESW_Shelter.Controllers
                                    Tumblr = x.Tumblr,
                                    Website = x.Website
                                }).ToList();
+            GetLogin();
             return View(userProfile);
         }
 
@@ -133,7 +131,7 @@ namespace ESW_Shelter.Controllers
             {
                 return RedirectToAction("ErrorNotFoundOrSomeOtherError");
             }
-
+            GetLogin();
             return View(userProfile);
         }
 
@@ -166,16 +164,18 @@ namespace ESW_Shelter.Controllers
                     _context.Add(newUserInfo);
                     await _context.SaveChangesAsync();
                     /** Send Confirmation Email **/
-                    NotificationSender sender = new NotificationSender(_configuration);
+
                     int user_id = (from user in _context.Users select user.UserID).Max();
+                    //SendSimpleMessage();
                     //string link = String.Format("<h3><a href=\"https://localhost:44359/Users/ConfirmEmail/{0}\">Click here to confirm your account so you can login with it!</a></h3>", user_id);
+                    var result = new MailSenderController(_configuration).PostMessage();
                     string link = String.Format("<h3><a href=\"https://eswshelter.azurewebsites.net/Users/ConfirmEmail/{0}\">Click here to confirm your account so you can login with it!</a></h3>", user_id);
                     string subj = "Welcome to our Shelter " + users.Name + "!";
                     string content = "<h1>We, ESW Group 2 Welcome you to our project!</h1>" +
                         "<p><h2>Please, to continue with your registration, we ask that you verify your account in the following link:</h2></p>" +
                         link +
                         "<p><h2>Any questions can be sent to this same email. I hope you enjoy the experience</h2></p>";
-                    await sender.PostMessage(subj, content, users.Email, users.Name);
+                    //await sender.PostMessage(subj, content, users.Email, users.Name);
                     /** End of Confirmation Email **/
                     TempData["Message"] = "Your account has been created!Please check your email and click on the link to confirm your email before trying to login!";
                     return View("~/Views/Home/Index.cshtml");
@@ -190,6 +190,11 @@ namespace ESW_Shelter.Controllers
             return View("~/Views/Home/Index.cshtml");
         }
 
+        [HttpGet]
+        public ActionResult Login()
+        {
+            return View("~/Views/Home/Index.cshtml");
+        }
         //Frontoffice - Post Login
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -206,10 +211,10 @@ namespace ESW_Shelter.Controllers
                         TempData["Message"] = "This email has not been confirmed yet! Please check your email!";
                         return View("~/Views/Home/Index.cshtml");
                     }
-                    HttpContext.Session.SetString("User_Name", userRetrieved.Name);
-                    HttpContext.Session.SetString("UserID", userRetrieved.UserID.ToString());
+                    LoginSV(userRetrieved.Name, userRetrieved.UserID.ToString());
                     TempData["Message"] = "Login sucessfull!";
-                    return View("~/Views/Home/Index.cshtml");
+
+                    return RedirectToAction("Login");
                 }
                 else
                 {
@@ -250,15 +255,20 @@ namespace ESW_Shelter.Controllers
             return View("~/Views/Home/Index.cshtml");
         }
 
-        /***************** Unchecked if correct **************************************************/
-
-        public async Task<IActionResult> Edit(int? id, Boolean? type)
+        public async Task<IActionResult> Logout(int? id)
         {
-            if (id == null || type == null)
+            var users = await _context.Users.FindAsync(id);
+            LoginSV("","");
+            TempData["Message"] = "Logout sucessfull! Come Back Soon!";
+            return View("~/Views/Home/Index.cshtml");
+        }
+
+        public async Task<IActionResult> Profile(int? id)
+        {
+            if (id == null || HttpContext.Session.GetString("User_Name").Equals("") || HttpContext.Session.GetString("UserID").Equals(""))
             {
                 return RedirectToAction("ErrorNotFoundOrSomeOtherError");
             }
-            var users = await _context.Users.FindAsync(id);
             var userProfile = (from user in _context.Users
                                join userInfo in _context.UsersInfo on user.UserID equals userInfo.UserID
                                where user.UserID == id
@@ -283,7 +293,10 @@ namespace ESW_Shelter.Controllers
                                    userInfo.Tumblr,
                                    userInfo.Website
                                }).First();
-
+            if (userProfile == null)
+            {
+                return RedirectToAction("ErrorNotFoundOrSomeOtherError");
+            }
             Profile profile = new Profile()
             {
                 UserID = userProfile.UserID,
@@ -305,16 +318,72 @@ namespace ESW_Shelter.Controllers
                 Tumblr = userProfile.Tumblr,
                 Website = userProfile.Website
             };
-            if (users == null)
+                GetLogin();
+                return View("~/Views/Home/Profile.cshtml", profile);
+        }
+
+        /***************** Unchecked if correct **************************************************/
+
+        public async Task<IActionResult> Edit(int? id)
+        {
+            if (id == null || !GetLogin())
             {
                 return RedirectToAction("ErrorNotFoundOrSomeOtherError");
             }
-            if (type == false)
+            var userProfile = (from user in _context.Users
+                               join userInfo in _context.UsersInfo on user.UserID equals userInfo.UserID
+                               where user.UserID == id
+                               select new
+                               {
+                                   user.UserID,
+                                   user.Email,
+                                   user.Password,
+                                   user.Name,
+                                   user.ConfirmedEmail,
+                                   user.RoleID,
+                                   userInfo.UserInfoID,
+                                   userInfo.Street,
+                                   userInfo.PostalCode,
+                                   userInfo.City,
+                                   userInfo.Phone,
+                                   userInfo.AlternativePhone,
+                                   userInfo.AlternativeEmail,
+                                   userInfo.Facebook,
+                                   userInfo.Twitter,
+                                   userInfo.Instagram,
+                                   userInfo.Tumblr,
+                                   userInfo.Website
+                               }).First();
+            if (userProfile == null)
             {
-                HttpContext.Session.SetString("User_Name", profile.Name);
-                HttpContext.Session.SetString("UserID", profile.UserID.ToString());
+                return RedirectToAction("ErrorNotFoundOrSomeOtherError");
+            }
+            Profile profile = new Profile()
+            {
+                UserID = userProfile.UserID,
+                Email = userProfile.Email,
+                Password = userProfile.Password,
+                ConfirmedEmail = userProfile.ConfirmedEmail,
+                RoleID = userProfile.RoleID,
+                Name = userProfile.Name,
+                UserInfoID = userProfile.UserInfoID,
+                Street = userProfile.Street,
+                PostalCode = userProfile.PostalCode,
+                City = userProfile.City,
+                Phone = userProfile.Phone,
+                AlternativePhone = userProfile.AlternativePhone,
+                AlternativeEmail = userProfile.AlternativeEmail,
+                Facebook = userProfile.Facebook,
+                Twitter = userProfile.Twitter,
+                Instagram = userProfile.Instagram,
+                Tumblr = userProfile.Tumblr,
+                Website = userProfile.Website
+            };
+            if (!GetLogin())
+            {
+                GetLogin();
                 return View("~/Views/Home/Profile.cshtml", profile);
-            } else if (type == true)
+            } else if (GetLogin())
             {
                 return View("Edit", profile);
             }
@@ -332,34 +401,6 @@ namespace ESW_Shelter.Controllers
             }
             if (ModelState.IsValid)
             {
-                //Update Users table
-               /* Users updateUser = new Users()
-                {
-                    UserID = profile.UserID,
-                    Email = profile.Email,
-                    Name = profile.Name,
-                    Password = profile.Password,
-                    ConfirmedEmail = profile.ConfirmedEmail,
-                    RoleID = profile.RoleID
-                };
-                _context.Users.Update(updateUser);
-                UsersInfo updateUserInfo = new UsersInfo()
-                {
-                    UserInfoID = profile.UserInfoID,
-                    Street = profile.Street,
-                    PostalCode = profile.PostalCode,
-                    City = profile.City,
-                    Phone = profile.Phone,
-                    AlternativePhone = profile.AlternativePhone,
-                    AlternativeEmail = profile.AlternativeEmail,
-                    Facebook = profile.Facebook,
-                    Twitter = profile.Twitter,
-                    Instagram = profile.Instagram,
-                    Tumblr = profile.Tumblr,
-                    Website = profile.Website,
-                    UserID = profile.UserID
-                };
-                _context.UsersInfo.Update(updateUserInfo);*/
                 try
                 {
                     Users updateUser = new Users()
@@ -418,7 +459,7 @@ namespace ESW_Shelter.Controllers
                 }
                 await _context.SaveChangesAsync();
                 TempData["Message"] = "Profile updated sucessfully!";
-                return RedirectToAction("Edit", "Users", new {id = profile.UserID, type = false });
+                return RedirectToAction("Edit", "Users", new {id = profile.UserID});
             }
             return View("~/Views/Home/Index.cshtml");
         }
@@ -437,7 +478,7 @@ namespace ESW_Shelter.Controllers
             {
                 return RedirectToAction("ErrorNotFoundOrSomeOtherError");
             }
-
+            GetLogin();
             return View(users);
         }
 
@@ -455,6 +496,7 @@ namespace ESW_Shelter.Controllers
             _context.Users.Remove(users);
 
             await _context.SaveChangesAsync();
+            GetLogin();
             return RedirectToAction(nameof(Index));
         }
 
@@ -473,6 +515,40 @@ namespace ESW_Shelter.Controllers
         private bool UsersInfoExists(int id)
         {
             return _context.UsersInfo.Any(e => e.UserInfoID == id);
+        }
+
+        private void LoginSV(String name, String id)
+        {
+            if(name.Equals(""))
+            {
+                HttpContext.Session.Remove("User_Name");
+                HttpContext.Session.Remove("UserID");
+            } else
+            {
+                HttpContext.Session.SetString("User_Name", name);
+                HttpContext.Session.SetString("UserID", id);
+                int idint = Int32.Parse(id);
+                var role = (from user in _context.Users where user.UserID == idint select user.RoleID).First();
+                if (role == 4)
+                {
+                    HttpContext.Session.SetString("Ad", "Ad");
+                }
+            }
+        }
+
+        private bool GetLogin()
+        {
+            if (HttpContext.Session.GetString("User_Name") != null && HttpContext.Session.GetString("UserID") != null)
+            {
+                HttpContext.Session.SetString("User_Name", HttpContext.Session.GetString("User_Name"));
+                HttpContext.Session.SetString("UserID", HttpContext.Session.GetString("UserID"));
+            }
+            if (HttpContext.Session.GetString("Ad") != null)
+            {
+                HttpContext.Session.SetString("Ad", HttpContext.Session.GetString("Ad"));
+                return true;
+            }
+            return false;
         }
     }
 
