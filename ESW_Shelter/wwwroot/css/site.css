@@ -326,7 +326,7 @@ li:hover {
 .contacts {
     position: relative;
     margin: 1% 0 0 0 !important;
-    height: 77.7vh;
+    height: 80vh;
 }
 .col-md-2 {
     width: 40%;
@@ -340,6 +340,7 @@ li:hover {
 .map-wrapper {
     padding: 0;
     height: 100%;
+    margin-left: 10%;
 }
 
 .map {
