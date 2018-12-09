@@ -326,7 +326,7 @@ li:hover {
 .contacts {
     position: relative;
     margin: 1% 0 0 0 !important;
-    height: 80vh;
+    height: 79.9vh;
 }
 .col-md-2 {
     width: 40%;
@@ -352,3 +352,7 @@ li:hover {
     margin-left: 1%; 
     text-align: justify;
 }
+
+/**
+*** About
+**/
