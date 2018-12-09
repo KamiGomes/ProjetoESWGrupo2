@@ -48,6 +48,10 @@ namespace ESW_Shelter.Controllers
             return View();
         }
 
+        public IActionResult Register()
+        {
+            return View();
+        }
 
         public IActionResult Account()
         {

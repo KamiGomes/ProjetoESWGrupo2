@@ -290,7 +290,7 @@ li:hover {
 
 .row {
     width: 100%;
-    height: 350px;
+    min-height: 79.9vh;
     position: relative;
     margin: 0;
     color: white;
@@ -330,7 +330,7 @@ li:hover {
 }
 .contacts .col-md-2 {
     width: 40%;
-    height: 100%;
+    min-height: 70vh;
     display: inline-block;
     vertical-align: top;
     position: relative;
@@ -339,13 +339,12 @@ li:hover {
 
 .map-wrapper {
     padding: 0;
-    height: 100%;
     margin-left: 10%;
 }
 
 .map {
     width: 100%;
-    height: 100%;
+    height: 70vh;
 }
 
 .contact-data {
@@ -363,8 +362,10 @@ li:hover {
 }
 
 .about > .col-md-2 {
+    display: table;
     width: 40%;
-    margin-left:5%;
+    min-height: 70vh;
+    margin-left: 5%;
 }
 
 .about > .picture {
@@ -378,4 +379,45 @@ li:hover {
     width: 100%;
     margin-top: -50%;
 
+}
+
+/**
+*** Register
+**/
+.register{
+    position: relative;
+    margin: 1% 0 0 0 !important;
+    min-height: 79.9vh;
+}
+
+.register > .col-md-2 {
+    width: 40%;
+    min-height: 70vh;
+    margin-left: 5%;
+    display: table;
+}
+
+.register > .col-md-2 > form {
+    margin-top: 5vh;
+    display: table-cell;
+    vertical-align:middle;
+}
+
+.register > .col-md-2 .buttons {
+    text-align: right;
+}
+
+.register > .col-md-2 .buttons input {
+    position: relative;
+    bottom: 0;
+}
+
+.register > .message {
+    display: table;
+}
+
+.register > .message > h2{
+    display: table-cell;
+    vertical-align: middle;
+    text-align: center; 
 }
