@@ -62,33 +62,7 @@
                     }
                     else
                     {
-                        <li class="nav-item dropdown navbar-right">
-                            <a class="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                LogIn
-                            </a>
-                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <div class="dropdown-item">
-                                    <form asp-controller="Users">
-                                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                                        <div class="form-group">
-                                            <label asp-for="Email" class="control-label"></label>
-                                            <input asp-for="Email" class="form-control" />
-                                            <span asp-validation-for="Email" class="text-danger"></span>
-                                        </div>
-                                        <div class="form-group">
-                                            <label asp-for="Password" class="control-label"></label>
-                                            <input asp-for="Password" class="form-control" />
-                                            <span asp-validation-for="Password" class="text-danger"></span>
-                                        </div>
-                                        <div class="form-group" >
-                                            <a  asp-area="" asp-controller="Home" asp-action="Register">Register</a>
-                                            <input type="submit" value="Login" class="btn btn-primary button-image right" />
-                                        </div>
-                                    </form>
-                                </div>
-                            </div>
-                        </li>
-                        <!--<li class="navbar-right"><a class="nav-item nav-link active" asp-area="" asp-controller="Home" asp-action="Account">Account</a></li>-->
+                        Html.RenderPartial("_Menu");
                     }
                 </ul>
             </div>
