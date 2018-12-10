@@ -340,13 +340,13 @@ namespace ESW_Shelter.Controllers
                     var result = new MailSenderController(_configuration).PostMessage(users.Email, users.Name, users.UserID);
                     
                     /** End of Confirmation Email **/
-                    TempData["Message"] = "Your account has been created!Please check your email and click on the link to confirm your email before trying to login!";
+                    TempData["Message"] = "A sua conta foi criada com sucesso!Por favor verifique o seu email e clique no email para concluir o registo da sua conta e prosseguir para o login!";
                     return RedirectToAction("SucessCreation");
                 }
                 else
                 {
 
-                    ModelState.AddModelError("Email", "Email already exists!");
+                    ModelState.AddModelError("Email", "Email já existe!");
                     return View("~/Views/Home/Account.cshtml");
                 }
             }
@@ -398,23 +398,23 @@ namespace ESW_Shelter.Controllers
                 {
                     if (userRetrieved.ConfirmedEmail == false)
                     {
-                        TempData["Message"] = "This email has not been confirmed yet! Please check your email!";
+                        TempData["Message"] = "Este email ainda não foi confirmado!Por favor vá ao seu email e siga as instruções!";
                         return View("~/Views/Home/Index.cshtml");
                     }
                     LoginSV(userRetrieved.Name, userRetrieved.UserID.ToString());
-                    TempData["Message"] = "Login sucessfull!";
+                    TempData["Message"] = "Login efetuado com sucesso!";
 
                     return RedirectToAction("Login");
                 }
                 else
                 {
-                    ModelState.AddModelError("Email", "Email or Password incorrect!");
+                    ModelState.AddModelError("Email", "Email or Password incorreto!");
                     return View("~/Views/Home/Register.cshtml");
                 }
             }
             catch (InvalidOperationException e)
             {
-                ModelState.AddModelError("Email", "Email or Password incorrect!");
+                ModelState.AddModelError("Email", "Email or Password incorreto!");
                 return View("~/Views/Home/Register.cshtml");
             }
 
@@ -446,7 +446,7 @@ namespace ESW_Shelter.Controllers
             users.ConfirmedEmail = true;
             _context.Update(users);
             await _context.SaveChangesAsync();
-            TempData["Message"] = "Account activated! Proceed to login in!";
+            TempData["Message"] = "A sua conta foi ativada! Pode proseguir para o login!";
             return View("~/Views/Home/Index.cshtml");
         }
 
@@ -471,7 +471,7 @@ namespace ESW_Shelter.Controllers
                 if(users != null)
                 {
                     LoginSV("", "");
-                    TempData["Message"] = "Logout sucessfull! Come Back Soon!";
+                    TempData["Message"] = "Logout efetuado com sucesso! Obrigado pela visita e volte brevemente!";
                     return View("~/Views/Home/Index.cshtml");
                 }
                 else
@@ -703,7 +703,7 @@ namespace ESW_Shelter.Controllers
                     }
                 }
                 await _context.SaveChangesAsync();
-                TempData["Message"] = "Profile updated sucessfully!";
+                TempData["Message"] = "Perfil atualizado com sucesso!";
                 return RedirectToAction("Profile", "Users", new { id = profile.UserID });
             }
             return View("~/Views/Home/Index.cshtml");
@@ -823,7 +823,7 @@ namespace ESW_Shelter.Controllers
                     }
                 }
                 await _context.SaveChangesAsync();
-                TempData["Message"] = "Profile updated sucessfully!";
+                TempData["Message"] = "Perfil atualizado com sucesso!";
                 return RedirectToAction("Edit", "Users", new {id = profile.UserID});
             }
             return View("~/Views/Home/Index.cshtml");
