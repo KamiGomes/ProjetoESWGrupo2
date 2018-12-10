@@ -47,36 +47,6 @@ namespace ESW_Shelter.Models
         [Display(Prompt = "Examplo: 910000000", Name = "Telemóvel")]
         public int Phone { get; set; }
 
-        [DataType(DataType.PhoneNumber)]
-        [RegularExpression("^[0-9]{9,12}$", ErrorMessage = "Contacto Alternativo têm de ter no minimo 9 números, e máximo 12!")]
-        [Display(Prompt = "Examplo: 910000000", Name = "Contacto Alternativo")]
-        public int AlternativePhone { get; set; }
-
-        [StringLength(256, ErrorMessage = "Facebook não pode ter mais de 256 caracteres!", MinimumLength = 1)]
-        [EmailAddress(ErrorMessage = "Formato de email incorreto!")]
-        [Display(Prompt = "Examplo: example@domain.com", Name = "Email Alternativo")]
-        public String AlternativeEmail { get; set; }
-
-        [StringLength(150, ErrorMessage = "Facebook não pode ter mais de 150 caracteres!", MinimumLength = 1)]
-        [Display(Prompt = "Copie o link aqui!")]
-        public String Facebook { get; set; }
-
-        [StringLength(150, ErrorMessage = "Twitter não pode ter mais de 150 caracteres!", MinimumLength = 1)]
-        [Display(Prompt = "Copie o link aqui!")]
-        public String Twitter { get; set; }
-
-        [StringLength(150, ErrorMessage = "Instagram não pode ter mais de 150 caracteres!", MinimumLength = 1)]
-        [Display(Prompt = "Copie o link aqui!")]
-        public String Instagram { get; set; }
-
-        [StringLength(150, ErrorMessage = "Tumblr não pode ter mais de 150 caracteres!", MinimumLength = 1)]
-        [Display(Prompt = "Copie o link aqui!")]
-        public String Tumblr { get; set; }
-
-        [StringLength(150, ErrorMessage = "Website não pode ter mais de 150 caracteres!", MinimumLength = 1)]
-        [Display(Prompt = "Copie o link aqui!")]
-        public String Website { get; set; }
-
         [Required(ErrorMessage = "Role Required!")]
         public int RoleID { get; set; }
     }

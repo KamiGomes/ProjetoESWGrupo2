@@ -144,14 +144,7 @@ namespace ESW_Shelter.Controllers
                                    userInfo.Street,
                                    userInfo.PostalCode,
                                    userInfo.City,
-                                   userInfo.Phone,
-                                   userInfo.AlternativePhone,
-                                   userInfo.AlternativeEmail,
-                                   userInfo.Facebook,
-                                   userInfo.Twitter,
-                                   userInfo.Instagram,
-                                   userInfo.Tumblr,
-                                   userInfo.Website
+                                   userInfo.Phone
                                }).AsEnumerable().Select(x => new Profile
                                {
                                    UserID = x.UserID,
@@ -164,14 +157,7 @@ namespace ESW_Shelter.Controllers
                                    Street = x.Street,
                                    PostalCode = x.PostalCode,
                                    City = x.City,
-                                   Phone = x.Phone,
-                                   AlternativePhone = x.AlternativePhone,
-                                   AlternativeEmail = x.AlternativeEmail,
-                                   Facebook = x.Facebook,
-                                   Twitter = x.Twitter,
-                                   Instagram = x.Instagram,
-                                   Tumblr = x.Tumblr,
-                                   Website = x.Website
+                                   Phone = x.Phone
                                }).ToList();
             GetLogin();
             return View(userProfile);
@@ -221,14 +207,7 @@ namespace ESW_Shelter.Controllers
                                    userInfo.Street,
                                    userInfo.PostalCode,
                                    userInfo.City,
-                                   userInfo.Phone,
-                                   userInfo.AlternativePhone,
-                                   userInfo.AlternativeEmail,
-                                   userInfo.Facebook,
-                                   userInfo.Twitter,
-                                   userInfo.Instagram,
-                                   userInfo.Tumblr,
-                                   userInfo.Website
+                                   userInfo.Phone
                                }).AsEnumerable().Select(x => new Profile
                                {
                                    UserID = x.UserID,
@@ -241,14 +220,7 @@ namespace ESW_Shelter.Controllers
                                    Street = x.Street,
                                    PostalCode = x.PostalCode,
                                    City = x.City,
-                                   Phone = x.Phone,
-                                   AlternativePhone = x.AlternativePhone,
-                                   AlternativeEmail = x.AlternativeEmail,
-                                   Facebook = x.Facebook,
-                                   Twitter = x.Twitter,
-                                   Instagram = x.Instagram,
-                                   Tumblr = x.Tumblr,
-                                   Website = x.Website
+                                   Phone = x.Phone
                                }).First(); 
             if (userProfile == null)
             {
@@ -347,10 +319,10 @@ namespace ESW_Shelter.Controllers
                 {
 
                     ModelState.AddModelError("Email", "Email já existe!");
-                    return View("~/Views/Home/Account.cshtml");
+                    RedirectToAction("Register", "Home", null);
                 }
             }
-            return View("~/Views/Home/Index.cshtml");
+            return RedirectToAction("Register", "Home", null); 
         }
 
         /// <summary>
@@ -398,7 +370,7 @@ namespace ESW_Shelter.Controllers
                 {
                     if (userRetrieved.ConfirmedEmail == false)
                     {
-                        TempData["Message"] = "Este email ainda não foi confirmado!Por favor vá ao seu email e siga as instruções!";
+                        TempData["Message"] = "Este email ainda não foi confirmado! Por favor vá ao seu email e siga as instruções!";
                         return View("~/Views/Home/Index.cshtml");
                     }
                     LoginSV(userRetrieved.Name, userRetrieved.UserID.ToString());
@@ -515,14 +487,7 @@ namespace ESW_Shelter.Controllers
                                    userInfo.Street,
                                    userInfo.PostalCode,
                                    userInfo.City,
-                                   userInfo.Phone,
-                                   userInfo.AlternativePhone,
-                                   userInfo.AlternativeEmail,
-                                   userInfo.Facebook,
-                                   userInfo.Twitter,
-                                   userInfo.Instagram,
-                                   userInfo.Tumblr,
-                                   userInfo.Website
+                                   userInfo.Phone
                                }).First();
             if (userProfile == null)
             {
@@ -540,14 +505,7 @@ namespace ESW_Shelter.Controllers
                 Street = userProfile.Street,
                 PostalCode = userProfile.PostalCode,
                 City = userProfile.City,
-                Phone = userProfile.Phone,
-                AlternativePhone = userProfile.AlternativePhone,
-                AlternativeEmail = userProfile.AlternativeEmail,
-                Facebook = userProfile.Facebook,
-                Twitter = userProfile.Twitter,
-                Instagram = userProfile.Instagram,
-                Tumblr = userProfile.Tumblr,
-                Website = userProfile.Website
+                Phone = userProfile.Phone
             };
                 GetLogin();
                 return View("~/Views/Home/Profile.cshtml", profile);
@@ -587,14 +545,7 @@ namespace ESW_Shelter.Controllers
                                    userInfo.Street,
                                    userInfo.PostalCode,
                                    userInfo.City,
-                                   userInfo.Phone,
-                                   userInfo.AlternativePhone,
-                                   userInfo.AlternativeEmail,
-                                   userInfo.Facebook,
-                                   userInfo.Twitter,
-                                   userInfo.Instagram,
-                                   userInfo.Tumblr,
-                                   userInfo.Website
+                                   userInfo.Phone
                                }).First();
             if (userProfile == null)
             {
@@ -612,14 +563,7 @@ namespace ESW_Shelter.Controllers
                 Street = userProfile.Street,
                 PostalCode = userProfile.PostalCode,
                 City = userProfile.City,
-                Phone = userProfile.Phone,
-                AlternativePhone = userProfile.AlternativePhone,
-                AlternativeEmail = userProfile.AlternativeEmail,
-                Facebook = userProfile.Facebook,
-                Twitter = userProfile.Twitter,
-                Instagram = userProfile.Instagram,
-                Tumblr = userProfile.Tumblr,
-                Website = userProfile.Website
+                Phone = userProfile.Phone
             };
             if (!GetLogin())
             {
@@ -638,13 +582,39 @@ namespace ESW_Shelter.Controllers
         /// <returns></returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Profile(int id, [Bind("UserID, Email, Password, Name, ConfirmedEmail, RoleID, UserInfoID, Street, PostalCode, City, Phone, AlternativePhone, AlternativeEmail, Facebook, Twitter, Instagram, Tumblr, Website")] Profile profile)
+        public async Task<IActionResult> Profile(int id, [Bind("UserID, Email, Password, Name, ConfirmedEmail, RoleID, UserInfoID, Street, PostalCode, City, Phone")] Profile profile)
         {
             if (id != profile.UserID)
             {
                 return RedirectToAction("ErrorNotFoundOrSomeOtherError");
             }
-            if (ModelState.IsValid)
+                Users updateUser = new Users()
+                {
+                    UserID = profile.UserID,
+                    Email = profile.Email,
+                    Name = profile.Name,
+                    Password = profile.Password,
+                    ConfirmedEmail = profile.ConfirmedEmail,
+                    RoleID = profile.RoleID
+                };
+                _context.Users.Update(updateUser);
+
+                UsersInfo updateUserInfo = new UsersInfo()
+                {
+                    UserInfoID = profile.UserInfoID,
+                    Street = profile.Street,
+                    PostalCode = profile.PostalCode,
+                    City = profile.City,
+                    Phone = profile.Phone,
+                    UserID = profile.UserID
+                };
+                _context.UsersInfo.Update(updateUserInfo);
+
+                await _context.SaveChangesAsync();
+                TempData["Message"] = "Perfil atualizado com sucesso!";
+                return RedirectToAction("Profile", "Users", new { id = profile.UserID });
+            
+            /*if (ModelState.IsValid)
             {
                 try
                 {
@@ -680,13 +650,6 @@ namespace ESW_Shelter.Controllers
                         PostalCode = profile.PostalCode,
                         City = profile.City,
                         Phone = profile.Phone,
-                        AlternativePhone = profile.AlternativePhone,
-                        AlternativeEmail = profile.AlternativeEmail,
-                        Facebook = profile.Facebook,
-                        Twitter = profile.Twitter,
-                        Instagram = profile.Instagram,
-                        Tumblr = profile.Tumblr,
-                        Website = profile.Website,
                         UserID = profile.UserID
                     };
                     _context.UsersInfo.Update(updateUserInfo);
@@ -701,12 +664,8 @@ namespace ESW_Shelter.Controllers
                     {
                         throw;
                     }
-                }
-                await _context.SaveChangesAsync();
-                TempData["Message"] = "Perfil atualizado com sucesso!";
-                return RedirectToAction("Profile", "Users", new { id = profile.UserID });
-            }
-            return View("~/Views/Home/Index.cshtml");
+                }*/
+            //return RedirectToAction("Index", "Home", null);
         }
 
 
@@ -800,13 +759,6 @@ namespace ESW_Shelter.Controllers
                         PostalCode = profile.PostalCode,
                         City = profile.City,
                         Phone = profile.Phone,
-                        AlternativePhone = profile.AlternativePhone,
-                        AlternativeEmail = profile.AlternativeEmail,
-                        Facebook = profile.Facebook,
-                        Twitter = profile.Twitter,
-                        Instagram = profile.Instagram,
-                        Tumblr = profile.Tumblr,
-                        Website = profile.Website,
                         UserID = profile.UserID
                     };
                     _context.UsersInfo.Update(updateUserInfo);
@@ -826,7 +778,7 @@ namespace ESW_Shelter.Controllers
                 TempData["Message"] = "Perfil atualizado com sucesso!";
                 return RedirectToAction("Edit", "Users", new {id = profile.UserID});
             }
-            return View("~/Views/Home/Index.cshtml");
+            return RedirectToAction("Index", "Home", null);
         }
 
         /// <summary>
@@ -890,7 +842,7 @@ namespace ESW_Shelter.Controllers
         public async Task<IActionResult> ErrorNotFoundOrSomeOtherError()
         {
             TempData["Message"] = "Access Denied";
-            return View("~/Views/Home/Index.cshtml");
+            return RedirectToAction("Index", "Home", null);
         }
 
         /// <summary>
