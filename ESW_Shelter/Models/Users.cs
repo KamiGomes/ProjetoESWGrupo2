@@ -10,37 +10,37 @@ namespace ESW_Shelter.Models
 {
     public class Users// : IValidatableObject
     {
-       /* public string Honeypot { get; set; }
+        /* public string Honeypot { get; set; }
 
-        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
-        {
-            if (!String.IsNullOrEmpty(this.Honeypot))
-            {
-                return new[] { new ValidationResult("An error occured") };
-            }
-            return null;
-        }*/
+         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+         {
+             if (!String.IsNullOrEmpty(this.Honeypot))
+             {
+                 return new[] { new ValidationResult("An error occured") };
+             }
+             return null;
+         }*/
 
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int UserID { get; set; }
 
-        [StringLength(256, ErrorMessage = "Name cannot be longer than 256 characters!.", MinimumLength = 1)]
-        [Required(ErrorMessage = "Missing email!")]
-        [EmailAddress(ErrorMessage = "This is not an Email Address!")]
-        [Display(Prompt = "Example: example@domain.com")]
+        [StringLength(256, ErrorMessage = "Email não pode ter mais que 256 caracteres!", MinimumLength = 1)]
+        [Required(ErrorMessage = "Email em falta!")]
+        [EmailAddress(ErrorMessage = "Formato de email incorreto!")]
+        [Display(Prompt = "Examplo: example@domain.com")]
         public String Email { get; set; }
 
-        [StringLength(256, ErrorMessage = "Name cannot be longer than 256 characters!.", MinimumLength = 1)]
-        [Required(ErrorMessage = "Missing Name!")]
-        [RegularExpression(@"^[a-zA-Z\s]+$", ErrorMessage = "Please only use leters!")]
-        [Display(Prompt = "Example: John Wick")]
+        [StringLength(256, ErrorMessage = "Nome não pode ter mais que 256 caracteres!", MinimumLength = 1)]
+        [Required(ErrorMessage = "Nome em falta!")]
+        [RegularExpression(@"^[a-zA-Z\s]+$", ErrorMessage = "Por favor, utilize só caracteres!")]
+        [Display(Prompt = "Examplo: John Wick", Name = "Nome")]
         public String Name { get; set; }
 
-        [Required(ErrorMessage = "Missing Password!")]
-        [StringLength(12, ErrorMessage = "Name cannot be longer than 12 characters and shorter than 6!.", MinimumLength = 6)]
+        [StringLength(12, ErrorMessage = "Password não pode ter mais que 12 caracteres e menos de 6!", MinimumLength = 6)]
+        [Required(ErrorMessage = "Password em falta!")]
         [DataType(DataType.Password)]
-        [Display(Prompt = "Example: John_152 (Min: 6 - Max: 12)")]
+        [Display(Prompt = "Examplo: John_152 (Min: 6 - Max: 12)")]
         public String Password { get; set; }
 
         [Required]
