@@ -337,15 +337,8 @@ namespace ESW_Shelter.Controllers
 
                     int user_id = (from user in _context.Users select user.UserID).Max();
                     //SendSimpleMessage();
-                    //string link = String.Format("<h3><a href=\"https://localhost:44359/Users/ConfirmEmail/{0}\">Click here to confirm your account so you can login with it!</a></h3>", user_id);
-                    var result = new MailSenderController(_configuration).PostMessage();
-                    string link = String.Format("<h3><a href=\"https://eswshelter.azurewebsites.net/Users/ConfirmEmail/{0}\">Click here to confirm your account so you can login with it!</a></h3>", user_id);
-                    string subj = "Welcome to our Shelter " + users.Name + "!";
-                    string content = "<h1>We, ESW Group 2 Welcome you to our project!</h1>" +
-                        "<p><h2>Please, to continue with your registration, we ask that you verify your account in the following link:</h2></p>" +
-                        link +
-                        "<p><h2>Any questions can be sent to this same email. I hope you enjoy the experience</h2></p>";
-                    //await sender.PostMessage(subj, content, users.Email, users.Name);
+                    var result = new MailSenderController(_configuration).PostMessage(users.Email, users.Name, users.UserID);
+                    
                     /** End of Confirmation Email **/
                     TempData["Message"] = "Your account has been created!Please check your email and click on the link to confirm your email before trying to login!";
                     return RedirectToAction("SucessCreation");
