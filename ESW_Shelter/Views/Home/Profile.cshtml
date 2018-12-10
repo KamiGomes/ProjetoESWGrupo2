@@ -1,4 +1,5 @@
 ﻿@model ESW_Shelter.Models.Profile
+
 @{
     ViewData["Title"] = "Profile";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -8,7 +9,7 @@
     <h2 class="innerH2">Profile</h2>
     <p style="margin-left: 10px;">
         <div class="col-md-4">
-        <form asp-action="Edit">
+        <form asp-action="Profile">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="UserID" />
             <input type="hidden" asp-for="UserInfoID" />

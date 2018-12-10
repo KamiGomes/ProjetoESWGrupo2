@@ -1,5 +1,4 @@
 ﻿@using Microsoft.AspNetCore.Http;
-@model ESW_Shelter.Models.Users;
 
 @{
     ViewData["User_Name"] = Context.Session.GetString("User_Name");
@@ -47,8 +46,8 @@
             <div class="navbar-collapse collapse" id="myNavBar">
                 <ul class="nav navbar-nav">
                     <li class="nav-item"><a class="nav-item nav-link active" asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
-                    <li class="nav-item"><a class="nav-item nav-link active" asp-area="" asp-controller="Home" asp-action="Donations">Donativos</a></li>
-                    <li class="nav-item"><a class="nav-item nav-link active" asp-area="" asp-controller="Home" asp-action="Animals">Animais</a></li>
+                    <!-- <li class="nav-item"><a class="nav-item nav-link active" asp-area="" asp-controller="Home" asp-action="Donations">Donativos</a></li>
+                    <li class="nav-item"><a class="nav-item nav-link active" asp-area="" asp-controller="Home" asp-action="Animals">Animais</a></li> -->
                     <li class="nav-item"><a class="nav-item nav-link active" asp-area="" asp-controller="Home" asp-action="Contact">Contact</a></li>
                     <li class="nav-item"><a class="nav-item nav-link active" asp-area="" asp-controller="Home" asp-action="About">About</a></li>
                     @if (ViewData["User_Name"] != null)
