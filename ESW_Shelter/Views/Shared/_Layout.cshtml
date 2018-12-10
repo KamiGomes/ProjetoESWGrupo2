@@ -54,10 +54,10 @@
                     {
                         if (ViewData["Ad"] != null)
                         {
-                            <li class="navbar-right"><a class="nav-item nav-link active" asp-area="" asp-controller="Users" asp-action="Index" asp-route-id="@ViewData["UserID"]" style="color: black;font-weight: bold;"></a></li>
+                            <li class="navbar-right"><a class="nav-item nav-link active" asp-area="" asp-controller="Users" asp-action="Index" asp-route-id="@ViewData["UserID"]" ></a></li>
                         }
-                        <li class="navbar-right"><a class="nav-item nav-link active" asp-area="" asp-controller="Users" asp-action="Profile" asp-route-id="@ViewData["UserID"]" style="color: black;font-weight: bold;">Welcome @ViewData["User_Name"]!</a></li>
-                        <li class="navbar-right"><a class="nav-item nav-link active" asp-area="" asp-controller="Users" asp-action="Logout" asp-route-id="@ViewData["UserID"]" style="color: black;font-weight: bold;">Logout</a></li>
+                        <li class="navbar-right"><a class="nav-item nav-link active" asp-area="" asp-controller="Users" asp-action="Profile" asp-route-id="@ViewData["UserID"]" >Welcome @ViewData["User_Name"]!</a></li>
+                        <li class="navbar-right"><a class="nav-item nav-link active" asp-area="" asp-controller="Users" asp-action="Logout" asp-route-id="@ViewData["UserID"]" >Logout</a></li>
                     }
                     else
                     {
