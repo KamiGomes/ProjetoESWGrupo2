@@ -638,6 +638,86 @@ namespace ESW_Shelter.Controllers
         }
 
         /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="profile"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Profile(int id, [Bind("UserID, Email, Password, Name, ConfirmedEmail, RoleID, UserInfoID, Street, PostalCode, City, Phone, AlternativePhone, AlternativeEmail, Facebook, Twitter, Instagram, Tumblr, Website")] Profile profile)
+        {
+            if (id != profile.UserID)
+            {
+                return RedirectToAction("ErrorNotFoundOrSomeOtherError");
+            }
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    Users updateUser = new Users()
+                    {
+                        UserID = profile.UserID,
+                        Email = profile.Email,
+                        Name = profile.Name,
+                        Password = profile.Password,
+                        ConfirmedEmail = profile.ConfirmedEmail,
+                        RoleID = profile.RoleID
+                    };
+                    _context.Users.Update(updateUser);
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!UsersExists(profile.UserID))
+                    {
+                        return RedirectToAction("ErrorNotFoundOrSomeOtherError");
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                // Update UsersInfo table
+                try
+                {
+                    UsersInfo updateUserInfo = new UsersInfo()
+                    {
+                        UserInfoID = profile.UserInfoID,
+                        Street = profile.Street,
+                        PostalCode = profile.PostalCode,
+                        City = profile.City,
+                        Phone = profile.Phone,
+                        AlternativePhone = profile.AlternativePhone,
+                        AlternativeEmail = profile.AlternativeEmail,
+                        Facebook = profile.Facebook,
+                        Twitter = profile.Twitter,
+                        Instagram = profile.Instagram,
+                        Tumblr = profile.Tumblr,
+                        Website = profile.Website,
+                        UserID = profile.UserID
+                    };
+                    _context.UsersInfo.Update(updateUserInfo);
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!UsersInfoExists(profile.UserInfoID))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                await _context.SaveChangesAsync();
+                TempData["Message"] = "Profile updated sucessfully!";
+                return RedirectToAction("Profile", "Users", new { id = profile.UserID });
+            }
+            return View("~/Views/Home/Index.cshtml");
+        }
+
+
+        /// <summary>
         /// <para>Método que vai ser chamado na rota "/Users/Edit/X". Vai receber um id de um Users e uma variável Profile que vem do formulário para edição dos dados.</para>
         /// <para> Caso esteja tudo correto, cria-se variáveis Users e UsersInfo dos modelos e preenche-se com os valores recebidos para que essas variáveis sejam atualizadas com a ajuda do _context.</para>
         /// <para> Caso o id seja null retorna-se <seealso cref="ErrorNotFoundOrSomeOtherError"/>.</para>

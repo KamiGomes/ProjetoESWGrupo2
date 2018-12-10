@@ -13,52 +13,51 @@ namespace ESW_Shelter.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int UserInfoID { get; set; }
 
-        [Display(Prompt = "Example: Street of Streets, nº 4, 1º floor")]
-        [StringLength(100, ErrorMessage = "Street name cannot have more than 100 characters!", MinimumLength = 1)]
+        [Display(Prompt = "Examplo: Rua de José, nº 4, 1º esq", Name = "Morada")]
+        [StringLength(100, ErrorMessage = "Morada não pode ter mais de 100 caracteres!", MinimumLength = 1)]
         public String Street { get; set; }
 
-        [StringLength(10, ErrorMessage = "Name cannot be longer than 10 characters!.", MinimumLength = 5)]
-        [Display(Prompt = "Example: 4000-010")]
+        [StringLength(10, ErrorMessage = "Código-Postal não pode ter mais de 10 caracteres!", MinimumLength = 5)]
+        [Display(Prompt = "Examplo: 4000-010", Name = "Código-Postal")]
         public String PostalCode { get; set; }
 
-        [Display(Prompt = "Example: Lisbon")]
-        [StringLength(40, ErrorMessage = "Name cannot be longer than 40 characters!.", MinimumLength = 1)]
+        [Display(Prompt = "Examplo: Lisboa", Name = "Cidade")]
+        [StringLength(40, ErrorMessage = "Cidade não pode ter mais de 10 caracteres!", MinimumLength = 1)]
         public String City { get; set; }
 
         [DataType(DataType.PhoneNumber)]
-        [RegularExpression("^[0-9]{9,12}$", ErrorMessage = "Phone must have atleast 9! Maximum 12!")]
-        [Display(Prompt = "Example: 910000000")]
+        [RegularExpression("^[0-9]{9,12}$", ErrorMessage = "Telemóvel têm de ter no minimo 9 números, e máximo 12!")]
+        [Display(Prompt = "Examplo: 910000000", Name = "Telemóvel")]
         public int Phone { get; set; }
 
         [DataType(DataType.PhoneNumber)]
-        [RegularExpression("^[0-9]{9,12}$", ErrorMessage = "Phone must have atleast 9! Maximum 12!")]
-        [Display(Prompt = "Example: 910000000")]
+        [RegularExpression("^[0-9]{9,12}$", ErrorMessage = "Contacto Alternativo têm de ter no minimo 9 números, e máximo 12!")]
+        [Display(Prompt = "Examplo: 910000000", Name = "Contacto Alternativo")]
         public int AlternativePhone { get; set; }
 
-        [StringLength(256, ErrorMessage = "Name cannot be longer than 256 characters!.", MinimumLength = 1)]
-        [Required(ErrorMessage = "Missing email!")]
-        [EmailAddress(ErrorMessage = "This is not an Email Address!")]
-        [Display(Prompt = "Example: example@domain.com")]
+        [StringLength(256, ErrorMessage = "Facebook não pode ter mais de 256 caracteres!", MinimumLength = 1)]
+        [EmailAddress(ErrorMessage = "Formato de email incorreto!")]
+        [Display(Prompt = "Examplo: example@domain.com", Name = "Email Alternativo")]
         public String AlternativeEmail { get; set; }
 
-        [StringLength(150, ErrorMessage = "Facebook cannot have more than 150 characters!", MinimumLength = 1)]
-        [Display(Prompt = "Paste your link here!")]
+        [StringLength(150, ErrorMessage = "Facebook não pode ter mais de 150 caracteres!", MinimumLength = 1)]
+        [Display(Prompt = "Copie o link aqui!")]
         public String Facebook { get; set; }
 
-        [StringLength(150, ErrorMessage = "Twitter cannot have more than 150 characters!", MinimumLength = 1)]
-        [Display(Prompt = "Paste your link here!")]
+        [StringLength(150, ErrorMessage = "Twitter não pode ter mais de 150 caracteres!", MinimumLength = 1)]
+        [Display(Prompt = "Copie o link aqui!")]
         public String Twitter { get; set; }
 
-        [StringLength(150, ErrorMessage = "Instagram cannot have more than 150 characters!", MinimumLength = 1)]
-        [Display(Prompt = "Paste your link here!")]
+        [StringLength(150, ErrorMessage = "Instagram não pode ter mais de 150 caracteres!", MinimumLength = 1)]
+        [Display(Prompt = "Copie o link aqui!")]
         public String Instagram { get; set; }
 
-        [StringLength(150, ErrorMessage = "Tumblr cannot have more than 150 characters!", MinimumLength = 1)]
-        [Display(Prompt = "Paste your link here!")]
+        [StringLength(150, ErrorMessage = "Tumblr não pode ter mais de 150 caracteres!", MinimumLength = 1)]
+        [Display(Prompt = "Copie o link aqui!")]
         public String Tumblr { get; set; }
 
-        [StringLength(150, ErrorMessage = "Website cannot have more than 150 characters!", MinimumLength = 1)]
-        [Display(Prompt = "Paste your link here!")]
+        [StringLength(150, ErrorMessage = "Website não pode ter mais de 150 caracteres!", MinimumLength = 1)]
+        [Display(Prompt = "Copie o link aqui!")]
         public String Website { get; set; }
 
         [Required]
