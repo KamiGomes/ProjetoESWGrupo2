@@ -222,6 +222,7 @@ li:hover {
 
 .dropdown-menu .dropdown-item .form-group {
     margin: 0 0 5px 0;
+    color: black;
 }
 
 .dropdown-menu .dropdown-item .buttons {
@@ -230,7 +231,9 @@ li:hover {
 
     .dropdown-menu .dropdown-item .buttons input {
         margin-left: 58%;
+        color: white !important;
     }
+
 
 .dropdown-menu .dropdown-item label {
     color: grey !important;
@@ -238,7 +241,7 @@ li:hover {
 
 .dropdown-menu .dropdown-item input {
     font-size: 12px;
-    color: white;
+    /* color: white; */
 }
 
 .dropdown-menu a {
