@@ -5,10 +5,11 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 
 }
-<div class="row">
-    <h2 class="innerH2">Profile</h2>
+<div class="row profile">
     <p style="margin-left: 10px;">
-        <div class="col-md-4">
+        <h2 class="innerH2">Profile</h2>
+    </p>
+    <div class="col-md-5">
         <form asp-action="Profile">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="UserID" />
@@ -16,14 +17,14 @@
             <input type="hidden" asp-for="ConfirmedEmail" />
             <input type="hidden" asp-for="RoleID" />
             <div class="form-group">
-                <label asp-for="Email" class="control-label"></label>
-                <input asp-for="Email" class="form-control" />
-                <span asp-validation-for="Email" class="text-danger"></span>
-            </div>
-            <div class="form-group">
                 <label asp-for="Name" class="control-label"></label>
                 <input asp-for="Name" class="form-control" />
                 <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Email" class="control-label"></label>
+                <input asp-for="Email" class="form-control" />
+                <span asp-validation-for="Email" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Password" class="control-label"></label>
@@ -51,46 +52,14 @@
                 <input asp-for="Phone" class="form-control" />
                 <span asp-validation-for="Phone" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="AlternativePhone" class="control-label"></label>
-                <input asp-for="AlternativePhone" class="form-control" />
-                <span asp-validation-for="AlternativePhone" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="AlternativeEmail" class="control-label"></label>
-                <input asp-for="AlternativeEmail" class="form-control" />
-                <span asp-validation-for="AlternativeEmail" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Facebook" class="control-label"></label>
-                <input asp-for="Facebook" class="form-control" />
-                <span asp-validation-for="Facebook" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Twitter" class="control-label"></label>
-                <input asp-for="Twitter" class="form-control" />
-                <span asp-validation-for="Twitter" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Instagram" class="control-label"></label>
-                <input asp-for="Instagram" class="form-control" />
-                <span asp-validation-for="Instagram" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Tumblr" class="control-label"></label>
-                <input asp-for="Tumblr" class="form-control" />
-                <span asp-validation-for="Tumblr" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Website" class="control-label"></label>
-                <input asp-for="Website" class="form-control" />
-                <span asp-validation-for="Website" class="text-danger"></span>
-            </div>
-            <div class="form-group" style="margin-bottom:100px;">
-                <input type="submit" value="Save" class="btn btn-default" />
+            <div class="form-group" style="text-align:right; margin-right: 2%;">
+                <input type="reset" value="Limpar" class="btn btn-primary button-image right" />
+                <input type="submit" value="Save" class="btn btn-primary button-image right" />
             </div>
         </form>
     </div>
-    </p>
+    <div class="col-md-5 message">
+        <h2>Deixe-nos conhecê-lo um pouco melhor atualizando o seu perfil.</h2>
+    </div>
 </div>
 

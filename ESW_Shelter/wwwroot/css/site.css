@@ -412,3 +412,29 @@ li:hover {
             vertical-align: middle;
             text-align: center;
         }
+
+/*
+** PROFILE
+*/
+.profile {
+    margin: 0!important;
+}
+
+.profile .col-md-5 {
+    min-height: 85vh;
+    display: table;
+    margin-left: 5%;
+}
+
+.profile .col-md-5 > * {
+    display: table-cell;
+    vertical-align: middle;
+}
+
+.profile > .message {
+    text-align: center;
+}
+
+.profile .col-md-5 form .form-group {
+    margin-top: 3%;
+}
