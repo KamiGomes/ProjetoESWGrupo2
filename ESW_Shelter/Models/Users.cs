@@ -46,6 +46,29 @@ namespace ESW_Shelter.Models
         [Required]
         public Boolean ConfirmedEmail { get; set; }
 
+        /* Info que só aparece no perfil ou então um administrador a criar */
+
+        [Display(Prompt = "Examplo: Rua de José, nº 4, 1º esq", Name = "Morada")]
+        [StringLength(100, ErrorMessage = "Morada não pode ter mais de 100 caracteres!", MinimumLength = 1)]
+        public String Street { get; set; }
+
+        [StringLength(10, ErrorMessage = "Código-Postal não pode ter mais de 10 caracteres!", MinimumLength = 5)]
+        [Display(Prompt = "Examplo: 4000-010", Name = "Código-Postal")]
+        public String PostalCode { get; set; }
+
+        [Display(Prompt = "Examplo: Lisboa", Name = "Cidade")]
+        [StringLength(40, ErrorMessage = "Cidade não pode ter mais de 10 caracteres!", MinimumLength = 1)]
+        public String City { get; set; }
+
+        [RegularExpression(@"^(\d{9})$", ErrorMessage = "Formato de Telemóvel errado!")]
+        [Display(Prompt = "Examplo: 910000000", Name = "Telemóvel")]
+        public string Phone { get; set; }
+
+        [DataType(DataType.Date)]
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
+        [Display(Name = "Data de Nascimento")]
+        public DateTime DateOfBirth { get; set; }
+
         [ForeignKey("Roles")]
         [Required(ErrorMessage = "Role Required!")]
         public int RoleID { get; set; }

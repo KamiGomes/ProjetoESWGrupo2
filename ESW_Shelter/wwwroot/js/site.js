@@ -8,7 +8,6 @@ $(document).ready(() => {
     });
 });
 
-
 //// Write your JavaScript code.
 ////Tabs JS - W3School
 //function openTab(evt, tabName) {

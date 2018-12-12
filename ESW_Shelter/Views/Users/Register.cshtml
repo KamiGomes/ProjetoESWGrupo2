@@ -8,7 +8,7 @@
         <h2>Comece por ajudar os nossos patudos efetuando o registo!</h2>
     </div>
     <div class="col-md-2">
-        <form asp-action="Create" asp-controller="Users">
+        <form asp-action="Register" asp-controller="Users">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="Email" class="control-label"></label>
@@ -22,14 +22,21 @@
             </div>
             <div class="form-group">
                 <label asp-for="Password" class="control-label"></label>
-                <input asp-for="Password" class="form-control" />
-                <span asp-validation-for="Password" class="text-danger"></span>
+                <input asp-for="Password" id="password" class="form-control" />
+                <span asp-validation-for="Password" class="text-danger"></span><br />
+                <input type="checkbox" onchange="document.getElementById('password').type = this.checked ? 'text' : 'password'">
+                Mostrar Password
             </div>
             <div class="form-group">
                 <input asp-for="RoleID" class="form-control" value="1" type="hidden" />
             </div>
             <div class="form-group">
                 <input asp-for="ConfirmedEmail" class="form-control" value="false" type="hidden" />
+                <input asp-for="Phone" class="form-control" value="000000000" type="hidden" />
+                <input asp-for="PostalCode" class="form-control" value="0000-000" type="hidden" />
+                <input asp-for="Street" class="form-control" value="" type="hidden" />
+                <input asp-for="City" class="form-control" value="" type="hidden" />
+                <input asp-for="DateOfBirth" class="form-control" value="01/01/1990" type="hidden" />
             </div>
             <div class="form-group buttons">
                 <input type="reset" value="Limpar" class="btn btn-primary button-image right" />

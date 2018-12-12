@@ -130,7 +130,7 @@ namespace ESW_Shelter.Controllers
         /// <returns>View(userProfile)</returns>
         public async Task<IActionResult> Index()
         {
-            var userProfile = (from user in _context.Users
+            /*var userProfile = (from user in _context.Users
                                join userInfo in _context.UsersInfo on user.UserID equals userInfo.UserID
                                select new
                                {
@@ -159,8 +159,8 @@ namespace ESW_Shelter.Controllers
                                    City = x.City,
                                    Phone = x.Phone
                                }).ToList();
-            GetLogin();
-            return View(userProfile);
+            GetLogin();*/
+            return View();
         }
 
         /// <summary>
@@ -191,8 +191,8 @@ namespace ESW_Shelter.Controllers
             {
                 return RedirectToAction("ErrorNotFoundOrSomeOtherError");
             }
-
-            var userProfile = (from user in _context.Users
+            return View();
+            /*var userProfile = (from user in _context.Users
                                join userInfo in _context.UsersInfo on user.UserID equals userInfo.UserID
                                where user.UserID == id
                                select new
@@ -227,7 +227,7 @@ namespace ESW_Shelter.Controllers
                 return RedirectToAction("ErrorNotFoundOrSomeOtherError");
             }
             GetLogin();
-            return View(userProfile);
+            return View(userProfile);*/
         }
 
         /// <summary>
@@ -243,17 +243,11 @@ namespace ESW_Shelter.Controllers
             return View();
         }
 
-        /// <summary>
-        /// Método é chamado quando a crição de uma nova conta de utilizador é efetuada. Vai direcionar o utilizador para a HomePage.
-        /// </summary>
-        /// <permission cref="Clientes">Novos utilizadores ao sistema.</permission>  
-        /// <returns>View("~/Views/Home/Index.cshtml")</returns>
         [HttpGet]
-        public ActionResult SucessCreation()
+        public IActionResult Register()
         {
-            return View("~/Views/Home/Index.cshtml");
+            return View();
         }
-
         /// <summary>
         /// <para>Método que vai ser chamado na rota "/Users/Create". Vai guardar um Users recebido do formulário. Existe a verificação se o model está correto, isto é,
         /// todos os campos estão preenchidos corretamente com o Model correspondente. </para>
@@ -286,14 +280,13 @@ namespace ESW_Shelter.Controllers
         /// </returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("UserID,Email,Name,Password,RoleID,ConfirmedEmail")] Users users)
+        public async Task<IActionResult> Register([Bind("UserID,Email,Name,Password,ConfirmedEmail,Street,PostalCode,City,Phone,DateOfBirth,RoleID")] Users users)
         {
-            if (ModelState.IsValid)
+            if (ModelState.IsValid == true)
             {
 
                 if (!_context.Users.Any(x => x.Email == users.Email))
                 {
-                    UsersInfo newUserInfo = new UsersInfo();
                     /** Password encrypting ***/
                     /*var data = Encoding.ASCII.GetBytes(users.Password);
                     var sha256 = new SHA256CryptoServiceProvider();
@@ -301,39 +294,24 @@ namespace ESW_Shelter.Controllers
                     users.Password = sha256data;*/
                     /** End of Password encrypting **/
                     _context.Add(users);
-                    _context.SaveChanges();
-                    newUserInfo.UserID = _context.Users.Max(user => users.UserID);
-                    _context.Add(newUserInfo);
+
                     await _context.SaveChangesAsync();
                     /** Send Confirmation Email **/
 
                     int user_id = (from user in _context.Users select user.UserID).Max();
-                    //SendSimpleMessage();
-                    var result = new MailSenderController(_configuration).PostMessage(users.Email, users.Name, users.UserID);
-                    
+                    //var result = new MailSenderController(_configuration).PostMessage(users.Email, users.Name, users.UserID);
+
                     /** End of Confirmation Email **/
+
                     TempData["Message"] = "A sua conta foi criada com sucesso!Por favor verifique o seu email e clique no email para concluir o registo da sua conta e prosseguir para o login!";
-                    return RedirectToAction("SucessCreation");
+                    return RedirectToAction("Index", "Home", null);
                 }
-                else
-                {
 
-                    ModelState.AddModelError("Email", "Email já existe!");
-                    RedirectToAction("Register", "Home", null);
-                }
+                ModelState.AddModelError("Email", "Email já existe!");
+                return View(users);
             }
-            return RedirectToAction("Register", "Home", null); 
-        }
-
-        /// <summary>
-        /// <para>Método que vai ser chamado na rota "/Users/Login". Vai redireccionar a página para a HomePage.</para>
-        /// </summary>
-        /// <permission cref="Clientes">Novos utilizadores ao sistema.</permission>  
-        /// <returns>View("~/Views/Home/Index.cshtml")</returns>
-        [HttpGet]
-        public ActionResult Login()
-        {
-            return View("~/Views/Home/Index.cshtml");
+            TempData["Message"] = "Error";
+            return View(users);
         }
 
         /// <summary>
@@ -362,33 +340,33 @@ namespace ESW_Shelter.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Login([Bind("Email,Password")] Users users)
         {
-            try
-            {
-                var userRetrieved = (from user in _context.Users where user.Email == users.Email && user.Password == users.Password select user).First();
 
-                if (userRetrieved != null)
+                var user = await _context.Users.SingleAsync(i => i.Email == users.Email);
+
+                if (user != null)
                 {
-                    if (userRetrieved.ConfirmedEmail == false)
+                    if (user.ConfirmedEmail == false)
                     {
                         TempData["Message"] = "Este email ainda não foi confirmado! Por favor vá ao seu email e siga as instruções!";
                         return View("~/Views/Home/Index.cshtml");
                     }
-                    LoginSV(userRetrieved.Name, userRetrieved.UserID.ToString());
+
+                    if (user.Password != users.Password)
+                    {
+                        TempData["Message"] = "Password Errada!";
+                        ModelState.AddModelError("Email", "Email or Password incorreto!");
+                        return View("~/Views/Home/Index.cshtml");
+                    }
+
+                    LoginSV(user.Name, user.UserID.ToString());
                     TempData["Message"] = "Login efetuado com sucesso!";
 
-                    return RedirectToAction("Login");
+                    return RedirectToAction("Index", "Home", null);
                 }
-                else
-                {
-                    ModelState.AddModelError("Email", "Email or Password incorreto!");
-                    return View("~/Views/Home/Register.cshtml");
-                }
-            }
-            catch (InvalidOperationException e)
-            {
+                TempData["Message"] = "Email or Password incorreto!";
                 ModelState.AddModelError("Email", "Email or Password incorreto!");
-                return View("~/Views/Home/Register.cshtml");
-            }
+                return View("~/Views/Home/Index.cshtml");
+           
 
         }
 
@@ -472,43 +450,14 @@ namespace ESW_Shelter.Controllers
             {
                 return RedirectToAction("ErrorNotFoundOrSomeOtherError");
             }
-            var userProfile = (from user in _context.Users
-                               join userInfo in _context.UsersInfo on user.UserID equals userInfo.UserID
-                               where user.UserID == id
-                               select new
-                               {
-                                   user.UserID,
-                                   user.Email,
-                                   user.Password,
-                                   user.Name,
-                                   user.ConfirmedEmail,
-                                   user.RoleID,
-                                   userInfo.UserInfoID,
-                                   userInfo.Street,
-                                   userInfo.PostalCode,
-                                   userInfo.City,
-                                   userInfo.Phone
-                               }).First();
-            if (userProfile == null)
+            var user = await _context.Users.FindAsync(id);
+            if (user == null)
             {
                 return RedirectToAction("ErrorNotFoundOrSomeOtherError");
             }
-            Profile profile = new Profile()
-            {
-                UserID = userProfile.UserID,
-                Email = userProfile.Email,
-                Password = userProfile.Password,
-                ConfirmedEmail = userProfile.ConfirmedEmail,
-                RoleID = userProfile.RoleID,
-                Name = userProfile.Name,
-                UserInfoID = userProfile.UserInfoID,
-                Street = userProfile.Street,
-                PostalCode = userProfile.PostalCode,
-                City = userProfile.City,
-                Phone = userProfile.Phone
-            };
+
                 GetLogin();
-                return View("~/Views/Home/Profile.cshtml", profile);
+                return View(user);
         }
 
         /// <summary>
@@ -530,7 +479,7 @@ namespace ESW_Shelter.Controllers
             {
                 return RedirectToAction("ErrorNotFoundOrSomeOtherError");
             }
-            var userProfile = (from user in _context.Users
+            /*var userProfile = (from user in _context.Users
                                join userInfo in _context.UsersInfo on user.UserID equals userInfo.UserID
                                where user.UserID == id
                                select new
@@ -569,8 +518,8 @@ namespace ESW_Shelter.Controllers
             {
                 return RedirectToAction("ErrorNotFoundOrSomeOtherError");
             } 
-            
-            return View("Edit", profile);
+            */
+            return View("Edit");
        
         }
 
@@ -582,90 +531,21 @@ namespace ESW_Shelter.Controllers
         /// <returns></returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Profile(int id, [Bind("UserID, Email, Password, Name, ConfirmedEmail, RoleID, UserInfoID, Street, PostalCode, City, Phone")] Profile profile)
+        public async Task<IActionResult> Profile(int id, [Bind("UserID, Email, Password, Name, ConfirmedEmail, RoleID, UserInfoID, Street, PostalCode, City, Phone")] Users users)
         {
-            if (id != profile.UserID)
+            if (id != users.UserID)
             {
                 return RedirectToAction("ErrorNotFoundOrSomeOtherError");
             }
-                Users updateUser = new Users()
-                {
-                    UserID = profile.UserID,
-                    Email = profile.Email,
-                    Name = profile.Name,
-                    Password = profile.Password,
-                    ConfirmedEmail = profile.ConfirmedEmail,
-                    RoleID = profile.RoleID
-                };
-                _context.Users.Update(updateUser);
 
-                UsersInfo updateUserInfo = new UsersInfo()
-                {
-                    UserInfoID = profile.UserInfoID,
-                    Street = profile.Street,
-                    PostalCode = profile.PostalCode,
-                    City = profile.City,
-                    Phone = profile.Phone,
-                    UserID = profile.UserID
-                };
-                _context.UsersInfo.Update(updateUserInfo);
-
+            if (ModelState.IsValid)
+            {
+                _context.Update(users);
                 await _context.SaveChangesAsync();
                 TempData["Message"] = "Perfil atualizado com sucesso!";
-                return RedirectToAction("Profile", "Users", new { id = profile.UserID });
-            
-            /*if (ModelState.IsValid)
-            {
-                try
-                {
-                    Users updateUser = new Users()
-                    {
-                        UserID = profile.UserID,
-                        Email = profile.Email,
-                        Name = profile.Name,
-                        Password = profile.Password,
-                        ConfirmedEmail = profile.ConfirmedEmail,
-                        RoleID = profile.RoleID
-                    };
-                    _context.Users.Update(updateUser);
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!UsersExists(profile.UserID))
-                    {
-                        return RedirectToAction("ErrorNotFoundOrSomeOtherError");
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                // Update UsersInfo table
-                try
-                {
-                    UsersInfo updateUserInfo = new UsersInfo()
-                    {
-                        UserInfoID = profile.UserInfoID,
-                        Street = profile.Street,
-                        PostalCode = profile.PostalCode,
-                        City = profile.City,
-                        Phone = profile.Phone,
-                        UserID = profile.UserID
-                    };
-                    _context.UsersInfo.Update(updateUserInfo);
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!UsersInfoExists(profile.UserInfoID))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }*/
-            //return RedirectToAction("Index", "Home", null);
+                return RedirectToAction("Profile", "Users", new { id = users.UserID });
+            }
+            return View();
         }
 
 
@@ -717,7 +597,7 @@ namespace ESW_Shelter.Controllers
         /// </returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("UserID, Email, Password, Name, ConfirmedEmail, RoleID, UserInfoID, Street, PostalCode, City, Phone, AlternativePhone, AlternativeEmail, Facebook, Twitter, Instagram, Tumblr, Website")] Profile profile)
+        public async Task<IActionResult> Edit(int id, [Bind("UserID, Email, Password, Name, ConfirmedEmail, RoleID, UserInfoID, Street, PostalCode, City, Phone, AlternativePhone, AlternativeEmail, Facebook, Twitter, Instagram, Tumblr, Website")] Users profile)
         {
             if (id != profile.UserID)
             {
@@ -750,7 +630,7 @@ namespace ESW_Shelter.Controllers
                     }
                 }
                 // Update UsersInfo table
-                try
+                /*try
                 {
                     UsersInfo updateUserInfo = new UsersInfo()
                     {
@@ -773,7 +653,7 @@ namespace ESW_Shelter.Controllers
                     {
                         throw;
                     }
-                }
+                }*/
                 await _context.SaveChangesAsync();
                 TempData["Message"] = "Perfil atualizado com sucesso!";
                 return RedirectToAction("Edit", "Users", new {id = profile.UserID});
