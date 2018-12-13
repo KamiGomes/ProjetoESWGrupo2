@@ -70,7 +70,7 @@ namespace ESW_Shelter.Data.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Roles", x => x.RoleID);
-            });
+                });
 
             migrationBuilder.CreateIndex(
                 name: "UsersByID",
@@ -104,7 +104,7 @@ namespace ESW_Shelter.Data.Migrations
         protected void Seed(ShelterContext shelterContext)
         {
 
-            shelterContext.Roles.Add( 
+            shelterContext.Roles.Add(
                 new Roles { RoleID = 1, RoleName = "Client" });
             shelterContext.Roles.Add(
                 new Roles { RoleID = 2, RoleName = "Volunteer" });
