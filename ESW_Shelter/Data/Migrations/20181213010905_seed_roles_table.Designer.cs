@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ESW_Shelter.Data.Migrations
 {
     [DbContext(typeof(ShelterContext))]
-    [Migration("20181213003200_RemoveUsersInfoTable")]
-    partial class RemoveUsersInfoTable
+    [Migration("20181213010905_seed_roles_table")]
+    partial class seed_roles_table
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
