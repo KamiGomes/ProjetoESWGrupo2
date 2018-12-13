@@ -37,7 +37,7 @@ namespace ESW_Shelter.Models
         [Display(Prompt = "Examplo: John Wick", Name = "Nome")]
         public String Name { get; set; }
 
-        [StringLength(12, ErrorMessage = "Password não pode ter mais que 12 caracteres e menos de 6!", MinimumLength = 6)]
+        [StringLength(12, ErrorMessage = "Siga o exemplo disponivel!Tamanho de Password: 6-12 caracteres!", MinimumLength = 6)]
         [Required(ErrorMessage = "Password em falta!")]
         [DataType(DataType.Password)]
         [Display(Prompt = "Examplo: John_152 (Min: 6 - Max: 12)")]
@@ -53,10 +53,12 @@ namespace ESW_Shelter.Models
         public String Street { get; set; }
 
         [StringLength(10, ErrorMessage = "Código-Postal não pode ter mais de 10 caracteres!", MinimumLength = 5)]
+        [RegularExpression(@"\d{4}(-\d{3})?", ErrorMessage = "Por favor, siga o formato do exemplo!")]
         [Display(Prompt = "Examplo: 4000-010", Name = "Código-Postal")]
         public String PostalCode { get; set; }
 
         [Display(Prompt = "Examplo: Lisboa", Name = "Cidade")]
+        [RegularExpression(@"^[a-zA-Z\s]+$", ErrorMessage = "Por favor, utilize só caracteres!")]
         [StringLength(40, ErrorMessage = "Cidade não pode ter mais de 10 caracteres!", MinimumLength = 1)]
         public String City { get; set; }
 

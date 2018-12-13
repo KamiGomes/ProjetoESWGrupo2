@@ -130,36 +130,6 @@ namespace ESW_Shelter.Controllers
         /// <returns>View(userProfile)</returns>
         public async Task<IActionResult> Index()
         {
-            /*var userProfile = (from user in _context.Users
-                               join userInfo in _context.UsersInfo on user.UserID equals userInfo.UserID
-                               select new
-                               {
-                                   user.UserID,
-                                   user.Email,
-                                   user.Password,
-                                   user.Name,
-                                   user.ConfirmedEmail,
-                                   user.RoleID,
-                                   userInfo.UserInfoID,
-                                   userInfo.Street,
-                                   userInfo.PostalCode,
-                                   userInfo.City,
-                                   userInfo.Phone
-                               }).AsEnumerable().Select(x => new Profile
-                               {
-                                   UserID = x.UserID,
-                                   Email = x.Email,
-                                   Password = x.Password,
-                                   ConfirmedEmail = x.ConfirmedEmail,
-                                   RoleID = x.RoleID,
-                                   Name = x.Name,
-                                   UserInfoID = x.UserInfoID,
-                                   Street = x.Street,
-                                   PostalCode = x.PostalCode,
-                                   City = x.City,
-                                   Phone = x.Phone
-                               }).ToList();
-            GetLogin();*/
             return View();
         }
 
@@ -192,42 +162,6 @@ namespace ESW_Shelter.Controllers
                 return RedirectToAction("ErrorNotFoundOrSomeOtherError");
             }
             return View();
-            /*var userProfile = (from user in _context.Users
-                               join userInfo in _context.UsersInfo on user.UserID equals userInfo.UserID
-                               where user.UserID == id
-                               select new
-                               {
-                                   user.UserID,
-                                   user.Email,
-                                   user.Password,
-                                   user.Name,
-                                   user.ConfirmedEmail,
-                                   user.RoleID,
-                                   userInfo.UserInfoID,
-                                   userInfo.Street,
-                                   userInfo.PostalCode,
-                                   userInfo.City,
-                                   userInfo.Phone
-                               }).AsEnumerable().Select(x => new Profile
-                               {
-                                   UserID = x.UserID,
-                                   Email = x.Email,
-                                   Password = x.Password,
-                                   ConfirmedEmail = x.ConfirmedEmail,
-                                   RoleID = x.RoleID,
-                                   Name = x.Name,
-                                   UserInfoID = x.UserInfoID,
-                                   Street = x.Street,
-                                   PostalCode = x.PostalCode,
-                                   City = x.City,
-                                   Phone = x.Phone
-                               }).First(); 
-            if (userProfile == null)
-            {
-                return RedirectToAction("ErrorNotFoundOrSomeOtherError");
-            }
-            GetLogin();
-            return View(userProfile);*/
         }
 
         /// <summary>
@@ -310,7 +244,6 @@ namespace ESW_Shelter.Controllers
                 ModelState.AddModelError("Email", "Email já existe!");
                 return View(users);
             }
-            TempData["Message"] = "Error";
             return View(users);
         }
 
@@ -486,46 +419,6 @@ namespace ESW_Shelter.Controllers
             {
                 return RedirectToAction("ErrorNotFoundOrSomeOtherError");
             }
-            /*var userProfile = (from user in _context.Users
-                               join userInfo in _context.UsersInfo on user.UserID equals userInfo.UserID
-                               where user.UserID == id
-                               select new
-                               {
-                                   user.UserID,
-                                   user.Email,
-                                   user.Password,
-                                   user.Name,
-                                   user.ConfirmedEmail,
-                                   user.RoleID,
-                                   userInfo.UserInfoID,
-                                   userInfo.Street,
-                                   userInfo.PostalCode,
-                                   userInfo.City,
-                                   userInfo.Phone
-                               }).First();
-            if (userProfile == null)
-            {
-                return RedirectToAction("ErrorNotFoundOrSomeOtherError");
-            }
-            Profile profile = new Profile()
-            {
-                UserID = userProfile.UserID,
-                Email = userProfile.Email,
-                Password = userProfile.Password,
-                ConfirmedEmail = userProfile.ConfirmedEmail,
-                RoleID = userProfile.RoleID,
-                Name = userProfile.Name,
-                UserInfoID = userProfile.UserInfoID,
-                Street = userProfile.Street,
-                PostalCode = userProfile.PostalCode,
-                City = userProfile.City,
-                Phone = userProfile.Phone
-            };
-            if (!GetLogin())
-            {
-                return RedirectToAction("ErrorNotFoundOrSomeOtherError");
-            } 
-            */
             return View("Edit");
        
         }
@@ -540,21 +433,29 @@ namespace ESW_Shelter.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Profile(int id, [Bind("UserID,Email,Name,Password,ConfirmedEmail,Street,PostalCode,City,Phone,DateOfBirth,RoleID")] Users users)
         {
-            if (id != users.UserID)
+            try
+            {
+                if (id != users.UserID)
             {
                 return RedirectToAction("ErrorNotFoundOrSomeOtherError");
             }
-
-            if (ModelState.IsValid)
+                if (ModelState.IsValid)
+                {
+                    _context.Update(users);
+                    await _context.SaveChangesAsync();
+                    TempData["Message"] = "Perfil atualizado com sucesso!";
+                    return RedirectToAction("Profile", "Users", new { id = users.UserID });
+                }
+                TempData["Message"] = "Por favor, siga os exemplos para fazer a atualização!";
+                ModelState.AddModelError("PostalCode", "Código Postal no Formato Errado!");
+                return RedirectToAction("Profile", "Users", new { id = users.UserID });
+            } catch (NullReferenceException e)
             {
-                _context.Update(users);
-                await _context.SaveChangesAsync();
-                TempData["Message"] = "Perfil atualizado com sucesso!";
+                TempData["Message"] = "Por favor, siga os exemplos para fazer a atualização!";
+                ModelState.AddModelError("PostalCode", "Código Postal no Formato Errado!");
                 return RedirectToAction("Profile", "Users", new { id = users.UserID });
             }
-            return View();
         }
-
 
         /// <summary>
         /// <para>Método que vai ser chamado na rota "/Users/Edit/X". Vai receber um id de um Users e uma variável Profile que vem do formulário para edição dos dados.</para>
@@ -636,31 +537,7 @@ namespace ESW_Shelter.Controllers
                         throw;
                     }
                 }
-                // Update UsersInfo table
-                /*try
-                {
-                    UsersInfo updateUserInfo = new UsersInfo()
-                    {
-                        UserInfoID = profile.UserInfoID,
-                        Street = profile.Street,
-                        PostalCode = profile.PostalCode,
-                        City = profile.City,
-                        Phone = profile.Phone,
-                        UserID = profile.UserID
-                    };
-                    _context.UsersInfo.Update(updateUserInfo);
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!UsersInfoExists(profile.UserInfoID))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }*/
+
                 await _context.SaveChangesAsync();
                 TempData["Message"] = "Perfil atualizado com sucesso!";
                 return RedirectToAction("Edit", "Users", new {id = profile.UserID});
