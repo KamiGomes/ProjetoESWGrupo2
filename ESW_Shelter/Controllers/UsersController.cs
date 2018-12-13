@@ -355,7 +355,7 @@ namespace ESW_Shelter.Controllers
                     if (user.Password != users.Password)
                     {
                         TempData["Message"] = "Password Errada!";
-                        ModelState.AddModelError("Email", "Email or Password incorreto!");
+                        ModelState.AddModelError("Email", "Email ou Password incorreto!");
                         return View("~/Views/Home/Index.cshtml");
                     }
 
@@ -365,13 +365,13 @@ namespace ESW_Shelter.Controllers
                     return RedirectToAction("Index", "Home", null);
                 }
                 TempData["Message"] = "Email or Password incorreto!";
-                ModelState.AddModelError("Email", "Email or Password incorreto!");
+                ModelState.AddModelError("Email", "Email ou Password incorreto!");
                 return View("~/Views/Home/Index.cshtml");
             }
             catch (Exception ex)
             {
-                TempData["Message"] = "Email or Password incorreto!";
-                ModelState.AddModelError("Email", "Email or Password incorreto!");
+                TempData["Message"] = "Email ou Password incorreto!";
+                ModelState.AddModelError("Email", "Email ou Password incorreto!");
                 return View("~/Views/Home/Index.cshtml");
             }
         }
