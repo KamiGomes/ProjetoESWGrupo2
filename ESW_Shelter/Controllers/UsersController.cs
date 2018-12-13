@@ -531,7 +531,7 @@ namespace ESW_Shelter.Controllers
         /// <returns></returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Profile(int id, [Bind("UserID, Email, Password, Name, ConfirmedEmail, RoleID, UserInfoID, Street, PostalCode, City, Phone")] Users users)
+        public async Task<IActionResult> Profile(int id, [Bind("UserID,Email,Name,Password,ConfirmedEmail,Street,PostalCode,City,Phone,DateOfBirth,RoleID")] Users users)
         {
             if (id != users.UserID)
             {
@@ -700,10 +700,6 @@ namespace ESW_Shelter.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var userInfo = (from ui in _context.UsersInfo
-                            where ui.UserID == id
-                            select ui).First();
-            _context.UsersInfo.Remove(userInfo);
 
             var users = await _context.Users.FindAsync(id);
             _context.Users.Remove(users);
@@ -735,18 +731,6 @@ namespace ESW_Shelter.Controllers
         private bool UsersExists(int id)
         {
             return _context.Users.Any(e => e.UserID == id);
-        }
-
-        /// <summary>
-        /// <para>Método que vai verificar se existe um UsersInfo com o id recebido.</para>
-        /// </summary>
-        /// <param name="id">Id de UsersInfo</param>
-        /// <returns>
-        /// <para>_context.UsersInfo.Any(e => e.UserInfoID == id)</para>
-        /// </returns>
-        private bool UsersInfoExists(int id)
-        {
-            return _context.UsersInfo.Any(e => e.UserInfoID == id);
         }
 
         /// <summary>

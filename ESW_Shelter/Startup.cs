@@ -46,7 +46,7 @@ namespace ESW_Shelter
                 options.Cookie.HttpOnly = true;
             });
 
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
             services.AddDbContext<ShelterContext>(options =>
                     options.UseSqlServer(Configuration.GetConnectionString("ShelterContext")));

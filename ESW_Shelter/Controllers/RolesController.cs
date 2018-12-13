@@ -23,7 +23,7 @@ namespace ESW_Shelter.Controllers
             return View(roles);
         }
 
-        private IActionResult View(object p)
+        public IActionResult View(object p)
         {
             throw new NotImplementedException();
         }
