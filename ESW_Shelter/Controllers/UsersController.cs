@@ -340,7 +340,12 @@ namespace ESW_Shelter.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Login([Bind("Email,Password")] Users users)
         {
-
+            if (users.Email.Equals(""))
+            {
+                TempData["Message"] = "Email or Password incorreto!";
+                ModelState.AddModelError("Email", "Email or Password incorreto!");
+                return View("~/Views/Home/Index.cshtml");
+            }
                 var user = await _context.Users.SingleAsync(i => i.Email == users.Email);
 
                 if (user != null)
@@ -456,8 +461,10 @@ namespace ESW_Shelter.Controllers
                 return RedirectToAction("ErrorNotFoundOrSomeOtherError");
             }
 
-                GetLogin();
-                return View(user);
+            string date31string = user.DateOfBirth.ToString("yyyy/MM/dd");
+            user.DateOfBirth  = DateTime.ParseExact(date31string, "yyyy/MM/dd",null);
+            GetLogin();
+            return View(user);
         }
 
         /// <summary>

@@ -65,7 +65,7 @@ namespace ESW_Shelter.Models
         public string Phone { get; set; }
 
         [DataType(DataType.Date)]
-        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
+        [DisplayFormat(DataFormatString = "{0:yyyy/MM/dd}", ApplyFormatInEditMode = true)]
         [Display(Name = "Data de Nascimento")]
         public DateTime DateOfBirth { get; set; }
 
