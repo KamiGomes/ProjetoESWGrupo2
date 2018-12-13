@@ -17,12 +17,6 @@ namespace ESW_Shelter.Data.Migrations
                 maxLength: 40,
                 nullable: true);
 
-            migrationBuilder.AddColumn<bool>(
-                name: "ConfirmedEmail",
-                table: "Users",
-                nullable: false,
-                defaultValue: false);
-
             migrationBuilder.AddColumn<DateTime>(
                 name: "DateOfBirth",
                 table: "Users",
