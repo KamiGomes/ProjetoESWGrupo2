@@ -23,11 +23,6 @@ namespace ESW_Shelter.Controllers
             return View(roles);
         }
 
-        public IActionResult View(object p)
-        {
-            throw new NotImplementedException();
-        }
-
         // GET: Roles/Details/5
         public async Task<IActionResult> Details(int? id)
         {
