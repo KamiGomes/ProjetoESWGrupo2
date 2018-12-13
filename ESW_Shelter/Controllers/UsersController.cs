@@ -273,42 +273,40 @@ namespace ESW_Shelter.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Login([Bind("Email,Password")] Users users)
         {
-            try
+            if (users.Email.Equals(""))
             {
-                var user = await _context.Users.SingleAsync(i => i.Email == users.Email);
-
-                if (user != null)
-                {
-                    if (user.ConfirmedEmail == false)
-                    {
-                        TempData["Message"] = "Este email ainda não foi confirmado! Por favor vá ao seu email e siga as instruções!";
-                        return View("~/Views/Home/Index.cshtml");
-                    }
-
-                    if (user.Password != users.Password)
-                    {
-                        TempData["Message"] = "Password Errada!";
-                        ModelState.AddModelError("Email", "Email ou Password incorreto!");
-                        return View("~/Views/Home/Index.cshtml");
-                    }
-
-                    LoginSV(user.Name, user.UserID.ToString());
-                    TempData["Message"] = "Login efetuado com sucesso!";
-
-                    return RedirectToAction("Index", "Home", null);
-                }
                 TempData["Message"] = "Email or Password incorreto!";
-                ModelState.AddModelError("Email", "Email ou Password incorreto!");
+                ModelState.AddModelError("Email", "Email or Password incorreto!");
                 return View("~/Views/Home/Index.cshtml");
             }
-            catch (Exception ex)
-            {
-                TempData["Message"] = "Email ou Password incorreto!";
-                ModelState.AddModelError("Email", "Email ou Password incorreto!");
-                return View("~/Views/Home/Index.cshtml");
-            }
-        }
+            var user = await _context.Users.SingleAsync(i => i.Email == users.Email);
 
+            if (user != null)
+            {
+                if (user.ConfirmedEmail == false)
+                {
+                    TempData["Message"] = "Este email ainda não foi confirmado! Por favor vá ao seu email e siga as instruções!";
+                    return View("~/Views/Home/Index.cshtml");
+                }
+
+                if (user.Password != users.Password)
+                {
+                    TempData["Message"] = "Password Errada!";
+                    ModelState.AddModelError("Email", "Email or Password incorreto!");
+                    return View("~/Views/Home/Index.cshtml");
+                }
+
+                LoginSV(user.Name, user.UserID.ToString());
+                TempData["Message"] = "Login efetuado com sucesso!";
+
+                return RedirectToAction("Index", "Home", null);
+            }
+            TempData["Message"] = "Email or Password incorreto!";
+            ModelState.AddModelError("Email", "Email or Password incorreto!");
+            return View("~/Views/Home/Index.cshtml");
+
+
+        }
 
         /// <summary>
         /// <para>Método que vai ser chamado na rota "/Users/ConfirmEmail/X". Vai receber um id de um Users, e com esse id vai pesquisar a existência de um.</para>
@@ -355,10 +353,10 @@ namespace ESW_Shelter.Controllers
         /// </returns>
         public async Task<IActionResult> Logout(int? id)
         {
-            if(id != null)
+            if (id != null)
             {
                 var users = await _context.Users.FindAsync(id);
-                if(users != null)
+                if (users != null)
                 {
                     LoginSV("", "");
                     TempData["Message"] = "Logout efetuado com sucesso! Obrigado pela visita e volte brevemente!";
@@ -397,7 +395,7 @@ namespace ESW_Shelter.Controllers
             }
 
             string date31string = user.DateOfBirth.ToString("yyyy/MM/dd");
-            user.DateOfBirth  = DateTime.ParseExact(date31string, "yyyy/MM/dd",null);
+            user.DateOfBirth = DateTime.ParseExact(date31string, "yyyy/MM/dd", null);
             GetLogin();
             return View(user);
         }
@@ -422,7 +420,7 @@ namespace ESW_Shelter.Controllers
                 return RedirectToAction("ErrorNotFoundOrSomeOtherError");
             }
             return View("Edit");
-       
+
         }
 
         /// <summary>
@@ -433,14 +431,14 @@ namespace ESW_Shelter.Controllers
         /// <returns></returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Profile(int id, [Bind("UserID, Email, Password, Name, ConfirmedEmail, RoleID, UserInfoID, Street, PostalCode, City, Phone")] Users users)
+        public async Task<IActionResult> Profile(int id, [Bind("UserID,Email,Name,Password,ConfirmedEmail,Street,PostalCode,City,Phone,DateOfBirth,RoleID")] Users users)
         {
             try
             {
                 if (id != users.UserID)
-            {
-                return RedirectToAction("ErrorNotFoundOrSomeOtherError");
-            }
+                {
+                    return RedirectToAction("ErrorNotFoundOrSomeOtherError");
+                }
                 if (ModelState.IsValid)
                 {
                     _context.Update(users);
@@ -448,12 +446,13 @@ namespace ESW_Shelter.Controllers
                     TempData["Message"] = "Perfil atualizado com sucesso!";
                     return RedirectToAction("Profile", "Users", new { id = users.UserID });
                 }
-                TempData["Message"] = "Por favor, siga os exemplos para fazer a atualização!";
+                TempData["Message"] = "Por favor, siga os exemplos para continuar!";
                 ModelState.AddModelError("PostalCode", "Código Postal no Formato Errado!");
                 return RedirectToAction("Profile", "Users", new { id = users.UserID });
-            } catch (NullReferenceException e)
+            }
+            catch (NullReferenceException e)
             {
-                TempData["Message"] = "Por favor, siga os exemplos para fazer a atualização!";
+                TempData["Message"] = "Por favor, siga os exemplos para continuar!";
                 ModelState.AddModelError("PostalCode", "Código Postal no Formato Errado!");
                 return RedirectToAction("Profile", "Users", new { id = users.UserID });
             }
@@ -542,7 +541,7 @@ namespace ESW_Shelter.Controllers
 
                 await _context.SaveChangesAsync();
                 TempData["Message"] = "Perfil atualizado com sucesso!";
-                return RedirectToAction("Edit", "Users", new {id = profile.UserID});
+                return RedirectToAction("Edit", "Users", new { id = profile.UserID });
             }
             return RedirectToAction("Index", "Home", null);
         }
@@ -586,10 +585,6 @@ namespace ESW_Shelter.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var userInfo = (from ui in _context.UsersInfo
-                            where ui.UserID == id
-                            select ui).First();
-            _context.UsersInfo.Remove(userInfo);
 
             var users = await _context.Users.FindAsync(id);
             _context.Users.Remove(users);
@@ -624,18 +619,6 @@ namespace ESW_Shelter.Controllers
         }
 
         /// <summary>
-        /// <para>Método que vai verificar se existe um UsersInfo com o id recebido.</para>
-        /// </summary>
-        /// <param name="id">Id de UsersInfo</param>
-        /// <returns>
-        /// <para>_context.UsersInfo.Any(e => e.UserInfoID == id)</para>
-        /// </returns>
-        private bool UsersInfoExists(int id)
-        {
-            return _context.UsersInfo.Any(e => e.UserInfoID == id);
-        }
-
-        /// <summary>
         /// <para>Método que vai definir as session variables que o login é efetuado.</para>
         /// <para>Caso o recebido seja vazio, as variáveis de sessão são removidas ( chamado pelo <seealso cref="Logout(int?)"/> )</para>
         /// <para>Verifica o role do utilizador, e caso seja admin, declara-se uma outra vairável de sessão</para>
@@ -644,11 +627,12 @@ namespace ESW_Shelter.Controllers
         /// <param name="id"> Id do utilizador </param>
         private void LoginSV(String name, String id)
         {
-            if(name.Equals(""))
+            if (name.Equals(""))
             {
                 HttpContext.Session.Remove("User_Name");
                 HttpContext.Session.Remove("UserID");
-            } else
+            }
+            else
             {
                 HttpContext.Session.SetString("User_Name", name);
                 HttpContext.Session.SetString("UserID", id);

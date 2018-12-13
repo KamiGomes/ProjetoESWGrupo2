@@ -23,7 +23,7 @@ namespace ESW_Shelter.Controllers
         {
             var apiKey = _configuration.GetSection("SENDGRID_API_KEY").Value;
             var client = new SendGridClient(apiKey);
-            string link = String.Format("<h2><a href=\"https://eswshelter.azurewebsites.net/Users/ConfirmEmail/{0}\"> Concluir Registo </a></h2> ", id);
+            string link = String.Format("<h2><a href=\"https://eswsheltergrupo2.azurewebsites.net/Users/ConfirmEmail/{0}\"> Concluir Registo </a></h2> ", id);
                 var msg = new SendGridMessage()
             {
                 From = new EmailAddress("eswg21819@gmail.com", "ESW - Grupo 2"),
