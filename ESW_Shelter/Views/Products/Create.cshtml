@@ -3,6 +3,24 @@
 @{
     ViewData["Title"] = "Create";
     Layout = "~/Views/Shared/_BackLayout.cshtml";
+
+    List<SelectListItem> listItems = new List<SelectListItem>();
+    listItems.Add(new SelectListItem
+    {
+        Text = "Exemplo1",
+        Value = "Exemplo1"
+    });
+    listItems.Add(new SelectListItem
+    {
+        Text = "Exemplo2",
+        Value = "Exemplo2",
+        Selected = true
+    });
+    listItems.Add(new SelectListItem
+    {
+        Text = "Exemplo3",
+        Value = "Exemplo3"
+    });
 }
 
 <h2>Create</h2>
@@ -25,14 +43,36 @@
             </div>
             <div class="form-group">
                 <label asp-for="AnimalTypeFK" class="control-label"></label>
-                <input asp-for="AnimalTypeFK" class="form-control" />
+                <select class="input-lg" name="AnimalTypeFK" id="AnimalTypeFK">
+                    <option value="0" style="color:#ccc !important;">
+                        Por favor seleccione um tipo de animal!
+                    </option>
+                    @foreach (AnimalType item in ViewBag.AnimalsTypes)
+                    {
+                        <option value="@item.AnimalTypeID" @(Model.AnimalType==item.AnimalTypeID ? "selected" : "" )>
+                            @item.Name
+                        </option>
+                    }
+                </select>
                 <span asp-validation-for="AnimalTypeFK" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="ProductTypeFK" class="control-label"></label>
-                <input asp-for="ProductTypeFK" class="form-control" />
-                <span asp-validation-for="ProductTypeFK" class="text-danger"></span>
             </div>
+    <div class="form-group">
+        <label asp-for="ProductTypeFK" class="control-label"></label>
+        <select class="input-lg" name="ProductTypeFK" id="ProductTypeFK">
+            <option value="0" style="color:#ccc !important;">
+                Por Favor seleccione um tipo de produto!
+            </option>
+            @foreach (ProductType item in ViewBag.ProductType)
+            {
+                <option value="@item.ProductTypeID" @(Model.ProductType==item.ProductTypeID ? "selected" : "" )>
+                    @item.Name
+                </option>
+            }
+        </select>
+
+        <span asp-validation-for="ProductTypeFK" class="text-danger"></span>
+    </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-default" />
             </div>

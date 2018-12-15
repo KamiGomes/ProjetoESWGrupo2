@@ -491,3 +491,7 @@ th {
     background-color: darkorange;
     color: white;
 }
+
+select {
+    color: black;
+}

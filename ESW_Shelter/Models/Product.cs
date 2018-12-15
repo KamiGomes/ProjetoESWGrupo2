@@ -12,7 +12,7 @@ namespace ESW_Shelter.Models
 
         [StringLength(256, ErrorMessage = "Nome não pode ter mais que 256 caracteres!", MinimumLength = 1)]
         [Required(ErrorMessage = "Nome em falta!")]
-        [RegularExpression(@"^[a-zA-Z\s]+$", ErrorMessage = "Por favor, utilize só caracteres!")]
+        [RegularExpression(@"^[a-zA-Z\s][\w~^´`]+$", ErrorMessage = "Por favor, utilize só caracteres!")]
         [Display(Prompt = "Examplo: Secos Continente", Name = "Nome")]
         public String Name { get; set; }
 
@@ -30,6 +30,13 @@ namespace ESW_Shelter.Models
         [Required(ErrorMessage = "Escolha um tipo para este produto!")]
         [Display(Prompt = "Examplo: Comida", Name = "Tipo de produto")]
         public int ProductTypeFK { get; set; }
+
+
+        [NotMapped]
+        public String ProductTypeName { get; set; }
+
+        [NotMapped]
+        public String AnimaltypeName { get; set; }
 
     }
 }

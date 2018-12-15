@@ -10,16 +10,19 @@ namespace ESW_Shelter.Models
 {
     public class Users// : IValidatableObject
     {
-        /* public string Honeypot { get; set; }
+        /* 
 
-         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
-         {
-             if (!String.IsNullOrEmpty(this.Honeypot))
-             {
-                 return new[] { new ValidationResult("An error occured") };
-             }
-             return null;
-         }*/
+            ^[\w\s.,:;!?€¥£¢$-]{0,2048}$
+
+            ^ -- Beginning of string/line
+            [] -- A character class
+            \w -- A word character
+            \s -- A space character
+            .,:;!?€¥£¢$- -- Punctuation and special characters
+            {} -- Number of repeats (min,max)
+            $ -- End of string/line
+
+             */
 
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -33,7 +36,7 @@ namespace ESW_Shelter.Models
 
         [StringLength(256, ErrorMessage = "Nome não pode ter mais que 256 caracteres!", MinimumLength = 1)]
         [Required(ErrorMessage = "Nome em falta!")]
-        [RegularExpression(@"^[a-zA-Z\s]+$", ErrorMessage = "Por favor, utilize só caracteres!")]
+        [RegularExpression(@"^[a-zA-Z\s][\w~^´`]+$", ErrorMessage = "Por favor, utilize só caracteres!")]
         [Display(Prompt = "Examplo: John Wick", Name = "Nome")]
         public String Name { get; set; }
 
@@ -58,7 +61,7 @@ namespace ESW_Shelter.Models
         public String PostalCode { get; set; }
 
         [Display(Prompt = "Examplo: Lisboa", Name = "Cidade")]
-        [RegularExpression(@"^[a-zA-Z\s]+$", ErrorMessage = "Por favor, utilize só caracteres!")]
+        [RegularExpression(@"^[a-zA-Z\s][\w~^´`]+$", ErrorMessage = "Por favor, utilize só caracteres!")]
         [StringLength(40, ErrorMessage = "Cidade não pode ter mais de 10 caracteres!", MinimumLength = 1)]
         public String City { get; set; }
 

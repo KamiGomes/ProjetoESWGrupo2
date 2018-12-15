@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ESW_Shelter.Models;
+using System.Data.Entity;
 
 namespace ESW_Shelter.Controllers
 {
@@ -21,7 +22,27 @@ namespace ESW_Shelter.Controllers
         // GET: Products
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Products.ToListAsync());
+
+            var query = from product in _context.Products
+                        join productType in _context.ProductTypes on product.ProductTypeFK equals productType.ProductTypeID
+                        join animalType in _context.AnimalTypes on product.AnimalTypeFK equals animalType.AnimalTypeID
+                        select new
+                        {
+                            ProductID = product.ProductID,
+                            Name = product.Name,
+                            Quantity = product.Quantity,
+                            ProductTypeName = productType.Name,
+                            AnimaltypeName = animalType.Name
+                        };
+            var result = query.ToList().Select(e => new Product
+            {
+                ProductID = e.ProductID,
+                Name = e.Name,
+                Quantity = e.Quantity,
+                ProductTypeName = e.ProductTypeName,
+                AnimaltypeName = e.AnimaltypeName
+            }).ToList();
+            return View(result);
         }
 
         // GET: Products/Details/5
@@ -45,6 +66,8 @@ namespace ESW_Shelter.Controllers
         // GET: Products/Create
         public IActionResult Create()
         {
+            ViewBag.AnimalsTypes = _context.AnimalTypes.AsParallel();
+            ViewBag.ProductType = _context.ProductTypes.AsParallel();
             return View();
         }
 
@@ -57,11 +80,13 @@ namespace ESW_Shelter.Controllers
         {
             if (ModelState.IsValid)
             {
+                product.AnimalTypeFK = Int32.Parse(Request.Form["AnimalTypeFK"].ToString());
+                product.ProductTypeFK = Int32.Parse(Request.Form["ProductTypeFK"].ToString());
                 _context.Add(product);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(product);
+            return RedirectToAction(nameof(Index));
         }
 
         // GET: Products/Edit/5
