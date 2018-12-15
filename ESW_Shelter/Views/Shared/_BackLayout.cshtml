@@ -1,8 +1,4 @@
 ﻿
-@{
-    Layout = null;
-}
-
 @using Microsoft.AspNetCore.Http;
 @{
     ViewData["User_Name"] = Context.Session.GetString("User_Name");
@@ -13,18 +9,18 @@
 
 <div class="row">
     <h2 style="margin-left: 15%;">Management</h2>
-</div>
-<div class="container-fluid">
-    <div class="row">
-        <div class="col-md-2 no-float">
-            <div class="vertical-menu">
-                <a href="#" class="active">Home</a>
-                <a asp-area="" asp-controller="Users" asp-action="Index">Users</a>
-                <a asp-area="" asp-controller="Roles" asp-action="Index">Roles</a>
-                <a href="#">Donations</a>
-                <a href="#">Animals</a>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-2 no-float">
+                <div class="vertical-menu">
+                    <a href="#" class="active">Home</a>
+                    <a asp-area="" asp-controller="Users" asp-action="Index">Utilizadores</a>
+                    <a asp-area="" asp-controller="Roles" asp-action="Index">Roles</a>
+                    <a href="#">Produtos</a>
+                    <a href="#">Animais</a>
+                </div>
             </div>
+            <div class="col-md-9 no-float"> @RenderBody()</div>
         </div>
-        <div class="col-md-9 no-float"> @RenderBody()</div>
     </div>
 </div>

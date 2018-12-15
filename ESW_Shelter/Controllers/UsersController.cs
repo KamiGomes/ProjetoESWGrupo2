@@ -130,7 +130,7 @@ namespace ESW_Shelter.Controllers
         /// <returns>View(userProfile)</returns>
         public async Task<IActionResult> Index()
         {
-            return View();
+            return View(await _context.Users.ToListAsync());
         }
 
         /// <summary>
@@ -233,7 +233,7 @@ namespace ESW_Shelter.Controllers
                     /** Send Confirmation Email **/
 
                     int user_id = (from user in _context.Users select user.UserID).Max();
-                    //var result = new MailSenderController(_configuration).PostMessage(users.Email, users.Name, users.UserID);
+                    var result = new MailSenderController(_configuration).PostMessage(users.Email, users.Name, users.UserID);
 
                     /** End of Confirmation Email **/
 

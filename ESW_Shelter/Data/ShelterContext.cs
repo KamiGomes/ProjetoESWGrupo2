@@ -15,6 +15,8 @@ namespace ESW_Shelter.Models
 
         public DbSet<ESW_Shelter.Models.Users> Users { get; set; }
         public DbSet<ESW_Shelter.Models.Roles> Roles { get; set; }
-
+        public DbSet<ESW_Shelter.Models.AnimalType> AnimalTypes { get; set; }
+        public DbSet<ESW_Shelter.Models.ProductType> ProductTypes { get; set; }
+        public DbSet<ESW_Shelter.Models.Product> Products { get; set; }
     }
 }

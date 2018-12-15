@@ -281,14 +281,14 @@ li:hover {
         background-image: linear-gradient(to bottom, #ff9933 32%, #ffcc99 88%);
     }
 
-
-
         /* Change background color of buttons on hover */
+
         .tab button:hover {
             background-color: #ddd;
         }
 
         /* Create an active/current tablink class */
+
         .tab button.active {
             background-color: black;
         }
@@ -417,24 +417,77 @@ li:hover {
 ** PROFILE
 */
 .profile {
-    margin: 0!important;
+    margin: 0 !important;
 }
 
-.profile .col-md-5 {
-    min-height: 85vh;
-    display: table;
-    margin-left: 5%;
+    .profile .col-md-5 {
+        min-height: 85vh;
+        display: table;
+        margin-left: 5%;
+    }
+
+        .profile .col-md-5 > * {
+            display: table-cell;
+            vertical-align: middle;
+        }
+
+    .profile > .message {
+        text-align: center;
+    }
+
+    .profile .col-md-5 form .form-group {
+        margin-top: 3%;
+    }
+/*
+** Vertical Menu (Backend)
+*/
+.vertical-menu {
+    width: 200px;
 }
 
-.profile .col-md-5 > * {
-    display: table-cell;
-    vertical-align: middle;
+    .vertical-menu a {
+        background-color: #ff9933;
+        color: white;
+        display: block;
+        padding: 12px;
+        text-decoration: none;
+    }
+
+        .vertical-menu a:hover {
+            background-color: yellow;
+        }
+
+        .vertical-menu a.active {
+            background-color: darkorange;
+            color: white;
+        }
+
+/**
+    Table
+*/
+table {
+    font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+    border: 1px double black;
+    width: 100%;
 }
 
-.profile > .message {
-    text-align: center;
+td, th {
+    border: 1px double black;
 }
 
-.profile .col-md-5 form .form-group {
-    margin-top: 3%;
+tr {
+    background-color: coral;
+}
+tr:nth-child(even) {
+    background-color: white;
+}
+
+tr:hover {
+    background-color: yellow;
+}
+
+th {
+    text-align: left;
+    background-color: darkorange;
+    color: white;
 }
