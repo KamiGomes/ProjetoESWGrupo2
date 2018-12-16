@@ -11,6 +11,8 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 
 
 //hotfix -> Install-Package Microsoft.AspNet.Mvc -Version 5.2.3.0 | Install-Package httpsecurecookie -Version 0.1.1 | Install-Package Microsoft.AspNetCore.Session -Version 2.1.1 
+//Insert Into Users (Email, Name, Password, ConfirmedEmail, RoleId, City, DateOfBirth, Phone, PostalCode, Street) Values
+//					('administrador@admin.pt', 'Admin', 'Admin-12',1,4,'Cidade','2018/12/16',000000000,'0000-000','Nenhuma')
 namespace ESW_Shelter.Controllers
 {
     /// <summary>
