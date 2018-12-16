@@ -5,23 +5,22 @@
     Layout = "~/Views/Shared/_BackLayout.cshtml";
 }
 
-<h2>Index</h2>
+<h2>Produtos</h2>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create">Criar um novo produto</a>
 </p>
 <form asp-controller="Products" asp-action="Index" method="get">
-    <p>
-        Nome do produto: <input type="text" name="SearchString" style="color:black;">
-        <input type="submit" value="Filter" />
-    </p>
+    Nome do produto: <input type="text" name="SearchString" style="color:black;" placeholder="Nome do produto">
     <select asp-for="AnimalType" asp-items="Model.AnimalTypes">
-        <option value="">All</option>
+        <option value="">Todos os Animais</option>
     </select>
     <select asp-for="ProductType" asp-items="Model.ProductTypes">
-        <option value="">All</option>
+        <option value="">Todos os Produtos</option>
     </select>
+    <input type="submit" value="Pesquisar" style="background-color: coral"/>
 </form>
+<br />
 <table class="table">
     <thead>
         <tr>
@@ -58,9 +57,8 @@
                 @Html.DisplayFor(modelItem => item.ProductTypeName)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.ProductID">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.ProductID">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.ProductID">Delete</a>
+                <a asp-action="Edit" asp-route-id="@item.ProductID">Editar</a> |
+                <a asp-action="Delete" asp-route-id="@item.ProductID">Eliminar</a>
             </td>
         </tr>
 }

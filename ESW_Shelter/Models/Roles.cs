@@ -13,6 +13,7 @@ namespace ESW_Shelter.Models
         public int RoleID { get; set; }
 
         [Required(ErrorMessage = "Role Name Required")]
+        [Display(Prompt = "Examplo: Funcionário, Administrador", Name = "Nome")]
         public string RoleName { get; set; }
     }
 }

@@ -5,9 +5,8 @@
     Layout = "~/Views/Shared/_BackLayout.cshtml";
 }
 
-<h2>Edit</h2>
+<h2>Editar - @Model.Name</h2>
 
-<h4>Product</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -26,22 +25,56 @@
             </div>
             <div class="form-group">
                 <label asp-for="AnimalTypeFK" class="control-label"></label>
-                <input asp-for="AnimalTypeFK" class="form-control" />
+                <select class="input-lg" name="AnimalTypeFK" id="AnimalTypeFK">
+                    <option value="0" style="color:#ccc !important;">
+                        Por favor seleccione um tipo de animal!
+                    </option>
+                    @foreach (AnimalType item in ViewBag.AnimalsTypes)
+                    {
+                        if (item.AnimalTypeID == Model.AnimalTypeFK)
+                        {
+                            <option selected="selected" value="@item.AnimalTypeID">
+                                @item.Name
+                            </option>
+                        }
+                        else
+                        {
+                            <option value="@item.AnimalTypeID">
+                                @item.Name
+                            </option>
+                        }
+                    }
+                </select>
                 <span asp-validation-for="AnimalTypeFK" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="ProductTypeFK" class="control-label"></label>
-                <input asp-for="ProductTypeFK" class="form-control" />
+                <select class="input-lg" name="ProductTypeFK" id="ProductTypeFK">
+                    <option value="0" style="color:#ccc !important;">
+                        Por Favor seleccione um tipo de produto!
+                    </option>
+                    @foreach (ProductType item in ViewBag.ProductType)
+                    {
+                        if (item.ProductTypeID == Model.ProductTypeFK)
+                        {
+                            <option selected="selected" value="@item.ProductTypeID">
+                                @item.Name
+                            </option>
+                        }
+                        else
+                        {
+                            <option value="@item.ProductTypeID">
+                                @item.Name
+                            </option>
+                        }
+                    }
+                </select>
                 <span asp-validation-for="ProductTypeFK" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-default" />
+                <input type="submit" value="Guardar" class="btn btn-default" />
             </div>
         </form>
     </div>
-</div>
-
-<div>
-    <a asp-action="Index">Back to List</a>
 </div>
 

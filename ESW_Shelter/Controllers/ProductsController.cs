@@ -129,6 +129,9 @@ namespace ESW_Shelter.Controllers
         // GET: Products/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
+            ViewBag.AnimalsTypes = _context.AnimalTypes.AsParallel();
+            ViewBag.ProductType = _context.ProductTypes.AsParallel();
+
             if (id == null)
             {
                 return NotFound();
@@ -185,14 +188,36 @@ namespace ESW_Shelter.Controllers
                 return NotFound();
             }
 
-            var product = await _context.Products
-                .FirstOrDefaultAsync(m => m.ProductID == id);
+            var product = from productF in _context.Products
+                        join productsType in _context.ProductTypes on productF.ProductTypeFK equals productsType.ProductTypeID
+                        join animalsType in _context.AnimalTypes on productF.AnimalTypeFK equals animalsType.AnimalTypeID
+                        where productF.ProductID == id
+                        select new
+                        {
+                            ProductID = productF.ProductID,
+                            Name = productF.Name,
+                            Quantity = productF.Quantity,
+                            AnimalTypeFK = productF.AnimalTypeFK,
+                            ProductTypeFK = productF.ProductTypeFK,
+                            ProductTypeName = productsType.Name,
+                            AnimaltypeName = animalsType.Name
+                        };
+
             if (product == null)
             {
                 return NotFound();
             }
 
-            return View(product);
+            var result = new Product
+            {
+                ProductID = product.First().ProductID,
+                Name = product.First().Name,
+                Quantity = product.First().Quantity,
+                ProductTypeName = product.First().ProductTypeName,
+                AnimaltypeName = product.First().AnimaltypeName
+            };
+
+            return View(result);
         }
 
         // POST: Products/Delete/5
