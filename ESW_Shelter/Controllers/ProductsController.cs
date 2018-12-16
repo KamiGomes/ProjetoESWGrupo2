@@ -22,8 +22,6 @@ namespace ESW_Shelter.Controllers
         // GET: Products
         public async Task<IActionResult> Index(string searchString, string animalType, string productType)
         {
-            ViewBag.AnimalsTypes = _context.AnimalTypes.AsParallel().ToList();
-            ViewBag.ProductType = _context.ProductTypes.AsParallel();
 
             var query = from product in _context.Products
                         join productsType in _context.ProductTypes on product.ProductTypeFK equals productsType.ProductTypeID

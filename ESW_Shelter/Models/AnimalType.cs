@@ -16,7 +16,7 @@ namespace ESW_Shelter.Models
         [StringLength(256, ErrorMessage = "Nome não pode ter mais que 256 caracteres!", MinimumLength = 1)]
         [Required(ErrorMessage = "Nome em falta!")]
         [RegularExpression(@"^[a-zA-Z\s][\w~^´`]+$", ErrorMessage = "Por favor, utilize só caracteres!")]
-        [Display(Prompt = "Examplo: Secos Continente", Name = "Nome")]
+        [Display(Prompt = "Examplo: Cão, Cachorro, Gato, etc", Name = "Nome")]
         public String Name { get; set; }
     }
 }

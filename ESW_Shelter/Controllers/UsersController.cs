@@ -7,6 +7,7 @@ using ESW_Shelter.Models;
 using Microsoft.AspNetCore.Http;
 using System.Collections.Generic;
 using Microsoft.Extensions.Configuration;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 
 //hotfix -> Install-Package Microsoft.AspNet.Mvc -Version 5.2.3.0 | Install-Package httpsecurecookie -Version 0.1.1 | Install-Package Microsoft.AspNetCore.Session -Version 2.1.1 
@@ -128,9 +129,51 @@ namespace ESW_Shelter.Controllers
         /// <para><b>View associada: </b>"-Views/Users/Index.cshtml"</para>
         /// </remarks>
         /// <returns>View(userProfile)</returns>
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string searchString, string roleType)
         {
-            return View(await _context.Users.ToListAsync());
+            var query = from usersJ in _context.Users
+                        join rolesJ in _context.Roles on usersJ.UserID equals rolesJ.RoleID
+                        select new
+                        {
+                            UserID = usersJ.UserID,
+                            Name = usersJ.Name,
+                            Email = usersJ.Email,
+                            ConfirmedEmail = usersJ.ConfirmedEmail,
+                            RoleName = rolesJ.RoleName,
+                            RoleID = rolesJ.RoleID
+                        };
+
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                query = query.Where(user => user.Name.Contains(searchString));
+            }
+
+            if (!String.IsNullOrEmpty(roleType))
+            {
+                query = query.Where(user => user.RoleName.Contains(roleType));
+            }
+
+            var result = query.ToList().Select(e => new Users
+            {
+                UserID = e.UserID,
+                Name = e.Name,
+                Email = e.Email,
+                ConfirmedEmail = e.ConfirmedEmail,
+                RoleName = e.RoleName,
+                RoleID = e.RoleID
+            }).ToList();
+
+            var rolesTypesQuery = from roles in _context.Roles
+                                  orderby roles.RoleName
+                                  select roles.RoleName;
+
+            var usersIndexVM = new UsersIndexViewModel
+            {
+                Users = result,
+                RolesType = new SelectList(rolesTypesQuery.Distinct().ToList()),
+            };
+
+            return View(usersIndexVM);
         }
 
         /// <summary>
@@ -174,7 +217,43 @@ namespace ESW_Shelter.Controllers
         /// <returns>View();</returns>
         public IActionResult Create()
         {
+            ViewBag.RoleTypes = _context.Roles.AsParallel();
             return View();
+        }
+
+        // POST: Products/Create
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create([Bind("UserID,Email,Name,Password,ConfirmedEmail,Street,PostalCode,City,Phone,DateOfBirth,RoleID")] Users users)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    users.RoleID = Int32.Parse(Request.Form["RoleFK"].ToString());
+                    _context.Add(users);
+                    await _context.SaveChangesAsync();
+
+                    int user_id = (from user in _context.Users select user.UserID).Max();
+                    //var result = new MailSenderController(_configuration).PostMessage(users.Email, users.Name, users.UserID);
+
+                    /** End of Confirmation Email **/
+
+                    TempData["Message"] = "A conta foi criada com sucesso!Por favor, o utilizador que verifique o seu email e clique no link para concluir o registo da sua conta e prosseguir para o login!";
+                    return RedirectToAction(nameof(Index));
+                }
+                TempData["Message"] = "Por favor, siga os exemplos para continuar!";
+                ModelState.AddModelError("PostalCode", "Código Postal no Formato Errado!");
+                return View();
+            }
+            catch (NullReferenceException e)
+            {
+                TempData["Message"] = "Por favor, siga os exemplos para continuar!";
+                ModelState.AddModelError("PostalCode", "Código Postal no Formato Errado!");
+                return View();
+            }
         }
 
         [HttpGet]

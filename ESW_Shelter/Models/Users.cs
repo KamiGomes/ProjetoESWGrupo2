@@ -76,7 +76,11 @@ namespace ESW_Shelter.Models
 
         [ForeignKey("Roles")]
         [Required(ErrorMessage = "Role Required!")]
+        [Display(Name = "Role")]
         public int RoleID { get; set; }
+
+        [NotMapped]
+        public String RoleName { get; set; }
     }
 
 }
