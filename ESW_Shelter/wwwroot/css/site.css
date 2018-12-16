@@ -454,7 +454,7 @@ li:hover {
     }
 
         .vertical-menu a:hover {
-            background-color: yellow;
+            background-color: #D7722C;
         }
 
         .vertical-menu a.active {
@@ -476,15 +476,15 @@ td, th {
 }
 
 tr {
-    background-color: coral;
+    background-color: #F9812A;
 }
-tr:nth-child(even) {
-    background-color: white;
-}
+    tr:nth-child(even) {
+        background-color: #FFBF00;
+    }
 
-tr:hover {
-    background-color: yellow;
-}
+    tr:hover {
+        background-color: #D7722C;
+    }
 
 th {
     text-align: left;

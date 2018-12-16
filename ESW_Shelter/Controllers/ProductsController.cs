@@ -20,20 +20,40 @@ namespace ESW_Shelter.Controllers
         }
 
         // GET: Products
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string searchString, string animalType, string productType)
         {
+            ViewBag.AnimalsTypes = _context.AnimalTypes.AsParallel().ToList();
+            ViewBag.ProductType = _context.ProductTypes.AsParallel();
 
             var query = from product in _context.Products
-                        join productType in _context.ProductTypes on product.ProductTypeFK equals productType.ProductTypeID
-                        join animalType in _context.AnimalTypes on product.AnimalTypeFK equals animalType.AnimalTypeID
+                        join productsType in _context.ProductTypes on product.ProductTypeFK equals productsType.ProductTypeID
+                        join animalsType in _context.AnimalTypes on product.AnimalTypeFK equals animalsType.AnimalTypeID
                         select new
                         {
                             ProductID = product.ProductID,
                             Name = product.Name,
                             Quantity = product.Quantity,
-                            ProductTypeName = productType.Name,
-                            AnimaltypeName = animalType.Name
+                            AnimalTypeFK = product.AnimalTypeFK,
+                            ProductTypeFK = product.ProductTypeFK,
+                            ProductTypeName = productsType.Name,
+                            AnimaltypeName = animalsType.Name
                         };
+            
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                query = query.Where(product => product.Name.Contains(searchString));
+            }
+            
+            if (!String.IsNullOrEmpty(animalType))
+            {
+                query = query.Where(product => product.AnimaltypeName.Contains(animalType));
+            }
+            
+            if (!String.IsNullOrEmpty(productType))
+            {
+                query = query.Where(product => product.ProductTypeName.Contains(productType));
+            }
+
             var result = query.ToList().Select(e => new Product
             {
                 ProductID = e.ProductID,
@@ -42,7 +62,24 @@ namespace ESW_Shelter.Controllers
                 ProductTypeName = e.ProductTypeName,
                 AnimaltypeName = e.AnimaltypeName
             }).ToList();
-            return View(result);
+
+
+            var animalTypeQuery = from animal in _context.AnimalTypes
+                                            orderby animal.Name
+                                            select animal.Name;
+
+            var productTypeQuery = from product in _context.ProductTypes
+                                                 orderby product.Name
+                                                 select product.Name;
+
+            var productIndexVM = new ProductIndexViewModel
+            {
+                Products = result,
+                AnimalTypes = new SelectList( animalTypeQuery.Distinct().ToList()),
+                ProductTypes = new SelectList( productTypeQuery.Distinct().ToList())
+            };
+
+            return View(productIndexVM);
         }
 
         // GET: Products/Details/5
