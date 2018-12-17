@@ -129,7 +129,7 @@ footer {
     background: #ffb366;
     position: relative;
     margin: 0;
-    padding: 1px;
+    padding: 0;
     min-height: 88.3vh;
 }
 
@@ -441,17 +441,30 @@ li:hover {
 /*
 ** Vertical Menu (Backend)
 */
-.vertical-menu {
-    width: 200px;
+h2 {
+    margin: 0 !important;
 }
 
-    .vertical-menu a {
-        background-color: #ff9933;
-        color: white;
-        display: block;
-        padding: 12px;
-        text-decoration: none;
-    }
+.subMenu {
+    width: 200px;
+    height: 100%;
+    position: absolute;
+    margin: 0;
+    padding: 0;
+    background-color: #ff9933;
+    box-shadow: black 0px 0px 3px;
+}
+
+.vertical-menu a:first-child {
+    margin-top: 25%;
+}
+
+.vertical-menu a {
+    color: white;
+    display: block;
+    padding: 12px;
+    text-decoration: none;
+}
 
         .vertical-menu a:hover {
             background-color: #D7722C;
@@ -465,22 +478,32 @@ li:hover {
 /**
     Table
 */
+.admin {
+    margin: 60px 0 0 250px;
+    padding: 0 !important;
+    color: white;
+}
+
 table {
     font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
-    border: 1px double black;
+    border: 1px double #ddd;
     width: 100%;
+    box-shadow: black 0px 0px 2px;
+    color: white;
+}
+
+table a, table a:hover{
+    color: white;
 }
 
 td, th {
-    border: 1px double black;
+    width: 30%;
+    border: 1px double #ddd;
 }
 
 tr {
-    background-color: #F9812A;
+    background-color: #fa9e5c;
 }
-    tr:nth-child(even) {
-        background-color: #FFBF00;
-    }
 
     tr:hover {
         background-color: #D7722C;
