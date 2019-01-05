@@ -1,14 +1,14 @@
-﻿using System;
+using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ESW_Shelter.Models
 {
-    public class Product
+    public class Donation
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int ProductID { get; set; }
+        public int DonationID { get; set; }
 
         [StringLength(256, ErrorMessage = "Nome não pode ter mais que 256 caracteres!", MinimumLength = 1)]
         [Required(ErrorMessage = "Nome em falta!")]
@@ -21,7 +21,7 @@ namespace ESW_Shelter.Models
         public int Quantity { get; set; }
 
         [ForeignKey("AnimalType")]
-        [Required(ErrorMessage = "Escolha um animal para este alimento!")]
+        [Required(ErrorMessage = "Escolha um animal para este produto!")]
         [Display(Prompt = "Examplo: Cão", Name = "Para animal")]
         public int AnimalTypeFK { get; set; }
 
@@ -30,6 +30,12 @@ namespace ESW_Shelter.Models
         [Display(Prompt = "Examplo: Comida", Name = "Tipo de produto")]
         public int ProductTypeFK { get; set; }
 
+        [ForeignKey("Users)]
+        public int UserIDFK { get; set; }
+
+
+        [NotMapped]
+        public String UsersName { get; set; }
 
         [NotMapped]
         public String ProductTypeName { get; set; }
