@@ -1,0 +1,21 @@
+C:\Users\rober\Desktop\universidade\ESW\projecto 18-19\ProjetoESWGrupo2-devKamiGomes\ESW_Shelter_Tests\bin\Debug\netcoreapp2.1\ESW_Shelter.Views.dll
+C:\Users\rober\Desktop\universidade\ESW\projecto 18-19\ProjetoESWGrupo2-devKamiGomes\ESW_Shelter_Tests\bin\Debug\netcoreapp2.1\ESW_Shelter.Views.pdb
+C:\Users\rober\Desktop\universidade\ESW\projecto 18-19\ProjetoESWGrupo2-devKamiGomes\ESW_Shelter_Tests\bin\Debug\netcoreapp2.1\xunit.runner.visualstudio.dotnetcore.testadapter.dll
+C:\Users\rober\Desktop\universidade\ESW\projecto 18-19\ProjetoESWGrupo2-devKamiGomes\ESW_Shelter_Tests\bin\Debug\netcoreapp2.1\xunit.runner.reporters.netcoreapp10.dll
+C:\Users\rober\Desktop\universidade\ESW\projecto 18-19\ProjetoESWGrupo2-devKamiGomes\ESW_Shelter_Tests\bin\Debug\netcoreapp2.1\xunit.runner.utility.netcoreapp10.dll
+C:\Users\rober\Desktop\universidade\ESW\projecto 18-19\ProjetoESWGrupo2-devKamiGomes\ESW_Shelter_Tests\bin\Debug\netcoreapp2.1\ESW_Shelter_Tests.deps.json
+C:\Users\rober\Desktop\universidade\ESW\projecto 18-19\ProjetoESWGrupo2-devKamiGomes\ESW_Shelter_Tests\bin\Debug\netcoreapp2.1\ESW_Shelter_Tests.runtimeconfig.json
+C:\Users\rober\Desktop\universidade\ESW\projecto 18-19\ProjetoESWGrupo2-devKamiGomes\ESW_Shelter_Tests\bin\Debug\netcoreapp2.1\ESW_Shelter_Tests.runtimeconfig.dev.json
+C:\Users\rober\Desktop\universidade\ESW\projecto 18-19\ProjetoESWGrupo2-devKamiGomes\ESW_Shelter_Tests\bin\Debug\netcoreapp2.1\ESW_Shelter_Tests.dll
+C:\Users\rober\Desktop\universidade\ESW\projecto 18-19\ProjetoESWGrupo2-devKamiGomes\ESW_Shelter_Tests\bin\Debug\netcoreapp2.1\ESW_Shelter_Tests.pdb
+C:\Users\rober\Desktop\universidade\ESW\projecto 18-19\ProjetoESWGrupo2-devKamiGomes\ESW_Shelter_Tests\bin\Debug\netcoreapp2.1\ESW_Shelter.dll
+C:\Users\rober\Desktop\universidade\ESW\projecto 18-19\ProjetoESWGrupo2-devKamiGomes\ESW_Shelter_Tests\bin\Debug\netcoreapp2.1\ESW_Shelter.pdb
+C:\Users\rober\Desktop\universidade\ESW\projecto 18-19\ProjetoESWGrupo2-devKamiGomes\ESW_Shelter_Tests\obj\Debug\netcoreapp2.1\ESW_Shelter_Tests.csprojAssemblyReference.cache
+C:\Users\rober\Desktop\universidade\ESW\projecto 18-19\ProjetoESWGrupo2-devKamiGomes\ESW_Shelter_Tests\obj\Debug\netcoreapp2.1\ESW_Shelter_Tests.csproj.CoreCompileInputs.cache
+C:\Users\rober\Desktop\universidade\ESW\projecto 18-19\ProjetoESWGrupo2-devKamiGomes\ESW_Shelter_Tests\obj\Debug\netcoreapp2.1\ESW_Shelter_Tests.AssemblyInfoInputs.cache
+C:\Users\rober\Desktop\universidade\ESW\projecto 18-19\ProjetoESWGrupo2-devKamiGomes\ESW_Shelter_Tests\obj\Debug\netcoreapp2.1\ESW_Shelter_Tests.AssemblyInfo.cs
+C:\Users\rober\Desktop\universidade\ESW\projecto 18-19\ProjetoESWGrupo2-devKamiGomes\ESW_Shelter_Tests\obj\Debug\netcoreapp2.1\ESW_Shelter_Tests.csproj.CopyComplete
+C:\Users\rober\Desktop\universidade\ESW\projecto 18-19\ProjetoESWGrupo2-devKamiGomes\ESW_Shelter_Tests\obj\Debug\netcoreapp2.1\ESW_Shelter_Tests.dll
+C:\Users\rober\Desktop\universidade\ESW\projecto 18-19\ProjetoESWGrupo2-devKamiGomes\ESW_Shelter_Tests\obj\Debug\netcoreapp2.1\ESW_Shelter_Tests.pdb
+C:\Users\Kami\source\repos\KamiGomes\ProjetoESWGrupo2\ESW_Shelter_Tests\obj\Debug\netcoreapp2.1\ESW_Shelter_Tests.dll
+C:\Users\Kami\source\repos\KamiGomes\ProjetoESWGrupo2\ESW_Shelter_Tests\obj\Debug\netcoreapp2.1\ESW_Shelter_Tests.pdb

@@ -1,0 +1,520 @@
+/* Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification\ 
+for details on configuring this project to bundle and minify static web assets. */
+body {
+    width: 100%;
+    height: 0;
+    margin: 0;
+    padding: 0;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+}
+
+footer {
+    position: relative;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: 50px;
+    background: #ff9933;
+    font-weight: bold;
+    padding: 0.5%;
+    box-shadow: rgba(0,0,0,0.5) 0 -1px 5px;
+}
+
+    footer a, footer p {
+        color: white;
+        margin: 0;
+    }
+
+.navbar {
+    background: #ff9933;
+    height: 20px;
+    margin: 0 !important;
+    box-shadow: rgba(0,0,0,0.5) 0 -1px 5px;
+}
+
+
+.navbar-static-top {
+    border-width: 0 !important;
+}
+
+.container {
+    width: 80% !important;
+    height: 100% !important;
+    padding: 0 !important;
+    margin-left: 15% !important;
+}
+
+.navbar-toggle {
+    width: 40px;
+}
+
+.icon-bar {
+    background-color: white !important;
+    width: 20px !important;
+}
+
+.navbar-header {
+    width: 10% !important;
+}
+
+.navbar-brand {
+    width: 90px !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    position: absolute;
+    z-index: 9999 !important;
+    top: 40%;
+    left: 15%;
+}
+
+    .navbar-brand > img {
+        width: 100%;
+        filter: drop-shadow(0px 0px 1px rgb(0, 0, 0))
+    }
+
+.in[id=myNavBar] {
+    width: 30% !important;
+    margin: 50px 0 0 70% !important;
+    text-align: center !important;
+}
+
+    .in[id=myNavBar] > ul {
+        margin: 0%;
+    }
+
+#myNavBar {
+    width: 85%;
+    background: #ff9933;
+    position: relative;
+    margin-left: 7%;
+}
+
+    #myNavBar > ul {
+        width: 100%;
+        height: 100%;
+        padding: 0;
+    }
+
+        #myNavBar > ul > li {
+            height: 100%;
+        }
+
+    #myNavBar a {
+        padding: 15px 20px;
+        height: 100%;
+        color: white;
+        font-weight: bold;
+        text-transform: uppercase;
+        margin: 0 !important;
+        font-size: 13px;
+    }
+
+        #myNavBar a:focus {
+            background-color: inherit !important;
+            border: none !important;
+            background-color: green;
+        }
+
+
+
+.navbar-right {
+    margin-right: 0 !important;
+}
+
+
+/* Wrapping element */
+/* Set some basic padding to keep content from hitting the edges */
+.body-content {
+    background: #ffb366;
+    position: relative;
+    margin: 0;
+    padding: 0;
+    min-height: 88.3vh;
+}
+
+
+/* Make .svg files in the carousel display properly in older browsers */
+.carousel-inner .item img[src$=".svg"] {
+    width: 100%;
+}
+
+/* QR code generator */
+#qrCode {
+    margin: 15px;
+}
+
+.item {
+    position: relative;
+    max-width: 100%;
+    margin: 0 auto;
+}
+
+    .item .carousel-caption {
+        bottom: 0;
+        left: 0;
+        background: rgba(53, 53, 53, 0.75);
+        color: white;
+        width: 100%;
+        height: 90px;
+        padding: 0;
+    }
+
+.carousel-caption > p {
+    font-size: 20px;
+    position: absolute;
+    width: 100%;
+    line-height: 70px;
+    text-shadow: 0px 0px 2px black, 0px 0px 5px black;
+}
+
+.carousel-indicators > li {
+    width: 5px;
+    height: 5px;
+    background-color: white;
+}
+
+    .carousel-indicators > li.active {
+        width: 8px;
+        height: 8px;
+    }
+
+.carousel-indicators {
+    bottom: 0;
+}
+
+.innerH2 {
+    border-bottom-style: dashed;
+    border-bottom-color: darkorange;
+    border-bottom-width: 2px;
+    font-weight: bold;
+}
+
+li:hover {
+    background-color: darkgoldenrod;
+}
+
+.dropdown-menu {
+    background: #ffcc99;
+    width: 300px;
+    min-height: 175px;
+    padding: 0;
+}
+
+    .dropdown-menu .dropdown-item {
+        margin: 0;
+        width: 100%;
+        height: 100%;
+        padding: 10px;
+        font-size: 12px;
+    }
+
+/* Hide/rearrange for smaller screens */
+@media screen and (max-width: 100% ) {
+    .carousel-caption {
+        display: none;
+    }
+}
+
+.img-responsive {
+    width: 100%;
+}
+
+.dropdown-menu .dropdown-item .form-group {
+    margin: 0 0 5px 0;
+    color: black;
+}
+
+.dropdown-menu .dropdown-item .buttons {
+    text-align: right;
+}
+
+    .dropdown-menu .dropdown-item .buttons input {
+        margin-left: 58%;
+        color: white !important;
+    }
+
+
+.dropdown-menu .dropdown-item label {
+    color: grey !important;
+}
+
+.dropdown-menu .dropdown-item input {
+    font-size: 12px;
+    /* color: white; */
+}
+
+.dropdown-menu a {
+    position: relative !important;
+    padding: 0 !important;
+    font-weight: normal !important;
+    color: grey !important;
+    font-size: 10px !important;
+}
+
+.nav > li > a:hover, .nav > li > a:focus {
+    background-color: darkgoldenrod !important;
+}
+
+.dropdown-toggle:hover .dropdown-menu {
+    display: block;
+}
+
+
+/*Tabs CSS - W3School*/
+/* Style the tab */
+.tab {
+    overflow: hidden;
+    background-color: #f1f1f1;
+    background-color: transparent;
+}
+
+    /* Style the buttons that are used to open the tab content */
+    .tab button {
+        background-color: inherit;
+        float: left;
+        border: none;
+        outline: none;
+        cursor: pointer;
+        padding: 14px 16px;
+        transition: 0.3s;
+        background-image: linear-gradient(to bottom, #ff9933 32%, #ffcc99 88%);
+    }
+
+        /* Change background color of buttons on hover */
+
+        .tab button:hover {
+            background-color: #ddd;
+        }
+
+        /* Create an active/current tablink class */
+
+        .tab button.active {
+            background-color: black;
+        }
+
+
+/* Style the tab content */
+.tabcontent {
+    display: none;
+    padding: 6px 12px;
+    border-top: none;
+}
+
+.row {
+    width: 100%;
+    min-height: 79.9vh;
+    position: relative;
+    margin: 0;
+    color: white;
+    padding: 2% 1%;
+    margin-bottom: 3%;
+}
+
+/**
+*** Contact            
+**/
+.contacts {
+    position: relative;
+    margin: 0 0 0 0 !important;
+    min-height: 79.9vh;
+}
+
+    .contacts .col-md-2 {
+        width: 40%;
+        min-height: 70vh;
+        display: inline-block;
+        vertical-align: top;
+        position: relative;
+        margin-left: 5%;
+    }
+
+.map-wrapper {
+    padding: 0;
+    margin-left: 10%;
+}
+
+.map {
+    width: 100%;
+    height: 70vh;
+}
+
+.contact-data {
+    margin-left: 1%;
+    text-align: justify;
+}
+
+/**
+*** About
+**/
+.about {
+    position: relative;
+    margin: 0 0 0 0 !important;
+    min-height: 79.9vh;
+}
+
+    .about > .col-md-2 {
+        display: table;
+        width: 40%;
+        min-height: 70vh;
+        margin-left: 5%;
+    }
+
+    .about > .picture {
+        margin-left: 5%;
+        height: 100%;
+        overflow: hidden;
+        padding: 0;
+    }
+
+        .about > .picture > .cat {
+            width: 100%;
+            margin-top: -50%;
+        }
+
+/**
+*** Register
+**/
+.register {
+    position: relative;
+    margin: 1% 0 0 0 !important;
+    min-height: 79.9vh;
+}
+
+    .register > .col-md-2 {
+        width: 40%;
+        min-height: 70vh;
+        margin-left: 5%;
+        display: table;
+    }
+
+        .register > .col-md-2 > form {
+            margin-top: 5vh;
+            display: table-cell;
+            vertical-align: middle;
+        }
+
+        .register > .col-md-2 .buttons {
+            text-align: right;
+        }
+
+            .register > .col-md-2 .buttons input {
+                position: relative;
+                bottom: 0;
+            }
+
+    .register > .message {
+        display: table;
+    }
+
+        .register > .message > h2 {
+            display: table-cell;
+            vertical-align: middle;
+            text-align: center;
+        }
+
+/*
+** PROFILE
+*/
+.profile {
+    margin: 0 !important;
+}
+
+    .profile .col-md-5 {
+        min-height: 85vh;
+        display: table;
+        margin-left: 5%;
+    }
+
+        .profile .col-md-5 > * {
+            display: table-cell;
+            vertical-align: middle;
+        }
+
+    .profile > .message {
+        text-align: center;
+    }
+
+    .profile .col-md-5 form .form-group {
+        margin-top: 3%;
+    }
+/*
+** Vertical Menu (Backend)
+*/
+h2 {
+    margin: 0 !important;
+}
+
+.subMenu {
+    width: 200px;
+    height: 100%;
+    position: absolute;
+    margin: 0;
+    padding: 0;
+    background-color: #ff9933;
+    box-shadow: black 0px 0px 3px;
+}
+
+.vertical-menu a:first-child {
+    margin-top: 25%;
+}
+
+.vertical-menu a {
+    color: white;
+    display: block;
+    padding: 12px;
+    text-decoration: none;
+}
+
+        .vertical-menu a:hover {
+            background-color: #D7722C;
+        }
+
+        .vertical-menu a.active {
+            background-color: darkorange;
+            color: white;
+        }
+
+/**
+    Table
+*/
+.admin {
+    margin: 60px 0 0 250px;
+    padding: 0 !important;
+    color: white;
+}
+
+table {
+    font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+    border: 1px double #ddd;
+    width: 100%;
+    box-shadow: black 0px 0px 2px;
+    color: white;
+}
+
+table a, table a:hover{
+    color: white;
+}
+
+td, th {
+    width: 30%;
+    border: 1px double #ddd;
+}
+
+tr {
+    background-color: #fa9e5c;
+}
+
+    tr:hover {
+        background-color: #D7722C;
+    }
+
+th {
+    text-align: left;
+    background-color: darkorange;
+    color: white;
+}
+
+select {
+    color: black;
+}

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+This file is used by the publish/package process of your Web project. You can customize the behavior of this process
+by editing this MSBuild file. In order to learn more about this please visit https://go.microsoft.com/fwlink/?LinkID=208121. 
+-->
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <TimeStampOfAssociatedLegacyPublishXmlFile />
+    <EncryptedPassword>AQAAANCMnd8BFdERjHoAwE/Cl+sBAAAAwVyXuy+07UGCyqxEzt9ZSwAAAAACAAAAAAAQZgAAAAEAACAAAABpbhhgWrcNn9axs3X6fOmgtMNu3DJPawBXC7SIXCZq/gAAAAAOgAAAAAIAACAAAABydRvDcUFPaciSx0PaTwQLX5b91Tk6uDxqscOGkxbb5oAAAABWpm9YUYpSktJ/93DTE7aWAukoiiIrZLDpeB1MDPSy9kaWXxFPnZuUeGNsKZyDv3YqhXxyXIK2GBF5NoLmZYz/KVx3/1vPGFWI2U66MJHRilZ7sq+AxQQOUcz2ql7bOinJk/DCHsoLp+uLuh4DlXc97Ph+TAdqyp6CbRPJDiLhOkAAAADqUmIWcASbx65KERxlSTdlFkXPgdFdYPpyUqQxXj6l96LQoMukhmPNFMiHYtse+1sljSaRbN9h4UERTSGMGZbx</EncryptedPassword>
+  </PropertyGroup>
+  <ItemGroup>
+    <DestinationConnectionStrings Include="ShelterContext">
+      <Value>Server=tcp:eswg2server.database.windows.net,1433%3bInitial Catalog=ESWShelterDB%3bPersist Security Info=False%3bUser ID=Kami%3bPassword=Super250%3bMultipleActiveResultSets=False%3bEncrypt=True%3bTrustServerCertificate=False%3bConnection Timeout=30%3b</Value>
+    </DestinationConnectionStrings>
+  </ItemGroup>
+</Project>
