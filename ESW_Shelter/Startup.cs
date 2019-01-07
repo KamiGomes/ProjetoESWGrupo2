@@ -21,6 +21,7 @@ namespace ESW_Shelter
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
+            Stripe.StripeConfiguration.SetApiKey("sk_test_au6jRCzk5OZSjbHPfgl29I92");
         }
 
         public IConfiguration Configuration { get; }
