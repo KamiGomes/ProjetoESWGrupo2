@@ -30,7 +30,7 @@ namespace ESW_Shelter.Models
         [Display(Prompt = "Examplo: Comida", Name = "Tipo de produto")]
         public int ProductTypeFK { get; set; }
 
-        [ForeignKey("Users)]
+        [ForeignKey("Users")]
         public int UserIDFK { get; set; }
 
 
