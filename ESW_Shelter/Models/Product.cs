@@ -37,5 +37,7 @@ namespace ESW_Shelter.Models
         [NotMapped]
         public String AnimaltypeName { get; set; }
 
+        [NotMapped]
+        public bool Checked { get; set; }
     }
 }

@@ -5,7 +5,7 @@
     Layout = "~/Views/Shared/_BackLayout.cshtml";
 }
 
-<h2>Criar um novo produto</h2>
+<h2>Criar um novo Produto</h2>
 
 <hr />
 <div class="row">
@@ -26,7 +26,7 @@
                 <label asp-for="AnimalTypeFK" class="control-label"></label>
                 <select class="input-lg" name="AnimalTypeFK" id="AnimalTypeFK">
                     <option value="0" style="color:#ccc !important;">
-                        Por favor seleccione um tipo de animal!
+                        Por favor seleccione um Cliente que fez o donativo!
                     </option>
                     @foreach (AnimalType item in ViewBag.AnimalsTypes)
                     {
