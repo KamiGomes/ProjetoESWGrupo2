@@ -1,0 +1,48 @@
+﻿@model ESW_Shelter.Models.Donation
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Donation</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Quantity)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Quantity)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.AnimalTypeFK)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.AnimalTypeFK)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.ProductTypeFK)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ProductTypeFK)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.UserIDFK)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.UserIDFK)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.DonationID">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>
