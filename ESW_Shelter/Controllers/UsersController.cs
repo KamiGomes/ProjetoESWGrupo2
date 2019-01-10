@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Http;
 using System.Collections.Generic;
 using Microsoft.Extensions.Configuration;
 using Microsoft.AspNetCore.Mvc.Rendering;
-
+using ESW_Shelter.Libs;
 
 //hotfix -> Install-Package Microsoft.AspNet.Mvc -Version 5.2.3.0 | Install-Package httpsecurecookie -Version 0.1.1 | Install-Package Microsoft.AspNetCore.Session -Version 2.1.1 
 //Insert Into Users (Email, Name, Password, ConfirmedEmail, RoleId, City, DateOfBirth, Phone, PostalCode, Street) Values
@@ -325,6 +325,22 @@ namespace ESW_Shelter.Controllers
                 ModelState.AddModelError("Email", "Email já existe!");
                 return View(users);
             }
+
+            // Register User as a Customer on Stripe
+            try
+            {
+                StripeLib stripeLib = new StripeLib();
+                stripeLib.CreateCustomer(users);
+            } catch (Exception ex)
+            {
+                Console.WriteLine("#########################################################3");
+                Console.WriteLine(ex.Message.ToString());
+                Console.WriteLine("#########################################################3");
+            }
+
+            Console.WriteLine("#########################################################3");
+            Console.WriteLine("CENAS");
+            Console.WriteLine("#########################################################3");
             return View(users);
         }
 
