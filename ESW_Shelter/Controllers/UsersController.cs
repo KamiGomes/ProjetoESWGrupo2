@@ -317,6 +317,11 @@ namespace ESW_Shelter.Controllers
                     var result = new MailSenderController(_configuration).PostMessage(users.Email, users.Name, users.UserID);
 
                     /** End of Confirmation Email **/
+                    // Register User as a Customer on Stripe
+                    StripeLib stripeLib = new StripeLib();
+                    users.CustomerId = await stripeLib.CreateCustomer(users);
+
+                    await _context.SaveChangesAsync();
 
                     TempData["Message"] = "A sua conta foi criada com sucesso!Por favor verifique o seu email e clique no email para concluir o registo da sua conta e prosseguir para o login!";
                     return RedirectToAction("Index", "Home", null);
@@ -325,22 +330,6 @@ namespace ESW_Shelter.Controllers
                 ModelState.AddModelError("Email", "Email já existe!");
                 return View(users);
             }
-
-            // Register User as a Customer on Stripe
-            try
-            {
-                StripeLib stripeLib = new StripeLib();
-                stripeLib.CreateCustomer(users);
-            } catch (Exception ex)
-            {
-                Console.WriteLine("#########################################################3");
-                Console.WriteLine(ex.Message.ToString());
-                Console.WriteLine("#########################################################3");
-            }
-
-            Console.WriteLine("#########################################################3");
-            Console.WriteLine("CENAS");
-            Console.WriteLine("#########################################################3");
             return View(users);
         }
 
