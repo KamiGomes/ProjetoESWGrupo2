@@ -10,6 +10,13 @@
 <p>
     <a asp-action="Create">Criar um novo Donativo</a>
 </p>
+<form asp-controller="Donations" asp-action="Index" method="get">
+    Data do Donativo:  <input type="date" name="DateString" style="color:black;">
+    <select asp-for="ClientString" asp-items="Model.UsersNames">
+        <option value="">Todos os Clientes</option>
+    </select>
+    <input type="submit" value="Pesquisar" style="background-color: coral" />
+</form>
 <div class="row profile">
     <table class="table">
         <thead>

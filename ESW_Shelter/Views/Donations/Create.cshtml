@@ -20,7 +20,7 @@
                 <label asp-for="UsersFK" class="control-label"></label>
                 <select class="input-lg" name="UsersFK" id="UsersFK">
                     <option value="0" style="color:#ccc !important;">
-                        Por favor seleccione um tipo de animal!
+                        Por favor seleccione um cliente!
                     </option>   1
                     @foreach (Users item in ViewBag.UsersFK)
                     {
@@ -58,26 +58,26 @@
                     <tbody>
                         @foreach (var item in Model.Products)
                         {
-                        <tr>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Name)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Quantity)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.AnimaltypeName)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.ProductTypeName)
-                            </td>
-                            <td>
-                                <input name="quantityProduct @item.ProductID" id ="@item.ProductID" type="number" class="check" value="" style="color: black;" />
-                            </td>
-                            <td>
-                                <input name="checkProduct" id="@item.ProductID" type="checkbox" class="check" value="@item.ProductID" />
-                            </td>
-                        </tr>
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Name)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Quantity)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.AnimaltypeName)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.ProductTypeName)
+                                </td>
+                                <td>
+                                    <input name="quantityProduct @item.ProductID" id="@item.ProductID" type="number" class="check" value="" style="color: black;" />
+                                </td>
+                                <td>
+                                    <input name="checkProduct" id="@item.ProductID" type="checkbox" class="check" value="@item.ProductID" />
+                                </td>
+                            </tr>
                         }
                     </tbody>
                 </table>
@@ -86,5 +86,15 @@
                 <input type="submit" value="Guardar" class="btn btn-default" />
             </div>
         </form>
+        <!--<form asp-controller="Donations" asp-action="Create" method="get">
+        Nome do produto: <input type="text" name="SearchString" style="color:black;" placeholder="Nome do produto">
+        <select asp-for="AnimalType" asp-items="Model.AnimalTypes">
+            <option value="">Todos os Animais</option>
+        </select>
+        <select asp-for="ProductType" asp-items="Model.ProductTypes">
+            <option value="">Todos os Produtos</option>
+        </select>
+        <input type="submit" value="Pesquisar" style="background-color: coral" />
+    </form>-->
     </div>
 </div>

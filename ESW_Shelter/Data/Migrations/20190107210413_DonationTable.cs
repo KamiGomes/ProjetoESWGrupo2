@@ -39,7 +39,7 @@ namespace ESW_Shelter.Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Products", x => x.DonationProductID);
+                    table.PrimaryKey("PK_DonationProduct", x => x.DonationProductID);
                 });
         }
 

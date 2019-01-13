@@ -21,7 +21,7 @@ namespace ESW_Shelter.Controllers
         }
 
         // GET: Donations
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string searchString, string animalType, string productType, string clientString, DateTime dateString)
         {
             var donationUserQuery = from donation in _context.Donation
                         join user in _context.Users on donation.UsersFK equals user.UserID
@@ -33,7 +33,29 @@ namespace ESW_Shelter.Controllers
                             UsersName = user.Name
                         };
 
+            if (!String.IsNullOrEmpty(clientString))
+            {
+                donationUserQuery = donationUserQuery.Where(don => don.UsersName.Contains(clientString));
+            }
+            if (dateString!=DateTime.MinValue)
+            {
+                donationUserQuery = donationUserQuery.Where(don => don.DateOfDonation.Day.Equals(dateString.Day) && 
+                                        don.DateOfDonation.Month.Equals(dateString.Month) && don.DateOfDonation.Year.Equals(dateString.Year));
+            }
+            /*if (!String.IsNullOrEmpty(searchString))
+            {
+                query = query.Where(product => product.Name.Contains(searchString));
+            }
 
+            if (!String.IsNullOrEmpty(animalType))
+            {
+                query = query.Where(product => product.AnimaltypeName.Contains(animalType));
+            }
+
+            if (!String.IsNullOrEmpty(productType))
+            {
+                query = query.Where(product => product.ProductTypeName.Contains(productType));
+            }*/
             var result = donationUserQuery.ToList().Select(e => new Donation
             {
                 DonationID = e.DonationID,
@@ -66,9 +88,22 @@ namespace ESW_Shelter.Controllers
                 don.ProductName = phrase;
             }
 
+            var animalTypeQuery = from animal in _context.AnimalTypes
+                                  orderby animal.Name
+                                  select animal.Name;
+
+            var productTypeQuery = from product in _context.ProductTypes
+                                   orderby product.Name
+                                   select product.Name;
+            var usersNameQuery = from user in _context.Users
+                                 orderby user.Name
+                                 select user.Name;
             DonationIndexViewModel donationIVM = new DonationIndexViewModel
             {
-                Donation = result
+                Donation = result,
+                AnimalTypes = new SelectList(animalTypeQuery.Distinct().ToList()),
+                ProductTypes = new SelectList(productTypeQuery.Distinct().ToList()),
+                UsersNames = new SelectList(usersNameQuery.Distinct().ToList())
             };
             return View(donationIVM);
         }
@@ -304,9 +339,9 @@ namespace ESW_Shelter.Controllers
                 {
                     string selected = Request.Form["checkProduct"].ToString();
                     string[] selectedList = selected.Split(',');
-                    System.Diagnostics.Debug.WriteLine("*************************");
+                    /*System.Diagnostics.Debug.WriteLine("*************************");
                     System.Diagnostics.Debug.WriteLine(selectedList[0]=="");
-                    System.Diagnostics.Debug.WriteLine("*************************");
+                    System.Diagnostics.Debug.WriteLine("*************************");*/
                     var result2 = _context.Donation.Find(id);
                     if (result2 != null)
                     {
