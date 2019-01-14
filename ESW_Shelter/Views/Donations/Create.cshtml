@@ -1,53 +1,33 @@
-﻿@model ESW_Shelter.Models.Donation
+﻿@using System.Text;
 
 @{
-    ViewData["Title"] = "Create";
+
+    var plans = ViewData["plans"] as Stripe.Plan[];
 }
 
-<h2>Create</h2>
-
-<h4>Donation</h4>
-<hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Create">
+        <form asp-controller="Donations" asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <p><strong>Planos:</strong></p>
             <div class="form-group">
-                <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control" />
-                <span asp-validation-for="Name" class="text-danger"></span>
+                @for (var i = 0; i < @plans.Length; i++)
+                {
+                    double value = Math.Truncate((double)plans[@i].Amount) / 100;
+                    StringBuilder sb = new StringBuilder();
+                    sb.Append(@plans[@i].Nickname);
+                    sb.Append(" - ");
+                    sb.Append(@value.ToString("0.00"));
+                    sb.Append("€");
+
+                    @Html.RadioButton("plans", @plans[@i].Id) @sb;
+
+                    <br />
+                }
             </div>
             <div class="form-group">
-                <label asp-for="Quantity" class="control-label"></label>
-                <input asp-for="Quantity" class="form-control" />
-                <span asp-validation-for="Quantity" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="AnimalTypeFK" class="control-label"></label>
-                <input asp-for="AnimalTypeFK" class="form-control" />
-                <span asp-validation-for="AnimalTypeFK" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="ProductTypeFK" class="control-label"></label>
-                <input asp-for="ProductTypeFK" class="form-control" />
-                <span asp-validation-for="ProductTypeFK" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="UserIDFK" class="control-label"></label>
-                <input asp-for="UserIDFK" class="form-control" />
-                <span asp-validation-for="UserIDFK" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-default" />
+                <input type="submit" value="Selecionar" class="btn btn-primary button-image" />
             </div>
         </form>
     </div>
 </div>
-
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
-
-@section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-}

@@ -9,7 +9,7 @@ using ESW_Shelter.Models;
 namespace ESW_Shelter.Libs
 {
     public class StripeLib
-    { 
+    {
 
         async public Task<string> CreateCustomer(Users user)
         {
@@ -23,6 +23,14 @@ namespace ESW_Shelter.Libs
             Stripe.Customer newCustomer = await customerService.CreateAsync(customerOpts);
 
             return newCustomer.Id;
+        }
+
+        public Stripe.Plan[] GetPlans()
+        {
+            var service = new Stripe.PlanService();
+            var options = new Stripe.PlanListOptions { };
+            
+            return service.List(options).ToArray<Stripe.Plan>();
         }
 
     }

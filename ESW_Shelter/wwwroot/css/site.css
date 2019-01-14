@@ -567,3 +567,10 @@ select {
 .donations > .col-md-6 li:hover {
     background-color: transparent;
 }
+
+
+.not-logged-in {
+    margin-top: 40px;
+    color: red !important;
+    font-weight: bold !important;
+}

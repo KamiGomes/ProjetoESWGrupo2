@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ESW_Shelter.Models;
+using Microsoft.AspNetCore.Http;
+using ESW_Shelter.Libs;
 
 namespace ESW_Shelter.Controllers
 {
@@ -15,15 +17,15 @@ namespace ESW_Shelter.Controllers
 
         public DonationsController(ShelterContext context)
         {
+            StringBuilder sb = new StringBuilder();
             _context = context;
         }
 
         // GET: Donations
         public async Task<IActionResult> Index()
         {
-            var service = new Stripe.PlanService();
-            var options = new Stripe.PlanListOptions { };
-            Stripe.Plan[] plans = service.List(options).ToArray<Stripe.Plan>();
+            StripeLib stripeLib = new StripeLib();
+            var plans = stripeLib.GetPlans();
 
             ViewData["plans"] = plans;
             
@@ -51,6 +53,11 @@ namespace ESW_Shelter.Controllers
         // GET: Donations/Create
         public IActionResult Create()
         {
+            StripeLib stripeLib = new StripeLib();
+            var plans = stripeLib.GetPlans();
+
+            ViewData["plans"] = plans;
+           
             return View();
         }
 
@@ -59,7 +66,7 @@ namespace ESW_Shelter.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("DonationID,Name,Quantity,AnimalTypeFK,ProductTypeFK,UserIDFK")] Donation donation)
+        public async Task<IActionResult> Create([Bind("Name,Quantity,AnimalTypeFK,ProductTypeFK,UserIDFK")] Donation donation)
         {
             if (ModelState.IsValid)
             {
@@ -67,7 +74,7 @@ namespace ESW_Shelter.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(donation);
+            return View();
         }
 
         // GET: Donations/Edit/5

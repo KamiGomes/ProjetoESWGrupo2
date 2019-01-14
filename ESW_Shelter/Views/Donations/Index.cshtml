@@ -1,8 +1,9 @@
-﻿@{
+﻿@using Microsoft.AspNetCore.Http;
 
+@{
+    var username = Context.Session.GetString("User_Name");
     Layout = "~/Views/Shared/_Layout.cshtml";
     var plans = ViewData["plans"] as Stripe.Plan[];
-
 }
 
 <div class="row donations">
@@ -15,12 +16,19 @@
         <ul>
             @for (var i = 0; i < plans.Length; i++)
             {
-                double value = Math.Truncate((double) plans[i].Amount) / 100;
+                double value = Math.Truncate((double)plans[i].Amount) / 100;
                 <li>@plans[@i].Nickname - @value.ToString("0.00")€</li>
             }
         </ul>
         <div class="button-wrapper">
-            <a asp-controller="Donation" asp-action="Create"><div class="btn btn-primary button-image">Aderir a plano</div></a>
+            @if (string.IsNullOrEmpty(username))
+            {
+                <p class="not-logged-in">Para poder aderir ao nosso sistema de doações mensais terá de se registar!</p>
+            }
+            else
+            {
+                <a asp-controller="Donations" asp-action="Create"><div class="btn btn-primary button-image">Aderir a plano</div></a>
+            }
         </div>
     </div>
     <div class="col-md-6">
