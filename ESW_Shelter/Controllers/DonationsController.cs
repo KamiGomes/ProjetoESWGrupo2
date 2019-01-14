@@ -23,13 +23,9 @@ namespace ESW_Shelter.Controllers
         {
             var service = new Stripe.PlanService();
             var options = new Stripe.PlanListOptions { };
+            Stripe.Plan[] plans = service.List(options).ToArray<Stripe.Plan>();
 
-            Stripe.StripeList<Stripe.Plan> plans = service.List(options);
-
-            foreach (Stripe.Plan plan in plans)
-            {
-                
-            }
+            ViewData["plans"] = plans;
             
             return View();
         }

@@ -319,7 +319,7 @@ li:hover {
     margin: 0;
     color: white;
     padding: 2% 1%;
-    margin-bottom: 3%;
+    margin-bottom: 0% !important;
 }
 
 /**
@@ -528,4 +528,42 @@ th {
 
 select {
     color: black;
+}
+
+/**
+    Donations
+*/
+.donations {
+    padding: 50px;
+}
+
+.donations > h2 {
+    margin-top: 20px !important;
+}
+
+.donations > .col-md-6 {
+    max-height: 400px;
+}
+
+.donations > .donations-data > .button-wrapper {
+    text-align: right;
+}
+
+.donations > .donations-data > .button-wrapper > .btn {
+    margin-right: 25px;
+    margin-top: 50px;
+}
+
+.donations > .donations-data{
+    margin-top: 30px;
+}
+
+.donations > .col-md-6 > img {
+    width: 50%;
+    position: relative;
+    margin: 5% 25%;
+}
+
+.donations > .col-md-6 li:hover {
+    background-color: transparent;
 }
