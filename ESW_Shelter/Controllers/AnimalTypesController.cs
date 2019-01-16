@@ -187,12 +187,12 @@ namespace ESW_Shelter.Controllers
 
         private bool checkValues(AnimalType animalType)
         {
-            if (!string.IsNullOrEmpty(animalType.Name))
+            if (string.IsNullOrEmpty(animalType.Name))
             {
                 TempData["Message"] = "Por favor introduza um nome de tipo de animal!";
                 return false;
             }
-            if (animalType.AnimalTypeID <= 0)
+            if (animalType.AnimalTypeID <= -1)
             {
                 TempData["Message"] = "Algo de errado ocorreu!";
                 return false;

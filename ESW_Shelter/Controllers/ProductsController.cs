@@ -285,7 +285,7 @@ namespace ESW_Shelter.Controllers
                 TempData["Message"] = "Por favor escolha um tipo de produto!";
                 return false;
             }
-            if (!string.IsNullOrEmpty(product.Name))
+            if (string.IsNullOrEmpty(product.Name))
             {
                 TempData["Message"] = "Por favor insira um nome para o produto!";
                 return false;
@@ -295,7 +295,7 @@ namespace ESW_Shelter.Controllers
                 TempData["Message"] = "Quantidade não pode ser negativa!";
                 return false;
             }
-            if (product.ProductID <= 0)
+            if (product.ProductID <= -1)
             {
                 TempData["Message"] = "Algo de errado aconteceu!";
                 return false;

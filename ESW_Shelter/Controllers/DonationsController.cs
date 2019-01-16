@@ -268,27 +268,33 @@ namespace ESW_Shelter.Controllers
                 };
                 _context.Add(donation);
                 _context.SaveChanges();
-                foreach (var temp in selectedList)
+
+                if(selectedList[0] != "")
                 {
-                    int prodKey = Convert.ToInt32(temp);
-                    int newQuant = Convert.ToInt32(Request.Form["quantityProduct " + Convert.ToInt32(temp)].ToString());
-                    DonationProduct donationProduct = new DonationProduct
+                    foreach (var temp in selectedList)
                     {
-                        DonationFK = donation.DonationID,
-                        ProductFK = prodKey,
-                        Quantity = newQuant
-                    };
-                    var prod = new Product
-                    {
-                        ProductID = prodKey
-                    };
-                    prod.Quantity = _context.Products.Where(e => e.ProductID == prodKey).FirstOrDefault().Quantity + newQuant;
-                    _context.Entry(prod).Property("Quantity").IsModified = true;
-                    _context.SaveChanges();
-                    _context.Add(donationProduct);
+
+                        int prodKey = Convert.ToInt32(temp);
+                        int newQuant = Convert.ToInt32(Request.Form["quantityProduct " + Convert.ToInt32(temp)].ToString());
+                        DonationProduct donationProduct = new DonationProduct
+                        {
+                            DonationFK = donation.DonationID,
+                            ProductFK = prodKey,
+                            Quantity = newQuant
+                        };
+                        var prod = new Product
+                        {
+                            ProductID = prodKey
+                        };
+                        prod.Quantity = _context.Products.Where(e => e.ProductID == prodKey).FirstOrDefault().Quantity + newQuant;
+                        _context.Entry(prod).Property("Quantity").IsModified = true;
+                        _context.SaveChanges();
+                        _context.Add(donationProduct);
+                    }
                 }
+
                 await _context.SaveChangesAsync();
-                TempData["Message"] = "Doação criada com sucesso!";
+                TempData["Message"] = "Doacao criada com sucesso!";
                 return RedirectToAction(nameof(Index));
             }
             return View(donationIVM);
@@ -580,7 +586,7 @@ namespace ESW_Shelter.Controllers
                 TempData["Message"] = "Escolha uma data para a doação!";
                 return false;
             }
-            if (donationIVM.UsersFK <= 0)
+            if (donationIVM.UsersFK <= -1)
             {
                 TempData["Message"] = "Escolha uma cliente para a doação!";
                 return false;

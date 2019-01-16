@@ -188,12 +188,12 @@ namespace ESW_Shelter.Controllers
 
         private bool checkValues(ProductType productType)
         {
-            if (!string.IsNullOrEmpty(productType.Name))
+            if (string.IsNullOrEmpty(productType.Name))
             {
                 TempData["Message"] = "Por favor insira um tipo de produto!";
                 return false;
             }
-            if (productType.ProductTypeID <= 0)
+            if (productType.ProductTypeID <= -1)
             {
                 TempData["Message"] = "Algo de errado aconteceu!";
                 return false;
