@@ -71,10 +71,17 @@ namespace ESW_Shelter
             app.UseCookiePolicy();
             app.UseMvc(routes =>
             {
+
                 routes.MapRoute(
-                    name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}"
+                    name: "DonationsSubscribe",
+                    template: "Donations/Subscribe/{plan}"
                     );
+
+                routes.MapRoute(
+                   name: "default",
+                   template: "{controller=Home}/{action=Index}/{id?}"
+                   );
+
             });
         }
     }

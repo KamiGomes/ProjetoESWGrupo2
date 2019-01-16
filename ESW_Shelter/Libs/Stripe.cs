@@ -29,9 +29,78 @@ namespace ESW_Shelter.Libs
         {
             var service = new Stripe.PlanService();
             var options = new Stripe.PlanListOptions { };
-            
+
             return service.List(options).ToArray<Stripe.Plan>();
         }
 
+        public string Subscribe(string customerId, string planId)
+        {
+            try
+            {
+                var items = new List<SubscriptionItemOption>
+                {
+                    new SubscriptionItemOption
+                    {
+                        PlanId = "plan_EKvi2ki4gfhDoT",
+                        Quantity = 1
+                    }
+                };
+
+                var options = new SubscriptionCreateOptions
+                {
+                    CustomerId = customerId,
+                    Items = items
+                };
+
+                Console.WriteLine(options.ToString());
+
+
+                var service = new SubscriptionService();
+                Subscription subscription = service.Create(options);
+
+                return subscription.Id;
+            } catch (Exception ex)
+            {
+                Console.WriteLine("########################################################################");
+                Console.WriteLine("########################################################################");
+                Console.WriteLine(ex.StackTrace);
+                Console.WriteLine(ex.Message);
+                Console.WriteLine("########################################################################");
+                Console.WriteLine("########################################################################");
+                return "false";
+            }
+        }
+
+        public Stripe.StripeList<Stripe.Card> GetCards(string customerId)
+        {
+            Stripe.CardService service = new CardService();
+            Stripe.StripeList<Stripe.Card> cards = service.List(customerId);
+
+            return cards;
+        }
+
+        public void SetCard(string customerId, string number, int month, int year, string cvc)
+        {
+            Stripe.TokenService tokenService = new Stripe.TokenService();
+            var options = new Stripe.TokenCreateOptions()
+            { 
+                Card = new CreditCardOptions()
+                {
+                    Number = number,
+                    ExpMonth = month,
+                    ExpYear = year,
+                    Cvc = cvc
+                }
+            };
+
+            Stripe.Token token = tokenService.Create(options);
+                
+            var customerOptions = new CustomerUpdateOptions() {
+                SourceToken = token.Id
+            };
+
+            var customerService = new CustomerService();
+            Stripe.Customer customer = customerService.Update(customerId, customerOptions);
+        }
     }
 }

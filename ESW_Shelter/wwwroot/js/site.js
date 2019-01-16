@@ -6,6 +6,108 @@ $(document).ready(() => {
     }, function () {
         $(this).find('.dropdown-menu').stop(true, true).fadeOut(250);
     });
+
+    $("#planCancel").click((cancelButton) => {
+        $(cancelButton.target).css("display", "none");
+        $("#planSelector").html("Ativar seleção");
+        $('#planSelector').attr("data-enabled", "false");
+
+        $('#planList').children().each((index) => {
+            let listItem = $("#planList").children()[index];
+            let text = $(listItem).text();
+            let id = $(listItem).attr("data-id");
+
+            $(listItem).html(text);
+        });
+    });
+
+    function subscribe(planId) {
+        $.ajax({
+            type: "POST",
+            url: "/Donations/Subscribe",
+            async: false,
+            data: {
+                plan: planId
+            }
+        }).done((result) => {
+            alert("Subscrição efetuada com sucesso");
+
+            $("#planCancel").css("display", "none");
+            $("#planSelector").html("Ativar seleção");
+            $('#planSelector').attr("data-enabled", "false");
+
+            $('#planList').children().each((index) => {
+                let listItem = $("#planList").children()[index];
+                let text = $(listItem).text();
+                let id = $(listItem).attr("data-id");
+
+                $(listItem).html(text);
+            });
+        });
+    }
+
+    $('#planSelector').click(function (plansButton) {
+        let dataEnabled = (this.getAttribute("data-enabled") == "true");
+        let planId = $(".plans:checked").val();
+
+        if (!dataEnabled) {
+            this.setAttribute("data-enabled", "true");
+            $(this).html("Subscrever");
+            $("#planCancel").css("display", "");
+            $('#planList').children().each((index) => {
+                let listItem = $("#planList").children()[index];
+                let text = $(listItem).text();
+                let id = $(listItem).attr("data-id");
+
+                $(listItem).html(
+                    '<input class="plans" name="plans" type="radio" value="' + id + '"> ' + text + '</input>'
+                );
+            });
+
+            $(".plans").last().attr("checked", "checked");
+        } else {
+            let card = null;
+            $.ajax({
+                type: "GET",
+                url: "/Users/Card",
+                async: false
+            }).done((result) => {
+                    card = result;
+                });
+
+            if (card == null) {
+                $("#cardModal").modal();
+                $(".cancel").click((index, elem) => {
+                    $("#cardModal").modal("hide");
+                });
+
+                $(".add-card").click((index, elem) => {
+                    $.ajax({
+                        type: "POST",
+                        url: "/Users/Card",
+                        async: false,
+                        data: {
+                            number: $("#cardNumber").val(),
+                            month: $("#cardMonth").val(),
+                            year: $("#cardYear").val(),
+                            cvc: $("#cardCvc").val()
+                        }
+                    }).done((result) => {
+                        console.log(result);
+                        if (result == "true") {
+                            $("#cardModal").modal("hide");
+                            subscribe(planId);
+                        } else {
+                            alert("Dados do cartão incorretos!");
+                        }
+                    });
+                });
+            } else {
+                subscribe(planId);
+            }
+
+        }
+    });
 });
 
 //// Write your JavaScript code.

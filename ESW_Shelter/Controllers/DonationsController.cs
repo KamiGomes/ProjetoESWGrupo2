@@ -17,7 +17,6 @@ namespace ESW_Shelter.Controllers
 
         public DonationsController(ShelterContext context)
         {
-            StringBuilder sb = new StringBuilder();
             _context = context;
         }
 
@@ -57,9 +56,10 @@ namespace ESW_Shelter.Controllers
             var plans = stripeLib.GetPlans();
 
             ViewData["plans"] = plans;
-           
+
             return View();
         }
+
 
         // POST: Donations/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
@@ -75,6 +75,30 @@ namespace ESW_Shelter.Controllers
                 return RedirectToAction(nameof(Index));
             }
             return View();
+        }
+
+        // POST: Donations/Subscribe
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        public string Subscribe(string planId)
+        {
+            try
+            {
+                var userId = Int32.Parse(HttpContext.Session.GetString("UserID"));
+                var user = _context.Users.Find(userId);
+                var customerId = user.CustomerId;
+
+                StripeLib stripeLib = new StripeLib();
+                var subscriptionId = stripeLib.Subscribe(customerId, planId);
+
+                if (subscriptionId == null) return "false";
+
+                return subscriptionId;
+            } catch (Exception ex)
+            {
+                return "false";
+            }
         }
 
         // GET: Donations/Edit/5

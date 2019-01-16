@@ -178,6 +178,7 @@ namespace ESW_Shelter.Controllers
             return View(usersIndexVM);
         }
 
+
         /// <summary>
         /// <para>Método que vai ser chamado na rota "/Users/Details/x". Utilizando uma query LINQ, vai buscar os dados de um Users e UsersInfo associados, cujo id de Users seja
         /// igual ao id recebido.</para>
@@ -751,6 +752,41 @@ namespace ESW_Shelter.Controllers
                 return true;
             }
             return false;
+        }
+
+        // GET: Users/Card
+        public string Card()
+        {
+
+            var userId = Int32.Parse(HttpContext.Session.GetString("UserID"));
+            var user = _context.Users.Find(userId);
+
+            var customerId = user.CustomerId;
+            StripeLib stripeLib = new StripeLib();
+
+            Stripe.StripeList<Stripe.Card> cards = stripeLib.GetCards(customerId);
+
+            if (cards.Count() == 0) return null;
+            
+            return cards.First().Id;
+        }
+
+        [HttpPost, ActionName("Card")]
+        public string CreateCard(string number, int month, int year, string cvc)
+        {
+            try {
+                var userId = Int32.Parse(HttpContext.Session.GetString("UserID"));
+                var user = _context.Users.Find(userId);
+                var customerId = user.CustomerId;
+
+                StripeLib stripeLib = new StripeLib();
+                stripeLib.SetCard(customerId, number, month, year, cvc);
+                return "true";
+
+            }catch (Exception ex)
+            {
+                return "false";
+            }
         }
     }
 }
