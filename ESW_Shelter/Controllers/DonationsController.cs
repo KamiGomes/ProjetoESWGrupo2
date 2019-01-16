@@ -249,16 +249,12 @@ namespace ESW_Shelter.Controllers
             {
                 return ErrorNotFoundOrSomeOtherError();
             }
-            if (donationIVM.DateOfDonation == DateTime.MinValue)
+
+            if (!checkValues(donationIVM))
             {
-                TempData["Message"] = "Escolha uma data para a doação!";
                 return Redirect(nameof(Create));
             }
-            if (donationIVM.UsersFK == 0)
-            {
-                TempData["Message"] = "Escolha uma cliente para a doação!";
-                return Redirect(nameof(Create));
-            }
+
             if (ModelState.IsValid)
             {
                    
@@ -401,6 +397,12 @@ namespace ESW_Shelter.Controllers
             {
                 return ErrorNotFoundOrSomeOtherError();
             }
+
+            if (!checkValues(donationIVM))
+            {
+                return Redirect(nameof(Create));
+            }
+
             if (ModelState.IsValid)
             {
                 try
@@ -490,10 +492,6 @@ namespace ESW_Shelter.Controllers
 
         private async void removeForEdition(int donationID)
         {
-            if (!GetAutorization(4))
-            {
-                return ErrorNotFoundOrSomeOtherError();
-            }
             var alldonations = _context.DonationProduct.Where(e=> e.DonationFK == donationID);
             foreach (DonationProduct donProd in alldonations)
             {
@@ -573,6 +571,21 @@ namespace ESW_Shelter.Controllers
         private bool DonationExists(int id)
         {
             return _context.Donation.Any(e => e.DonationID == id);
+        }
+
+        private bool checkValues(DonationIndexViewModel donationIVM)
+        {
+            if (donationIVM.DateOfDonation == DateTime.MinValue)
+            {
+                TempData["Message"] = "Escolha uma data para a doação!";
+                return false;
+            }
+            if (donationIVM.UsersFK <= 0)
+            {
+                TempData["Message"] = "Escolha uma cliente para a doação!";
+                return false;
+            }
+            return true;
         }
     }
 }

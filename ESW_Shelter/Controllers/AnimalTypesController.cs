@@ -51,7 +51,7 @@ namespace ESW_Shelter.Controllers
         }
 
         // GET: AnimalTypes/Create
-        public async Task<IActionResult> CreateAsync()
+        public async Task<IActionResult> Create()
         {
             if (!GetAutorization(4))
             {
@@ -110,6 +110,10 @@ namespace ESW_Shelter.Controllers
             if (!GetAutorization(4))
             {
                 return ErrorNotFoundOrSomeOtherError();
+            }
+            if (!checkValues(animalType))
+            {
+                return View(animalType);
             }
             if (id != animalType.AnimalTypeID)
             {
@@ -179,6 +183,21 @@ namespace ESW_Shelter.Controllers
         private bool AnimalTypeExists(int id)
         {
             return _context.AnimalTypes.Any(e => e.AnimalTypeID == id);
+        }
+
+        private bool checkValues(AnimalType animalType)
+        {
+            if (!string.IsNullOrEmpty(animalType.Name))
+            {
+                TempData["Message"] = "Por favor introduza um nome de tipo de animal!";
+                return false;
+            }
+            if (animalType.AnimalTypeID <= 0)
+            {
+                TempData["Message"] = "Algo de errado ocorreu!";
+                return false;
+            }
+            return true;
         }
     }
 }

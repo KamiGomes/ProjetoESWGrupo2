@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ESW_Shelter.Models;
 
@@ -71,6 +68,10 @@ namespace ESW_Shelter.Controllers
             {
                 return ErrorNotFoundOrSomeOtherError();
             }
+            if (!checkValues(productType))
+            {
+                return View(productType);
+            }
             if (ModelState.IsValid)
             {
                 _context.Add(productType);
@@ -110,6 +111,10 @@ namespace ESW_Shelter.Controllers
             if (!GetAutorization(4))
             {
                 return ErrorNotFoundOrSomeOtherError();
+            }
+            if (!checkValues(productType))
+            {
+                return View(productType);
             }
             if (id != productType.ProductTypeID)
             {
@@ -179,6 +184,21 @@ namespace ESW_Shelter.Controllers
         private bool ProductTypeExists(int id)
         {
             return _context.ProductTypes.Any(e => e.ProductTypeID == id);
+        }
+
+        private bool checkValues(ProductType productType)
+        {
+            if (!string.IsNullOrEmpty(productType.Name))
+            {
+                TempData["Message"] = "Por favor insira um tipo de produto!";
+                return false;
+            }
+            if (productType.ProductTypeID <= 0)
+            {
+                TempData["Message"] = "Algo de errado aconteceu!";
+                return false;
+            }
+            return true;
         }
     }
 }

@@ -128,6 +128,10 @@ namespace ESW_Shelter.Controllers
             {
                 return ErrorNotFoundOrSomeOtherError();
             }
+            if(!checkValues(product))
+            {
+                return RedirectToAction(nameof(Create));
+            }
             if (ModelState.IsValid)
             {
                 product.AnimalTypeFK = Int32.Parse(Request.Form["AnimalTypeFK"].ToString());
@@ -172,6 +176,10 @@ namespace ESW_Shelter.Controllers
             if (!GetAutorization(4))
             {
                 return ErrorNotFoundOrSomeOtherError();
+            }
+            if (!checkValues(product))
+            {
+                return RedirectToAction(nameof(Create));
             }
             if (id != product.ProductID)
             {
@@ -263,6 +271,36 @@ namespace ESW_Shelter.Controllers
         private bool ProductExists(int id)
         {
             return _context.Products.Any(e => e.ProductID == id);
+        }
+
+        private bool checkValues(Product product)
+        {
+            if (product.AnimalTypeFK <= 0)
+            {
+                TempData["Message"] = "Por favor insira um tipo de animal!";
+                return false;
+            }
+            if (product.ProductTypeFK <= 0)
+            {
+                TempData["Message"] = "Por favor escolha um tipo de produto!";
+                return false;
+            }
+            if (!string.IsNullOrEmpty(product.Name))
+            {
+                TempData["Message"] = "Por favor insira um nome para o produto!";
+                return false;
+            }
+            if (product.Quantity <= -1)
+            {
+                TempData["Message"] = "Quantidade não pode ser negativa!";
+                return false;
+            }
+            if (product.ProductID <= 0)
+            {
+                TempData["Message"] = "Algo de errado aconteceu!";
+                return false;
+            }
+            return true;
         }
     }
 }
