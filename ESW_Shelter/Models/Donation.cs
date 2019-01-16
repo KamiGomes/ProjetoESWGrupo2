@@ -11,12 +11,13 @@ namespace ESW_Shelter.Models
         public int DonationID { get; set; }
 
         [DataType(DataType.Date)]
+        [Required(ErrorMessage = "Selecione uma data!")]
         [DisplayFormat(DataFormatString = "{0:yyyy/MM/dd}", ApplyFormatInEditMode = true)]
         [Display(Name = "Data do Donativo")]
         public DateTime DateOfDonation { get; set; }
 
         [ForeignKey("Users")]
-        [Required(ErrorMessage = "Escolha um produto!")]
+        [Required(ErrorMessage = "Escolha um cliente!")]
         [Display(Prompt = "Examplo: José", Name = "Cliente")]
         public int UsersFK { get; set; }
 

@@ -8,14 +8,15 @@ using Microsoft.EntityFrameworkCore;
 using ESW_Shelter.Models;
 using Microsoft.AspNetCore.Http;
 using System.Collections;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ESW_Shelter.Controllers
 {
-    public class DonationsController : Controller
+    public class DonationsController : SharedController
     {
         private readonly ShelterContext _context;
 
-        public DonationsController(ShelterContext context)
+        public DonationsController(ShelterContext context) : base(context)
         {
             _context = context;
         }
@@ -23,6 +24,10 @@ namespace ESW_Shelter.Controllers
         // GET: Donations
         public async Task<IActionResult> Index(string searchString, string animalType, string productType, string clientString, DateTime dateString)
         {
+            if (!GetAutorization(4))
+            {
+                return ErrorNotFoundOrSomeOtherError();
+            }
             var donationUserQuery = from donation in _context.Donation
                         join user in _context.Users on donation.UsersFK equals user.UserID
                         select new
@@ -111,6 +116,10 @@ namespace ESW_Shelter.Controllers
         // GET: Donations/Details/5
         public async Task<IActionResult> Details(int? id)
         {
+            if (!GetAutorization(4))
+            {
+                return ErrorNotFoundOrSomeOtherError();
+            }
             if (id == null)
             {
                 return NotFound();
@@ -129,6 +138,41 @@ namespace ESW_Shelter.Controllers
         // GET: Donations/Create
         public IActionResult Create(string searchString, string animalType, string productType)
         {
+            if (!GetAutorization(4))
+            {
+                return ErrorNotFoundOrSomeOtherError();
+            }
+            List<Product> selectedProducts = new List<Product>();
+            if (ViewBag.selectedProducts != null)
+            {
+                List<Product> savedProducts = ViewBag.selectedProducts;
+                if (savedProducts.Count > 0)
+                {
+                    selectedProducts = savedProducts;
+                    System.Diagnostics.Debug.WriteLine("*************************");
+                    System.Diagnostics.Debug.WriteLine(selectedProducts[0].Name);
+                    System.Diagnostics.Debug.WriteLine("*************************");
+                }
+            }
+            if (Request.HasFormContentType && Request.Form != null && Request.Form.Count() > 0)
+            {
+                string selected = Request.Form["checkProduct"].ToString();
+                string[] selectedList = selected.Split(',');
+
+                foreach (var temp in selectedList)
+                {
+                    int prodKey = Convert.ToInt32(temp);
+                    int newQuant = Convert.ToInt32(Request.Form["quantityProduct " + Convert.ToInt32(temp)].ToString());
+
+                    selectedProducts.Add(new Product
+                    {
+                        ProductID = prodKey,
+                        ProductTypeFK = prodKey,
+                        Quantity = newQuant
+                    });
+                }
+            }
+
             /**
              * Produtos
              */
@@ -183,12 +227,14 @@ namespace ESW_Shelter.Controllers
             {
                 Products = result,
                 AnimalTypes = new SelectList(animalTypeQuery.Distinct().ToList()),
-                ProductTypes = new SelectList(productTypeQuery.Distinct().ToList())
+                ProductTypes = new SelectList(productTypeQuery.Distinct().ToList()),
+                SelectedProducts = selectedProducts
             };
             /**
              * 
              */
             ViewBag.UsersFK = _context.Users.AsParallel();
+            ViewBag.selectedProducts = selectedProducts;
             return View(donationIndexVM);
         }
 
@@ -199,8 +245,23 @@ namespace ESW_Shelter.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("DonationID,DateOfDonation,UsersFK")] DonationIndexViewModel donationIVM)
         {
+            if (!GetAutorization(4))
+            {
+                return ErrorNotFoundOrSomeOtherError();
+            }
+            if (donationIVM.DateOfDonation == DateTime.MinValue)
+            {
+                TempData["Message"] = "Escolha uma data para a doação!";
+                return Redirect(nameof(Create));
+            }
+            if (donationIVM.UsersFK == 0)
+            {
+                TempData["Message"] = "Escolha uma cliente para a doação!";
+                return Redirect(nameof(Create));
+            }
             if (ModelState.IsValid)
             {
+                   
                 string selected = Request.Form["checkProduct"].ToString();
                 string[] selectedList = selected.Split(',');
 
@@ -211,7 +272,6 @@ namespace ESW_Shelter.Controllers
                 };
                 _context.Add(donation);
                 _context.SaveChanges();
-                var x = 0;
                 foreach (var temp in selectedList)
                 {
                     int prodKey = Convert.ToInt32(temp);
@@ -222,7 +282,6 @@ namespace ESW_Shelter.Controllers
                         ProductFK = prodKey,
                         Quantity = newQuant
                     };
-                    x++;
                     var prod = new Product
                     {
                         ProductID = prodKey
@@ -233,14 +292,19 @@ namespace ESW_Shelter.Controllers
                     _context.Add(donationProduct);
                 }
                 await _context.SaveChangesAsync();
+                TempData["Message"] = "Doação criada com sucesso!";
                 return RedirectToAction(nameof(Index));
             }
             return View(donationIVM);
         }
 
         // GET: Donations/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        public async Task<IActionResult> Edit(int? id, string searchString, string animalType, string productType)
         {
+            if (!GetAutorization(4))
+            {
+                return ErrorNotFoundOrSomeOtherError();
+            }
             if (id == null)
             {
                 return NotFound();
@@ -268,7 +332,7 @@ namespace ESW_Shelter.Controllers
                             ProductTypeName = productsType.Name,
                             AnimaltypeName = animalsType.Name
                         };
-            /*
+            
             if (!String.IsNullOrEmpty(searchString))
             {
                 query = query.Where(product => product.Name.Contains(searchString));
@@ -282,7 +346,7 @@ namespace ESW_Shelter.Controllers
             if (!String.IsNullOrEmpty(productType))
             {
                 query = query.Where(product => product.ProductTypeName.Contains(productType));
-            }*/
+            }
 
             var result = query.ToList().Select(e => new Product
             {
@@ -333,6 +397,10 @@ namespace ESW_Shelter.Controllers
             {
                 return NotFound();
             }*/
+            if (!GetAutorization(4))
+            {
+                return ErrorNotFoundOrSomeOtherError();
+            }
             if (ModelState.IsValid)
             {
                 try
@@ -394,7 +462,13 @@ namespace ESW_Shelter.Controllers
                             _context.Add(donationProduct);
                         }
                     }
-
+                    var editdon = _context.Donation.SingleOrDefault(d => d.DonationID == id);
+                    if (editdon != null)
+                    {
+                        editdon.DateOfDonation = donationIVM.DateOfDonation;
+                        editdon.UsersFK = donationIVM.UsersFK;
+                        _context.SaveChanges();
+                    }
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
@@ -416,6 +490,10 @@ namespace ESW_Shelter.Controllers
 
         private async void removeForEdition(int donationID)
         {
+            if (!GetAutorization(4))
+            {
+                return ErrorNotFoundOrSomeOtherError();
+            }
             var alldonations = _context.DonationProduct.Where(e=> e.DonationFK == donationID);
             foreach (DonationProduct donProd in alldonations)
             {
@@ -433,6 +511,10 @@ namespace ESW_Shelter.Controllers
         // GET: Donations/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
+            if (!GetAutorization(4))
+            {
+                return ErrorNotFoundOrSomeOtherError();
+            }
             if (id == null)
             {
                 return NotFound();
@@ -453,6 +535,10 @@ namespace ESW_Shelter.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
+            if (!GetAutorization(4))
+            {
+                return ErrorNotFoundOrSomeOtherError();
+            }
             var donation = await _context.Donation.FindAsync(id);
             var query = from donationProduct in _context.DonationProduct
                         where donationProduct.DonationFK == id

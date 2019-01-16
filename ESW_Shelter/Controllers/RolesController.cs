@@ -7,11 +7,11 @@ using ESW_Shelter.Models;
 
 namespace ESW_Shelter.Controllers
 {
-    public class RolesController : Controller
+    public class RolesController : SharedController
     {
         private readonly ShelterContext _context;
 
-        public RolesController(ShelterContext context)
+        public RolesController(ShelterContext context) : base(context)
         {
             _context = context;
         }
@@ -19,6 +19,10 @@ namespace ESW_Shelter.Controllers
         // GET: Roles
         public async Task<IActionResult> Index()
         {
+            if (!GetAutorization(4))
+            {
+                return ErrorNotFoundOrSomeOtherError();
+            }
             var roles = await _context.Roles.ToListAsync();
             return View(roles);
         }
@@ -26,6 +30,10 @@ namespace ESW_Shelter.Controllers
         // GET: Roles/Details/5
         public async Task<IActionResult> Details(int? id)
         {
+            if (!GetAutorization(4))
+            {
+                return ErrorNotFoundOrSomeOtherError();
+            }
             if (id == null)
             {
                 return NotFound();
@@ -44,6 +52,10 @@ namespace ESW_Shelter.Controllers
         // GET: Roles/Create
         public IActionResult Create()
         {
+            if (!GetAutorization(4))
+            {
+                return ErrorNotFoundOrSomeOtherError();
+            }
             return View();
         }
 
@@ -54,6 +66,10 @@ namespace ESW_Shelter.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("RoleID,RoleName")] Roles roles)
         {
+            if (!GetAutorization(4))
+            {
+                return ErrorNotFoundOrSomeOtherError();
+            }
             if (ModelState.IsValid)
             {
                 _context.Add(roles);
@@ -66,6 +82,10 @@ namespace ESW_Shelter.Controllers
         // GET: Roles/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
+            if (!GetAutorization(4))
+            {
+                return ErrorNotFoundOrSomeOtherError();
+            }
             if (id == null)
             {
                 return NotFound();
@@ -86,6 +106,10 @@ namespace ESW_Shelter.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("RoleID,RoleName")] Roles roles)
         {
+            if (!GetAutorization(4))
+            {
+                return ErrorNotFoundOrSomeOtherError();
+            }
             if (id != roles.RoleID)
             {
                 return NotFound();
@@ -117,6 +141,10 @@ namespace ESW_Shelter.Controllers
         // GET: Roles/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
+            if (!GetAutorization(4))
+            {
+                return ErrorNotFoundOrSomeOtherError();
+            }
             if (id == null)
             {
                 return NotFound();
@@ -137,6 +165,10 @@ namespace ESW_Shelter.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
+            if (!GetAutorization(4))
+            {
+                return ErrorNotFoundOrSomeOtherError();
+            }
             var roles = await _context.Roles.FindAsync(id);
             _context.Roles.Remove(roles);
             await _context.SaveChangesAsync();

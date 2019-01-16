@@ -9,11 +9,11 @@ using ESW_Shelter.Models;
 
 namespace ESW_Shelter.Controllers
 {
-    public class ProductTypesController : Controller
+    public class ProductTypesController : SharedController
     {
         private readonly ShelterContext _context;
 
-        public ProductTypesController(ShelterContext context)
+        public ProductTypesController(ShelterContext context) : base(context)
         {
             _context = context;
         }
@@ -21,12 +21,20 @@ namespace ESW_Shelter.Controllers
         // GET: ProductTypes
         public async Task<IActionResult> Index()
         {
+            if (!GetAutorization(4))
+            {
+                return ErrorNotFoundOrSomeOtherError();
+            }
             return View(await _context.ProductTypes.ToListAsync());
         }
 
         // GET: ProductTypes/Details/5
         public async Task<IActionResult> Details(int? id)
         {
+            if (!GetAutorization(4))
+            {
+                return ErrorNotFoundOrSomeOtherError();
+            }
             if (id == null)
             {
                 return NotFound();
@@ -45,6 +53,10 @@ namespace ESW_Shelter.Controllers
         // GET: ProductTypes/Create
         public IActionResult Create()
         {
+            if (!GetAutorization(4))
+            {
+                return ErrorNotFoundOrSomeOtherError();
+            }
             return View();
         }
 
@@ -55,6 +67,10 @@ namespace ESW_Shelter.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("ProductTypeID,Name")] ProductType productType)
         {
+            if (!GetAutorization(4))
+            {
+                return ErrorNotFoundOrSomeOtherError();
+            }
             if (ModelState.IsValid)
             {
                 _context.Add(productType);
@@ -67,6 +83,10 @@ namespace ESW_Shelter.Controllers
         // GET: ProductTypes/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
+            if (!GetAutorization(4))
+            {
+                return ErrorNotFoundOrSomeOtherError();
+            }
             if (id == null)
             {
                 return NotFound();
@@ -87,6 +107,10 @@ namespace ESW_Shelter.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("ProductTypeID,Name")] ProductType productType)
         {
+            if (!GetAutorization(4))
+            {
+                return ErrorNotFoundOrSomeOtherError();
+            }
             if (id != productType.ProductTypeID)
             {
                 return NotFound();
@@ -118,6 +142,10 @@ namespace ESW_Shelter.Controllers
         // GET: ProductTypes/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
+            if (!GetAutorization(4))
+            {
+                return ErrorNotFoundOrSomeOtherError();
+            }
             if (id == null)
             {
                 return NotFound();
@@ -138,6 +166,10 @@ namespace ESW_Shelter.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
+            if (!GetAutorization(4))
+            {
+                return ErrorNotFoundOrSomeOtherError();
+            }
             var productType = await _context.ProductTypes.FindAsync(id);
             _context.ProductTypes.Remove(productType);
             await _context.SaveChangesAsync();

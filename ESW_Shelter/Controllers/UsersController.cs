@@ -9,7 +9,6 @@ using System.Collections.Generic;
 using Microsoft.Extensions.Configuration;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
-
 //hotfix -> Install-Package Microsoft.AspNet.Mvc -Version 5.2.3.0 | Install-Package httpsecurecookie -Version 0.1.1 | Install-Package Microsoft.AspNetCore.Session -Version 2.1.1 
 //Insert Into Users (Email, Name, Password, ConfirmedEmail, RoleId, City, DateOfBirth, Phone, PostalCode, Street) Values
 //					('administrador@admin.pt', 'Admin', 'Admin-12',1,4,'Cidade','2018/12/16',000000000,'0000-000','Nenhuma')
@@ -103,14 +102,16 @@ namespace ESW_Shelter.Controllers
     /// </item>
     /// </list>
     /// </remarks>
-    public class UsersController : Controller
+    public class UsersController : SharedController
     {
 
         private readonly ShelterContext _context;
         private readonly IConfiguration _configuration;
 
-        public UsersController(ShelterContext context, IConfiguration configuration)
+
+        public UsersController(ShelterContext context, IConfiguration configuration) : base(context)
         {
+            
             _context = context;
             _configuration = configuration;
         }
@@ -131,8 +132,13 @@ namespace ESW_Shelter.Controllers
         /// <para><b>View associada: </b>"-Views/Users/Index.cshtml"</para>
         /// </remarks>
         /// <returns>View(userProfile)</returns>
+
         public async Task<IActionResult> Index(string searchString, string roleType)
         {
+            if (!GetAutorization(4))
+            {
+                return RedirectToAction("ErrorNotFoundOrSomeOtherError");
+            }
             var query = from usersJ in _context.Users
                         join rolesJ in _context.Roles on usersJ.UserID equals rolesJ.RoleID
                         select new
@@ -202,6 +208,10 @@ namespace ESW_Shelter.Controllers
         /// </returns>
         public async Task<IActionResult> Details(int? id)
         {
+            if (!GetAutorization(4))
+            {
+                return RedirectToAction("ErrorNotFoundOrSomeOtherError");
+            }
             if (id == null)
             {
                 return RedirectToAction("ErrorNotFoundOrSomeOtherError");
@@ -219,6 +229,10 @@ namespace ESW_Shelter.Controllers
         /// <returns>View();</returns>
         public IActionResult Create()
         {
+            if (!GetAutorization(4))
+            {
+                return RedirectToAction("ErrorNotFoundOrSomeOtherError");
+            }
             ViewBag.RoleTypes = _context.Roles.AsParallel();
             return View();
         }
@@ -230,6 +244,10 @@ namespace ESW_Shelter.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("UserID,Email,Name,Password,ConfirmedEmail,Street,PostalCode,City,Phone,DateOfBirth,RoleID")] Users users)
         {
+            if (!GetAutorization(4))
+            {
+                return RedirectToAction("ErrorNotFoundOrSomeOtherError");
+            }
             try
             {
                 if (ModelState.IsValid)
@@ -477,7 +495,6 @@ namespace ESW_Shelter.Controllers
 
             string date31string = user.DateOfBirth.ToString("yyyy/MM/dd");
             user.DateOfBirth = DateTime.ParseExact(date31string, "yyyy/MM/dd", null);
-            GetLogin();
             return View(user);
         }
 
@@ -496,7 +513,11 @@ namespace ESW_Shelter.Controllers
         /// </returns>
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null || !GetLogin())
+            if (!GetAutorization(4))
+            {
+                return RedirectToAction("ErrorNotFoundOrSomeOtherError");
+            }
+            if (id == null)
             {
                 return RedirectToAction("ErrorNotFoundOrSomeOtherError");
             }
@@ -589,6 +610,10 @@ namespace ESW_Shelter.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("UserID, Email, Password, Name, ConfirmedEmail, RoleID, UserInfoID, Street, PostalCode, City, Phone, AlternativePhone, AlternativeEmail, Facebook, Twitter, Instagram, Tumblr, Website")] Users profile)
         {
+            if (!GetAutorization(4))
+            {
+                return RedirectToAction("ErrorNotFoundOrSomeOtherError");
+            }
             if (id != profile.UserID)
             {
                 return RedirectToAction("ErrorNotFoundOrSomeOtherError");
@@ -639,6 +664,10 @@ namespace ESW_Shelter.Controllers
         /// </returns>
         public async Task<IActionResult> Delete(int? id)
         {
+            if (!GetAutorization(4))
+            {
+                return RedirectToAction("ErrorNotFoundOrSomeOtherError");
+            }
             if (id == null)
             {
                 return RedirectToAction("ErrorNotFoundOrSomeOtherError");
@@ -650,7 +679,6 @@ namespace ESW_Shelter.Controllers
             {
                 return RedirectToAction("ErrorNotFoundOrSomeOtherError");
             }
-            GetLogin();
             return View(users);
         }
 
@@ -666,26 +694,17 @@ namespace ESW_Shelter.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-
+            if (!GetAutorization(4))
+            {
+                return RedirectToAction("ErrorNotFoundOrSomeOtherError");
+            }
             var users = await _context.Users.FindAsync(id);
             _context.Users.Remove(users);
 
             await _context.SaveChangesAsync();
-            GetLogin();
             return RedirectToAction(nameof(Index));
         }
 
-        /// <summary>
-        /// <para>Método que é chamado quando existe algum acesso não desejado, ou algum erro ocorrido no lado do servidor.</para>
-        /// </summary>
-        /// <returns>
-        /// <para>return View("~/Views/Home/Index.cshtml")</para>
-        /// </returns>
-        public async Task<IActionResult> ErrorNotFoundOrSomeOtherError()
-        {
-            TempData["Message"] = "Access Denied";
-            return RedirectToAction("Index", "Home", null);
-        }
 
         /// <summary>
         /// <para>Método que vai verificar se existe um Users com o id recebido.</para>
@@ -712,6 +731,7 @@ namespace ESW_Shelter.Controllers
             {
                 HttpContext.Session.Remove("User_Name");
                 HttpContext.Session.Remove("UserID");
+                HttpContext.Session.Remove("Ad");
             }
             else
             {
@@ -719,33 +739,11 @@ namespace ESW_Shelter.Controllers
                 HttpContext.Session.SetString("UserID", id);
                 int idint = Int32.Parse(id);
                 var role = (from user in _context.Users where user.UserID == idint select user.RoleID).First();
-                if (role == 4)
+                if (role == 4 || role == 3)
                 {
                     HttpContext.Session.SetString("Ad", "Ad");
                 }
             }
-        }
-
-        /// <summary>
-        /// <para>Método que redefine os session variables, para que não haja perda de dados. Verifica ainda se é admin ou não e devolve conforme o resultado.</para>
-        /// </summary>
-        /// <returns>
-        /// <para> Caso a variável de sessão "Ad" não exista - false</para>
-        /// <para> Caso a variável de sessão "Ad" exista - true</para>
-        /// </returns>
-        private bool GetLogin()
-        {
-            if (HttpContext.Session.GetString("User_Name") != null && HttpContext.Session.GetString("UserID") != null)
-            {
-                HttpContext.Session.SetString("User_Name", HttpContext.Session.GetString("User_Name"));
-                HttpContext.Session.SetString("UserID", HttpContext.Session.GetString("UserID"));
-            }
-            if (HttpContext.Session.GetString("Ad") != null)
-            {
-                HttpContext.Session.SetString("Ad", HttpContext.Session.GetString("Ad"));
-                return true;
-            }
-            return false;
         }
     }
 }
