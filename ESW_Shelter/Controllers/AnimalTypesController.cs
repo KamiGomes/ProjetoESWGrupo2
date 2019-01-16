@@ -9,11 +9,11 @@ using ESW_Shelter.Models;
 
 namespace ESW_Shelter.Controllers
 {
-    public class AnimalTypesController : Controller
+    public class AnimalTypesController : SharedController
     {
         private readonly ShelterContext _context;
 
-        public AnimalTypesController(ShelterContext context)
+        public AnimalTypesController(ShelterContext context) : base(context)
         {
             _context = context;
         }
@@ -21,12 +21,20 @@ namespace ESW_Shelter.Controllers
         // GET: AnimalTypes
         public async Task<IActionResult> Index()
         {
+            if (!GetAutorization(4))
+            {
+                return ErrorNotFoundOrSomeOtherError();
+            }
             return View(await _context.AnimalTypes.ToListAsync());
         }
 
         // GET: AnimalTypes/Details/5
         public async Task<IActionResult> Details(int? id)
         {
+            if (!GetAutorization(4))
+            {
+                return ErrorNotFoundOrSomeOtherError();
+            }
             if (id == null)
             {
                 return NotFound();
@@ -43,8 +51,12 @@ namespace ESW_Shelter.Controllers
         }
 
         // GET: AnimalTypes/Create
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
+            if (!GetAutorization(4))
+            {
+                return ErrorNotFoundOrSomeOtherError();
+            }
             return View();
         }
 
@@ -55,6 +67,10 @@ namespace ESW_Shelter.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("AnimalTypeID,Name")] AnimalType animalType)
         {
+            if (!GetAutorization(4))
+            {
+                return ErrorNotFoundOrSomeOtherError();
+            }
             if (ModelState.IsValid)
             {
                 _context.Add(animalType);
@@ -67,6 +83,10 @@ namespace ESW_Shelter.Controllers
         // GET: AnimalTypes/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
+            if (!GetAutorization(4))
+            {
+                return ErrorNotFoundOrSomeOtherError();
+            }
             if (id == null)
             {
                 return NotFound();
@@ -87,9 +107,17 @@ namespace ESW_Shelter.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("AnimalTypeID,Name")] AnimalType animalType)
         {
+            if (!GetAutorization(4))
+            {
+                return ErrorNotFoundOrSomeOtherError();
+            }
+            if (!checkValues(animalType))
+            {
+                return View(animalType);
+            }
             if (id != animalType.AnimalTypeID)
             {
-                return NotFound();
+                return ErrorNotFoundOrSomeOtherError();
             }
 
             if (ModelState.IsValid)
@@ -118,6 +146,10 @@ namespace ESW_Shelter.Controllers
         // GET: AnimalTypes/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
+            if (!GetAutorization(4))
+            {
+                return ErrorNotFoundOrSomeOtherError();
+            }
             if (id == null)
             {
                 return NotFound();
@@ -138,6 +170,10 @@ namespace ESW_Shelter.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
+            if (!GetAutorization(4))
+            {
+                return ErrorNotFoundOrSomeOtherError();
+            }
             var animalType = await _context.AnimalTypes.FindAsync(id);
             _context.AnimalTypes.Remove(animalType);
             await _context.SaveChangesAsync();
@@ -147,6 +183,21 @@ namespace ESW_Shelter.Controllers
         private bool AnimalTypeExists(int id)
         {
             return _context.AnimalTypes.Any(e => e.AnimalTypeID == id);
+        }
+
+        private bool checkValues(AnimalType animalType)
+        {
+            if (string.IsNullOrEmpty(animalType.Name))
+            {
+                TempData["Message"] = "Por favor introduza um nome de tipo de animal!";
+                return false;
+            }
+            if (animalType.AnimalTypeID <= -1)
+            {
+                TempData["Message"] = "Algo de errado ocorreu!";
+                return false;
+            }
+            return true;
         }
     }
 }

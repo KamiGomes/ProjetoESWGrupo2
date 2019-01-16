@@ -1,3 +1,63 @@
+﻿@model ESW_Shelter.Models.DonationIndexViewModel
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_BackLayout.cshtml";
+}
+
+<h2>Donativos</h2>
+
+<p>
+    <a asp-action="Create">Criar um novo Donativo</a>
+</p>
+<form asp-controller="Donations" asp-action="Index" method="get">
+    Data do Donativo:  <input type="date" name="DateString" style="color:black;">
+    <select asp-for="ClientString" asp-items="Model.UsersNames">
+        <option value="">Todos os Clientes</option>
+    </select>
+    <input type="submit" value="Pesquisar" style="background-color: coral" />
+</form>
+<div class="row profile">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Donation[0].DateOfDonation)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Donation[0].UsersFK)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Donation[0].ProductName)
+                </th>
+                <th>
+                    Opções
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Donation)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.DateOfDonation)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.UsersName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ProductName)
+                    </td>
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@item.DonationID">Editar</a> |
+                        <a asp-action="Delete" asp-route-id="@item.DonationID">Eliminar</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
 ﻿@using Microsoft.AspNetCore.Http;
 
 @{

@@ -2,6 +2,7 @@
 
 @{
     ViewData["Title"] = "Details";
+    Layout = "~/Views/Shared/_BackLayout.cshtml";
 }
 
 <h2>Details</h2>
@@ -11,34 +12,16 @@
     <hr />
     <dl class="dl-horizontal">
         <dt>
-            @Html.DisplayNameFor(model => model.Name)
+            @Html.DisplayNameFor(model => model.DateOfDonation)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.Name)
+            @Html.DisplayFor(model => model.DateOfDonation)
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.Quantity)
+            @Html.DisplayNameFor(model => model.UsersFK)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.Quantity)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.AnimalTypeFK)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.AnimalTypeFK)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.ProductTypeFK)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.ProductTypeFK)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.UserIDFK)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.UserIDFK)
+            @Html.DisplayFor(model => model.UsersFK)
         </dd>
     </dl>
 </div>

@@ -8,6 +8,7 @@ namespace ESW_Shelter.Models
 {
     public class Roles
     {
+        public const string administrator = "administrator";
         [Key]
         [Required(ErrorMessage = "Id Required")]
         public int RoleID { get; set; }

@@ -1,28 +1,22 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿
 using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
-using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 
 namespace ESW_Shelter.Models
 {
     public class Users// : IValidatableObject
     {
-        /* 
-
-            ^[\w\s.,:;!?€¥£¢$-]{0,2048}$
-
+        /* ^[\w\s.,:;!?€¥£¢$-]{0,2048}$
             ^ -- Beginning of string/line
             [] -- A character class
             \w -- A word character
             \s -- A space character
             .,:;!?€¥£¢$- -- Punctuation and special characters
             {} -- Number of repeats (min,max)
-            $ -- End of string/line
-
-             */
+            $ -- End of string/line */
 
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -36,7 +30,7 @@ namespace ESW_Shelter.Models
 
         [StringLength(256, ErrorMessage = "Nome não pode ter mais que 256 caracteres!", MinimumLength = 1)]
         [Required(ErrorMessage = "Nome em falta!")]
-        [RegularExpression(@"^[a-zA-Z\s][\w~^´`]+$", ErrorMessage = "Por favor, utilize só caracteres!")]
+        //[RegularExpression(@"^[a-zA-Z\s][\w~^´`]+$", ErrorMessage = "Por favor, utilize só caracteres!")]
         [Display(Prompt = "Examplo: John Wick", Name = "Nome")]
         public String Name { get; set; }
 
