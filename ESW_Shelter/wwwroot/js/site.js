@@ -22,7 +22,11 @@ $(document).ready(() => {
     });
 
     function subscribe(planId) {
-        console.log(planId);
+        $("#loader-modal").modal({
+            escapeClose: false,
+            clickClose: false,
+            showClose: false
+        });
         $.ajax({
             type: "POST",
             url: "/Donations/Subscribe",
@@ -30,6 +34,7 @@ $(document).ready(() => {
                 planId: planId
             }
         }).done((result) => {
+            $("#loader-modal").modal("hide");
             alert("Subscrição efetuada com sucesso");
 
             $("#planCancel").css("display", "none");

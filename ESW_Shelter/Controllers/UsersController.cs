@@ -379,37 +379,45 @@ namespace ESW_Shelter.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Login([Bind("Email,Password")] Users users)
         {
-            if (users.Email.Equals(""))
+            try
+            {
+                if (users.Email.Equals(""))
+                {
+                    TempData["Message"] = "Email or Password incorreto!";
+                    ModelState.AddModelError("Email", "Email or Password incorreto!");
+                    return View("~/Views/Home/Index.cshtml");
+                }
+                var user = await _context.Users.SingleAsync(i => i.Email == users.Email);
+
+                if (user != null)
+                {
+                    if (user.ConfirmedEmail == false)
+                    {
+                        TempData["Message"] = "Este email ainda não foi confirmado! Por favor vá ao seu email e siga as instruções!";
+                        return View("~/Views/Home/Index.cshtml");
+                    }
+
+                    if (user.Password != users.Password)
+                    {
+                        TempData["Message"] = "Password Errada!";
+                        ModelState.AddModelError("Email", "Email or Password incorreto!");
+                        return View("~/Views/Home/Index.cshtml");
+                    }
+
+                    LoginSV(user.Name, user.UserID.ToString());
+                    TempData["Message"] = "Login efetuado com sucesso!";
+
+                    return RedirectToAction("Index", "Home", null);
+                }
+                TempData["Message"] = "Email or Password incorreto!";
+                ModelState.AddModelError("Email", "Email or Password incorreto!");
+                return View("~/Views/Home/Index.cshtml");
+            } catch (Exception ex)
             {
                 TempData["Message"] = "Email or Password incorreto!";
                 ModelState.AddModelError("Email", "Email or Password incorreto!");
                 return View("~/Views/Home/Index.cshtml");
             }
-            var user = await _context.Users.SingleAsync(i => i.Email == users.Email);
-
-            if (user != null)
-            {
-                if (user.ConfirmedEmail == false)
-                {
-                    TempData["Message"] = "Este email ainda não foi confirmado! Por favor vá ao seu email e siga as instruções!";
-                    return View("~/Views/Home/Index.cshtml");
-                }
-
-                if (user.Password != users.Password)
-                {
-                    TempData["Message"] = "Password Errada!";
-                    ModelState.AddModelError("Email", "Email or Password incorreto!");
-                    return View("~/Views/Home/Index.cshtml");
-                }
-
-                LoginSV(user.Name, user.UserID.ToString());
-                TempData["Message"] = "Login efetuado com sucesso!";
-
-                return RedirectToAction("Index", "Home", null);
-            }
-            TempData["Message"] = "Email or Password incorreto!";
-            ModelState.AddModelError("Email", "Email or Password incorreto!");
-            return View("~/Views/Home/Index.cshtml");
 
 
         }

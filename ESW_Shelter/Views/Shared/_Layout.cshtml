@@ -32,95 +32,96 @@
     </environment>
 </head>
 <body>
-    <nav class="navbar navbar-static-top">
-        <div class="container">
-            <div class="navbar-header">
-                <a class="navbar-brand" asp-action="Index">
-                    <img src="~/images/navIcon.png" alt="Icon" class="" width="30" />
-                </a>
-            </div>
-            <button class="navbar-toggle" type="button" data-toggle="collapse" data-target="#myNavBar">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            <div class="navbar-collapse collapse" id="myNavBar">
-                <ul class="nav navbar-nav">
-                    <li class="nav-item"><a class="nav-item nav-link active" asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
-                    <!-- <li class="nav-item"><a class="nav-item nav-link active" asp-area="" asp-controller="Home" asp-action="Donations">Donativos</a></li>
-    <li class="nav-item"><a class="nav-item nav-link active" asp-area="" asp-controller="Home" asp-action="Animals">Animais</a></li> -->
-                    <li class="nav-item"><a class="nav-item nav-link active" asp-area="" asp-controller="Home" asp-action="Contact">Contactos</a></li>
-                    <li class="nav-item"><a class="nav-item nav-link active" asp-area="" asp-controller="Home" asp-action="About">Sobre nós</a></li>
-                    <li class="nav-item"><a class="nav-item nav-link active menu-has-image" asp-area="" asp-controller="Donations" asp-action="StripeIndex"><img class="img-menu" title="Doações" alt="Doações" src="~/images/dog-food.png" /></a></li>
-                    @if (ViewData["User_Name"] != null)
-                    {
-                        if (ViewData["Ad"] != null)
+    <div id="loader-modal" class="modal" data-backdrop="static" data-keyboard="false"><img src="~/images/loader.gif" /></div>
+        <nav class="navbar navbar-static-top">
+            <div class="container">
+                <div class="navbar-header">
+                    <a class="navbar-brand" asp-action="Index">
+                        <img src="~/images/navIcon.png" alt="Icon" class="" width="30" />
+                    </a>
+                </div>
+                <button class="navbar-toggle" type="button" data-toggle="collapse" data-target="#myNavBar">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <div class="navbar-collapse collapse" id="myNavBar">
+                    <ul class="nav navbar-nav">
+                        <li class="nav-item"><a class="nav-item nav-link active" asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
+                        <!-- <li class="nav-item"><a class="nav-item nav-link active" asp-area="" asp-controller="Home" asp-action="Donations">Donativos</a></li>
+                        <li class="nav-item"><a class="nav-item nav-link active" asp-area="" asp-controller="Home" asp-action="Animals">Animais</a></li> -->
+                        <li class="nav-item"><a class="nav-item nav-link active" asp-area="" asp-controller="Home" asp-action="Contact">Contactos</a></li>
+                        <li class="nav-item"><a class="nav-item nav-link active" asp-area="" asp-controller="Home" asp-action="About">Sobre nós</a></li>
+                        <li class="nav-item"><a class="nav-item nav-link active menu-has-image" asp-area="" asp-controller="Donations" asp-action="StripeIndex"><img class="img-menu" title="Doações" alt="Doações" src="~/images/dog-food.png" /></a></li>
+                        @if (ViewData["User_Name"] != null)
                         {
-                            <li class="navbar-right"><a class="nav-item nav-link active" asp-area="" asp-controller="Users" asp-action="Index" asp-route-id="@ViewData["UserID"]">Administração</a></li>
+                            if (ViewData["Ad"] != null)
+                            {
+                                <li class="navbar-right"><a class="nav-item nav-link active" asp-area="" asp-controller="Users" asp-action="Index" asp-route-id="@ViewData["UserID"]">Administração</a></li>
+                            }
+                            <li class="navbar-right"><a class="nav-item nav-link active" asp-area="" asp-controller="Users" asp-action="Profile" asp-route-id="@ViewData["UserID"]">Benvindo, @ViewData["User_Name"]!</a></li>
+                            <li class="navbar-right"><a class="nav-item nav-link active" asp-area="" asp-controller="Users" asp-action="Logout" asp-route-id="@ViewData["UserID"]">Logout</a></li>
                         }
-                        <li class="navbar-right"><a class="nav-item nav-link active" asp-area="" asp-controller="Users" asp-action="Profile" asp-route-id="@ViewData["UserID"]">Benvindo, @ViewData["User_Name"]!</a></li>
-                        <li class="navbar-right"><a class="nav-item nav-link active" asp-area="" asp-controller="Users" asp-action="Logout" asp-route-id="@ViewData["UserID"]">Logout</a></li>
-                    }
-                    else
-                    {
-                        Html.RenderPartial("_Menu");
-                    }
-                </ul>
+                        else
+                        {
+                            Html.RenderPartial("_Menu");
+                        }
+                    </ul>
+                </div>
+
             </div>
+        </nav>
+
+
+        <partial name="_CookieConsentPartial" />
+
+        <div class="body-content">
+            @RenderBody()
+        </div>
+
+        <!-- Footer -->
+        <footer class="page-footer font-small blue">
+
+            <!-- Copyright -->
+            <div class="footer-copyright text-center py-3">
+                <p>
+                    &copy; 2018 Copyright:
+                    <a href="https://mdbootstrap.com/education/bootstrap/"> MDBootstrap.com</a>
+                    </br>
+                    &copy; ESW 2018/19 - Grupo 2 { Roberto Pato, Miguel Gomes, Rafael Botas, David Antunes, David Afonso }
+                </p>
+            </div>
+            <!-- Copyright -->
+
+        </footer>
+
+        <environment include="Development">
+            <script src="~/lib/jquery/dist/jquery.js"></script>
+            <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
+        </environment>
+        <environment exclude="Development">
+            <script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-3.3.1.min.js"
+                    asp-fallback-src="~/lib/jquery/dist/jquery.min.js"
+                    asp-fallback-test="window.jQuery"
+                    crossorigin="anonymous"
+                    integrity="sha384-tsQFqpEReu7ZLhBV2VZlAu7zcOV+rXbYlF2cqB8txI/8aZajjp4Bqd+V6D5IgvKT">
+            </script>
+            <script src="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.7/bootstrap.min.js"
+                    asp-fallback-src="~/lib/bootstrap/dist/js/bootstrap.min.js"
+                    asp-fallback-test="window.jQuery && window.jQuery.fn && window.jQuery.fn.modal"
+                    crossorigin="anonymous"
+                    integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa">
+            </script>
+            <script src="~/js/site.min.js" asp-append-version="true"></script>
+        </environment>
+        <div class="modal" id="modal">
 
         </div>
-    </nav>
-
-
-    <partial name="_CookieConsentPartial" />
-
-    <div class="body-content">
-        @RenderBody()
-    </div>
-
-    <!-- Footer -->
-    <footer class="page-footer font-small blue">
-
-        <!-- Copyright -->
-        <div class="footer-copyright text-center py-3">
-            <p>
-                &copy; 2018 Copyright:
-                <a href="https://mdbootstrap.com/education/bootstrap/"> MDBootstrap.com</a>
-                </br>
-                &copy; ESW 2018/19 - Grupo 2 { Roberto Pato, Miguel Gomes, Rafael Botas, David Antunes, David Afonso }
-            </p>
-        </div>
-        <!-- Copyright -->
-
-    </footer>
-
-    <environment include="Development">
-        <script src="~/lib/jquery/dist/jquery.js"></script>
-        <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
-    </environment>
-    <environment exclude="Development">
-        <script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-3.3.1.min.js"
-                asp-fallback-src="~/lib/jquery/dist/jquery.min.js"
-                asp-fallback-test="window.jQuery"
-                crossorigin="anonymous"
-                integrity="sha384-tsQFqpEReu7ZLhBV2VZlAu7zcOV+rXbYlF2cqB8txI/8aZajjp4Bqd+V6D5IgvKT">
-        </script>
-        <script src="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.7/bootstrap.min.js"
-                asp-fallback-src="~/lib/bootstrap/dist/js/bootstrap.min.js"
-                asp-fallback-test="window.jQuery && window.jQuery.fn && window.jQuery.fn.modal"
-                crossorigin="anonymous"
-                integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa">
-        </script>
-        <script src="~/js/site.min.js" asp-append-version="true"></script>
-    </environment>
-    <div class="modal" id="modal">
-
-    </div>
-    @if (TempData["Message"] != null)
-    {
-        <script> $(document).ready(function () { alert('@TempData["Message"].ToString()'); }); </script>
-    }
-    @RenderSection("Scripts", required: false)
+        @if (TempData["Message"] != null)
+        {
+            <script> $(document).ready(function () { alert('@TempData["Message"].ToString()'); }); </script>
+        }
+        @RenderSection("Scripts", required: false)
 </body>
 </html>

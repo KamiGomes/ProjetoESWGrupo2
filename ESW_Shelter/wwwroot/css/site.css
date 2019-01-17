@@ -26,6 +26,14 @@ footer {
         margin: 0;
     }
 
+#loader-modal > img {
+    width: 100px;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translateY(-50%) translateX(-50%);
+}
+
 .navbar {
     background: #ff9933;
     height: 20px;
