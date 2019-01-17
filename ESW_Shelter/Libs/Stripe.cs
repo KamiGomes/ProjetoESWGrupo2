@@ -35,13 +35,14 @@ namespace ESW_Shelter.Libs
 
         public string Subscribe(string customerId, string planId)
         {
+
             try
             {
                 var items = new List<SubscriptionItemOption>
                 {
                     new SubscriptionItemOption
                     {
-                        PlanId = "plan_EKvi2ki4gfhDoT",
+                        PlanId = planId,
                         Quantity = 1
                     }
                 };

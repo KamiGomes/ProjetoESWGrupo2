@@ -777,7 +777,7 @@ namespace ESW_Shelter.Controllers
 
         // GET: Users/Card
         public string Card()
-        {
+        { 
 
             var userId = Int32.Parse(HttpContext.Session.GetString("UserID"));
             var user = _context.Users.Find(userId);

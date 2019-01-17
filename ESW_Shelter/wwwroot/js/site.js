@@ -22,12 +22,12 @@ $(document).ready(() => {
     });
 
     function subscribe(planId) {
+        console.log(planId);
         $.ajax({
             type: "POST",
             url: "/Donations/Subscribe",
-            async: false,
             data: {
-                plan: planId
+                planId: planId
             }
         }).done((result) => {
             alert("Subscrição efetuada com sucesso");
@@ -48,7 +48,6 @@ $(document).ready(() => {
 
     $('#planSelector').click(function (plansButton) {
         let dataEnabled = (this.getAttribute("data-enabled") == "true");
-        let planId = $(".plans:checked").val();
 
         if (!dataEnabled) {
             this.setAttribute("data-enabled", "true");
@@ -66,6 +65,7 @@ $(document).ready(() => {
 
             $(".plans").last().attr("checked", "checked");
         } else {
+            let planId = $(".plans:checked").val();
             let card = null;
             $.ajax({
                 type: "GET",
@@ -103,6 +103,7 @@ $(document).ready(() => {
                     });
                 });
             } else {
+                let planId = $(".plans:checked").val();
                 subscribe(planId);
             }
 

@@ -388,7 +388,7 @@ li:hover {
 **/
 .register {
     position: relative;
-    margin: 1% 0 0 0 !important;
+    margin: 0 !important;
     min-height: 79.9vh;
 }
 
