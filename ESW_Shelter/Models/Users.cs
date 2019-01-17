@@ -75,6 +75,9 @@ namespace ESW_Shelter.Models
 
         [NotMapped]
         public String RoleName { get; set; }
+
+        [DataType("String")]
+        public string CustomerId { get; set; }
     }
 
 }

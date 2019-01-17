@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Http;
 using System.Collections.Generic;
 using Microsoft.Extensions.Configuration;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using ESW_Shelter.Libs;
 
 //hotfix -> Install-Package Microsoft.AspNet.Mvc -Version 5.2.3.0 | Install-Package httpsecurecookie -Version 0.1.1 | Install-Package Microsoft.AspNetCore.Session -Version 2.1.1 
 //Insert Into Users (Email, Name, Password, ConfirmedEmail, RoleId, City, DateOfBirth, Phone, PostalCode, Street) Values
@@ -184,6 +185,7 @@ namespace ESW_Shelter.Controllers
             return View(usersIndexVM);
         }
 
+
         /// <summary>
         /// <para>Método que vai ser chamado na rota "/Users/Details/x". Utilizando uma query LINQ, vai buscar os dados de um Users e UsersInfo associados, cujo id de Users seja
         /// igual ao id recebido.</para>
@@ -335,6 +337,11 @@ namespace ESW_Shelter.Controllers
                     var result = new MailSenderController(_configuration).PostMessage(users.Email, users.Name, users.UserID);
 
                     /** End of Confirmation Email **/
+                    // Register User as a Customer on Stripe
+                    StripeLib stripeLib = new StripeLib();
+                    users.CustomerId = await stripeLib.CreateCustomer(users);
+
+                    await _context.SaveChangesAsync();
 
                     TempData["Message"] = "A sua conta foi criada com sucesso!Por favor verifique o seu email e clique no email para concluir o registo da sua conta e prosseguir para o login!";
                     return RedirectToAction("Index", "Home", null);
@@ -743,6 +750,63 @@ namespace ESW_Shelter.Controllers
                 {
                     HttpContext.Session.SetString("Ad", "Ad");
                 }
+            }
+        }
+
+        /// <summary>
+        /// <para>Método que redefine os session variables, para que não haja perda de dados. Verifica ainda se é admin ou não e devolve conforme o resultado.</para>
+        /// </summary>
+        /// <returns>
+        /// <para> Caso a variável de sessão "Ad" não exista - false</para>
+        /// <para> Caso a variável de sessão "Ad" exista - true</para>
+        /// </returns>
+        private bool GetLogin()
+        {
+            if (HttpContext.Session.GetString("User_Name") != null && HttpContext.Session.GetString("UserID") != null)
+            {
+                HttpContext.Session.SetString("User_Name", HttpContext.Session.GetString("User_Name"));
+                HttpContext.Session.SetString("UserID", HttpContext.Session.GetString("UserID"));
+            }
+            if (HttpContext.Session.GetString("Ad") != null)
+            {
+                HttpContext.Session.SetString("Ad", HttpContext.Session.GetString("Ad"));
+                return true;
+            }
+            return false;
+        }
+
+        // GET: Users/Card
+        public string Card()
+        { 
+
+            var userId = Int32.Parse(HttpContext.Session.GetString("UserID"));
+            var user = _context.Users.Find(userId);
+
+            var customerId = user.CustomerId;
+            StripeLib stripeLib = new StripeLib();
+
+            Stripe.StripeList<Stripe.Card> cards = stripeLib.GetCards(customerId);
+
+            if (cards.Count() == 0) return null;
+            
+            return cards.First().Id;
+        }
+
+        [HttpPost, ActionName("Card")]
+        public string CreateCard(string number, int month, int year, string cvc)
+        {
+            try {
+                var userId = Int32.Parse(HttpContext.Session.GetString("UserID"));
+                var user = _context.Users.Find(userId);
+                var customerId = user.CustomerId;
+
+                StripeLib stripeLib = new StripeLib();
+                stripeLib.SetCard(customerId, number, month, year, cvc);
+                return "true";
+
+            }catch (Exception ex)
+            {
+                return "false";
             }
         }
     }

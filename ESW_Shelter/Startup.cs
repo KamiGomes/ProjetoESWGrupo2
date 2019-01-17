@@ -21,6 +21,7 @@ namespace ESW_Shelter
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
+            Stripe.StripeConfiguration.SetApiKey("sk_test_au6jRCzk5OZSjbHPfgl29I92");
         }
 
         public IConfiguration Configuration { get; }
@@ -75,10 +76,17 @@ namespace ESW_Shelter
             app.UseCookiePolicy();
             app.UseMvc(routes =>
             {
+
                 routes.MapRoute(
-                    name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}"
+                    name: "DonationsSubscribe",
+                    template: "Donations/Subscribe/{plan}"
                     );
+
+                routes.MapRoute(
+                   name: "default",
+                   template: "{controller=Home}/{action=Index}/{id?}"
+                   );
+
             });
         }
     }

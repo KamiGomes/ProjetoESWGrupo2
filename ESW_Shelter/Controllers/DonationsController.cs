@@ -9,6 +9,7 @@ using ESW_Shelter.Models;
 using Microsoft.AspNetCore.Http;
 using System.Collections;
 using Microsoft.AspNetCore.Authorization;
+using ESW_Shelter.Libs;
 
 namespace ESW_Shelter.Controllers
 {
@@ -593,5 +594,45 @@ namespace ESW_Shelter.Controllers
             }
             return true;
         }
+
+        // GET: Donations
+        [HttpGet, ActionName("StripeIndex")]
+        public async Task<IActionResult> IndexStripe()
+        {
+            StripeLib stripeLib = new StripeLib();
+            var plans = stripeLib.GetPlans();
+
+            ViewData["plans"] = plans;
+
+            return View();
+        }
+
+        // POST: Donations/Subscribe
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        public string Subscribe(string planId)
+        {
+            try
+            {
+                var userId = Int32.Parse(HttpContext.Session.GetString("UserID"));
+                var user = _context.Users.Find(userId);
+                var customerId = user.CustomerId;
+
+                StripeLib stripeLib = new StripeLib();
+                var subscriptionId = stripeLib.Subscribe(customerId, planId);
+
+                if (subscriptionId == null) return "false";
+
+                return subscriptionId;
+            }
+            catch (Exception ex)
+            {
+                return "false";
+            }
+        }
+
     }
 }
+
+        

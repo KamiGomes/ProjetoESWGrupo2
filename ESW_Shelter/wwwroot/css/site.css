@@ -216,6 +216,17 @@ li:hover {
     }
 }
 
+.menu-has-image {
+    padding: 14px 15px !important;
+}
+
+.img-menu {
+    filter: drop-shadow(0px 0px 1px rgb(0, 0, 0));
+    position: relative;
+    max-width: 22px !important;
+    padding: 0 !important;
+}
+
 .img-responsive {
     width: 100%;
 }
@@ -303,12 +314,12 @@ li:hover {
 
 .row {
     width: 100%;
-    min-height: 79.9vh;
+    min-height: 100vh;
     position: relative;
     margin: 0;
     color: white;
     padding: 2% 1%;
-    margin-bottom: 3%;
+    margin-bottom: 0% !important;
 }
 
 /**
@@ -377,7 +388,7 @@ li:hover {
 **/
 .register {
     position: relative;
-    margin: 1% 0 0 0 !important;
+    margin: 0 !important;
     min-height: 79.9vh;
 }
 
@@ -466,14 +477,14 @@ h2 {
     text-decoration: none;
 }
 
-        .vertical-menu a:hover {
-            background-color: #D7722C;
-        }
+    .vertical-menu a:hover {
+        background-color: #D7722C;
+    }
 
-        .vertical-menu a.active {
-            background-color: darkorange;
-            color: white;
-        }
+    .vertical-menu a.active {
+        background-color: darkorange;
+        color: white;
+    }
 
 /**
     Table
@@ -492,9 +503,9 @@ table {
     color: white;
 }
 
-table a, table a:hover{
-    color: white;
-}
+    table a, table a:hover {
+        color: white;
+    }
 
 td, th {
     width: 30%;
@@ -518,3 +529,88 @@ th {
 select {
     color: black;
 }
+
+/**
+    Donations
+*/
+.donations {
+    padding: 50px;
+}
+
+    .donations > h2 {
+        margin-top: 20px !important;
+    }
+
+    .donations > .col-md-6 {
+        max-height: 400px;
+    }
+
+    .donations > .donations-data > .button-wrapper {
+        text-align: right;
+    }
+
+        .donations > .donations-data > .button-wrapper > .btn {
+            margin-right: 25px;
+            margin-top: 50px;
+        }
+
+    .donations > .donations-data {
+        margin-top: 30px;
+    }
+
+    .donations > .col-md-6 > img {
+        width: 50%;
+        position: relative;
+        margin: 5% 25%;
+    }
+
+    .donations > .col-md-6 li {
+        list-style-type: none;
+    }
+
+        .donations > .col-md-6 li:hover {
+            background-color: transparent;
+        }
+
+
+.not-logged-in {
+    margin-top: 40px;
+    color: red !important;
+    font-weight: bold !important;
+}
+
+/**
+    Card Modal
+*/
+
+#cardModal > form {
+    background-color: #FFB366;
+    width: 300px;
+    height: 300px;
+    padding: 10px 20px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+    #cardModal > form > h3 {
+        margin-bottom: 20px;
+    }
+
+    #cardModal > form > .date > div {
+        width: 33%;
+        padding: 5px 0px;
+        float: left;
+    }
+
+        #cardModal > form > .date > div > input {
+            width: 90%;
+        }
+
+    #cardModal > form > .buttons {
+        width: 100%;
+        float: right;
+        margin-top: 20px;
+        text-align: right;
+    }
