@@ -383,6 +383,9 @@ namespace ESW_Shelter.Controllers
             {
                 if (users.Email.Equals(""))
                 {
+                    System.Diagnostics.Debug.WriteLine("*************************");
+                    System.Diagnostics.Debug.WriteLine("Vazio");
+                    System.Diagnostics.Debug.WriteLine("*************************");
                     TempData["Message"] = "Email or Password incorreto!";
                     ModelState.AddModelError("Email", "Email or Password incorreto!");
                     return View("~/Views/Home/Index.cshtml");
@@ -399,6 +402,9 @@ namespace ESW_Shelter.Controllers
 
                     if (user.Password != users.Password)
                     {
+                        System.Diagnostics.Debug.WriteLine("*************************");
+                        System.Diagnostics.Debug.WriteLine("PasswordErrada");
+                        System.Diagnostics.Debug.WriteLine("*************************");
                         TempData["Message"] = "Password Errada!";
                         ModelState.AddModelError("Email", "Email or Password incorreto!");
                         return View("~/Views/Home/Index.cshtml");
@@ -409,11 +415,17 @@ namespace ESW_Shelter.Controllers
 
                     return RedirectToAction("Index", "Home", null);
                 }
+                System.Diagnostics.Debug.WriteLine("*************************");
+                System.Diagnostics.Debug.WriteLine("Nnehum User");
+                System.Diagnostics.Debug.WriteLine("*************************");
                 TempData["Message"] = "Email or Password incorreto!";
                 ModelState.AddModelError("Email", "Email or Password incorreto!");
                 return View("~/Views/Home/Index.cshtml");
             } catch (Exception ex)
             {
+                System.Diagnostics.Debug.WriteLine("*************************");
+                System.Diagnostics.Debug.WriteLine("Exception");
+                System.Diagnostics.Debug.WriteLine("*************************");
                 TempData["Message"] = "Email or Password incorreto!";
                 ModelState.AddModelError("Email", "Email or Password incorreto!");
                 return View("~/Views/Home/Index.cshtml");

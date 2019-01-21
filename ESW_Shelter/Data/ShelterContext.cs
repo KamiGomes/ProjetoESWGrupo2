@@ -21,5 +21,6 @@ namespace ESW_Shelter.Models
         public DbSet<ESW_Shelter.Models.Product> Products { get; set; }
         public DbSet<ESW_Shelter.Models.Donation> Donation { get; set; }
         public DbSet<ESW_Shelter.Models.DonationProduct> DonationProduct { get; set; }
+        public DbSet<ESW_Shelter.Models.AnimalRace> AnimalRace { get; set; }
     }
 }
