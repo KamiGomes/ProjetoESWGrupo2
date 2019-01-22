@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Http;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -36,7 +37,7 @@ namespace ESW_Shelter.Models
         public string Description{ get;set;}
 
         [Display(Name = "Fotografia")]
-        public IFormFile Picture { get; set; }
+        public string Picture { get; set; }
 
         [ForeignKey("AnimalType")]
         [Required(ErrorMessage = "Escolha um tipo para este Animal!")]
@@ -56,6 +57,13 @@ namespace ESW_Shelter.Models
 
         [NotMapped]
         public String AnimaltypeName { get; set; }
+
+        [NotMapped]
+        public String AnimalRaceName { get; set; }
+
+        [NotMapped]
+        [Display(Name = "Escolha produtos que possam ser necessários!")]
+        public List<int> ProductFK { get; set; }
 
         [NotMapped]
         [Display( Name = "Idade")]

@@ -1,0 +1,101 @@
+﻿@model ESW_Shelter.Models.Animal
+
+@{
+    ViewData["Title"] = "Edit";
+    Layout = "~/Views/Shared/_BackLayout.cshtml";
+}
+
+<h2>Edit</h2>
+
+<h4>Animal</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="AnimalID" />
+            <div class="form-group">
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="DateOfBirth" class="control-label"></label>
+                <input asp-for="DateOfBirth" class="form-control" />
+                <span asp-validation-for="DateOfBirth" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <div class="checkbox">
+                    <label>
+                        <input asp-for="Disinfection" /> @Html.DisplayNameFor(model => model.Disinfection)
+                    </label>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="checkbox">
+                    <label>
+                        <input asp-for="Neutered" /> @Html.DisplayNameFor(model => model.Neutered)
+                    </label>
+                </div>
+            </div>
+            <div class="form-group">
+                <label asp-for="Description" class="control-label"></label>
+                <input asp-for="Description" class="form-control" />
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Picture" class="control-label"></label>
+                <input asp-for="Picture" class="form-control" />
+                <span asp-validation-for="Picture" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="AnimalTypeFK" class="control-label"></label>
+                <select class="input-lg" name="AnimalTypeFK" id="AnimalTypeFK">
+                    <option value="0" style="color:#ccc !important;">
+                        Escolha um tipo de animal!
+                    </option>
+                    @foreach (AnimalType item in ViewBag.AnimalTypeFK)
+                    {
+                        <option value="@item.AnimalTypeID" selected="@(Model.AnimalTypeFK== item.AnimalTypeID ? "selected" : null)">
+                            @item.Name
+                        </option>
+                    }
+                </select>
+                <span asp-validation-for="AnimalTypeFK" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="AnimalRaceFK" class="control-label"></label>
+                <select class="input-lg" name="AnimalRaceFK" id="AnimalRaceFK">
+                    <option value="0" style="color:#ccc !important;">
+                        Escolha uma raça para o animal!
+                    </option>
+                    @foreach (AnimalRace item in ViewBag.AnimalRaceFK)
+                    {
+                        <option value="@item.AnimalRaceID" selected="@(Model.AnimalRaceFK== item.AnimalRaceID ? "selected" : null)">
+                            @item.Name
+                        </option>
+                    }
+                </select>
+                <span asp-validation-for="AnimalRaceFK" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="OwnerFK" class="control-label"></label>
+                <select class="input-lg" name="OwnerFK" id="OwnerFK">
+                    <option value="0" style="color:#ccc !important;">
+                        Se o animal foi adotado escolha um dono!Caso não, deixe conforme!
+                    </option>   1
+                    @foreach (Users item in ViewBag.UsersFK)
+                    {
+                        <option value="@item.UserID" selected="@(Model.OwnerFK== item.UserID ? "selected" : null)">
+                            @item.Name
+                        </option>
+                    }
+                </select>
+                <span asp-validation-for="OwnerFK" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-default" />
+            </div>
+        </form>
+    </div>
+</div>

@@ -1,0 +1,69 @@
+﻿@model ESW_Shelter.Models.AnimalIndexViewModel
+
+@{
+    ViewData["Title"] = "Details";
+    Layout = "~/Views/Shared/_BackLayout.cshtml";
+}
+
+<h2>@Html.DisplayFor(model => model.Animals[0].Name)</h2>
+
+<div>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Animals[0].Name)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Animals[0].Name)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Animals[0].DateOfBirth)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Animals[0].DateOfBirth)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Animals[0].Disinfection)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Animals[0].Disinfection)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Animals[0].Neutered)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Animals[0].Neutered)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Animals[0].Description)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Animals[0].Description)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Animals[0].Picture)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Animals[0].Picture)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Animals[0].AnimalTypeFK)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Animals[0].AnimaltypeName)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Animals[0].AnimalRaceFK)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Animals[0].AnimalRaceName)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Animals[0].OwnerFK)
+        </dt>
+
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.Animals[0].AnimalID">Editar</a>
+</div>
