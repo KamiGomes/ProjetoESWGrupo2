@@ -5,10 +5,10 @@
     Layout = "~/Views/Shared/_BackLayout.cshtml";
 }
 
-<h2>Index</h2>
+<h2>Raças de animais</h2>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create">Criar uma nova raça animal</a>
 </p>
 <table class="table">
     <thead>
@@ -26,9 +26,8 @@
                 @Html.DisplayFor(modelItem => item.Name)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.AnimalRaceID">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.AnimalRaceID">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.AnimalRaceID">Delete</a>
+                <a asp-action="Edit" asp-route-id="@item.AnimalRaceID">Editar</a> |
+                <a asp-action="Delete" asp-route-id="@item.AnimalRaceID">Eliminar</a>
             </td>
         </tr>
 }

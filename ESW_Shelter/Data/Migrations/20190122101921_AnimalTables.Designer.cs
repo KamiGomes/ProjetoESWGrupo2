@@ -4,14 +4,16 @@ using ESW_Shelter.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace ESW_Shelter.Data.Migrations
 {
     [DbContext(typeof(ShelterContext))]
-    partial class ShelterContextModelSnapshot : ModelSnapshot
+    [Migration("20190122101921_AnimalTables")]
+    partial class AnimalTables
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

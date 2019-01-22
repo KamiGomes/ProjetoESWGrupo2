@@ -8,6 +8,11 @@ namespace ESW_Shelter.Data.Migrations
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.AddColumn<string>(
+                name: "CustomerId",
+                table: "Users",
+                nullable: true);
+
             migrationBuilder.CreateTable(
                 name: "Donation",
                 columns: table => new
@@ -49,6 +54,9 @@ namespace ESW_Shelter.Data.Migrations
                 name: "Donation");
             migrationBuilder.DropTable(
                 name: "DonationProductID");
+            migrationBuilder.DropColumn(
+                name: "CustomerId",
+                table: "Users");
         }
     }
 }

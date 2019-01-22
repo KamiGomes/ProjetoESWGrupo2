@@ -11,31 +11,32 @@ namespace ESW_Shelter.Models
 
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int AnimalId {get;set;}
+        public int AnimalID {get;set;}
 
         [StringLength(256, ErrorMessage = "Nome não pode ter mais que 256 caracteres!", MinimumLength = 1)]
         [Required(ErrorMessage = "Nome em falta!")]
         [Display(Prompt = "Examplo: Jack", Name = "Nome")]
         public String Name { get; set; }
 
-        [Required(ErrorMessage = "Idade em falta!")]
-        [Display(Name = "Idade")]
-        public int Idade { get; set; }
+        [DataType(DataType.Date)]
+        [DisplayFormat(DataFormatString = "{0:yyyy/MM/dd}", ApplyFormatInEditMode = true)]
+        [Display(Name = "Data de Nascimento")]
+        public DateTime DateOfBirth { get; set; }
 
         [Required(ErrorMessage = "Por favor preencha este campo!")]
         [Display(Name = "Desinfestação")]
-        public bool Desinfection { get; set; }
+        public bool Disinfection { get; set; }
 
         [Required(ErrorMessage = "Por favor preencha este campo!")]
         [Display(Name = "Castrado")]
-        public bool Castrated { get; set; }
+        public bool Neutered { get; set; }
 
-        [StringLength(1000, ErrorMessage = "Nome não pode ter mais que 1000 caracteres!", MinimumLength = 1)]
+        [StringLength(2000, ErrorMessage = "Descrição não pode ter mais que 2000 caracteres!", MinimumLength = 1)]
         [Display(Prompt = "Faça uma breve descrição sobre o animal!", Name = "Descrição")]
         public string Description{ get;set;}
 
         [Display(Name = "Fotografia")]
-        public Byte Picture { get; set; }
+        public IFormFile Picture { get; set; }
 
         [ForeignKey("AnimalType")]
         [Required(ErrorMessage = "Escolha um tipo para este Animal!")]
@@ -55,6 +56,10 @@ namespace ESW_Shelter.Models
 
         [NotMapped]
         public String AnimaltypeName { get; set; }
+
+        [NotMapped]
+        [Display( Name = "Idade")]
+        public String Age { get; set; }
 
         /*
         [DataType(DataType.ImageUrl)]

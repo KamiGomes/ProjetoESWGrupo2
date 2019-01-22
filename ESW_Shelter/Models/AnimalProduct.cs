@@ -17,6 +17,6 @@ namespace ESW_Shelter.Models
         public int AnimalFK { get; set; }
 
         [ForeignKey("Product")]
-        public int UsersFK { get; set; }
+        public int ProductFK { get; set; }
     }
 }

@@ -10,9 +10,11 @@ namespace ESW_Shelter.Models
         public int AnimalUsersID { get; set; }
 
         [ForeignKey("Animal")]
+        [Required]
         public int AnimalFK { get; set; }
 
         [ForeignKey("Users")]
+        [Required]
         public int UsersFK { get; set; }
     }
 }
