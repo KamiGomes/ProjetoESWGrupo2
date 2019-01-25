@@ -9,10 +9,13 @@ namespace ESW_Shelter.Models
     {
 
         public List<Animal> Animals;
+        public List<Images> Pictures;
         public List<Product> Products;
         public List<AnimalRace> AnimalRaces;
         public List<AnimalType> AnimalTypes;
         public List<Users> UsersNames;
+        public List<AnimalProduct> AnimalProduct;
+        public List<AnimalUsers> AnimalUsers;
         public string AnimalRace { get; set; }
         public string AnimalType { get; set; }
         public string ProductType { get; set; }

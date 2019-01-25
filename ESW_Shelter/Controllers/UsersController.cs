@@ -379,6 +379,10 @@ namespace ESW_Shelter.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Login([Bind("Email,Password")] Users users)
         {
+            System.Diagnostics.Debug.WriteLine("*************************");
+            System.Diagnostics.Debug.WriteLine(users.Email);
+            System.Diagnostics.Debug.WriteLine(users.Password);
+            System.Diagnostics.Debug.WriteLine("*************************");
             try
             {
                 if (users.Email.Equals(""))

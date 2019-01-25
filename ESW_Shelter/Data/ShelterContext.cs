@@ -25,5 +25,6 @@ namespace ESW_Shelter.Models
         public DbSet<ESW_Shelter.Models.Animal> Animal { get; set; }
         public DbSet<ESW_Shelter.Models.AnimalProduct> AnimalProduct { get; set; }
         public DbSet<ESW_Shelter.Models.AnimalUsers> AnimalUsers { get; set; }
+        public DbSet<ESW_Shelter.Models.Images> Images { get; set; }
     }
 }

@@ -33,7 +33,6 @@ namespace ESW_Shelter.Data.Migrations
                     Disinfection = table.Column<bool>(nullable:false, defaultValue: false),
                     Neutered = table.Column<bool>(nullable: false, defaultValue: false),
                     Description = table.Column<string>(maxLength: 2000, nullable: false),
-                    Picture = table.Column<string>(),
                     AnimalTypeFK = table.Column<int>(nullable: false),
                     AnimalRaceFK = table.Column<int>(nullable: false),
                     OwnerFK = table.Column<int>(nullable: true)
@@ -112,8 +111,26 @@ namespace ESW_Shelter.Data.Migrations
                     principalTable: "Products",
                     principalColumn: "ProductID",
                     onDelete: ReferentialAction.NoAction);
-
-    }
+            /****************************************************/
+            migrationBuilder.CreateTable(
+                name: "Images",
+                columns: table => new
+                {
+                    ImageID = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    AnimalFK = table.Column<int>(nullable: false),
+                    Name = table.Column<string>(maxLength: 1000, nullable: false),
+                    Lenght = table.Column<long>(nullable: false),
+                    FileName = table.Column<string>(maxLength: 4000, nullable: false),
+                    ContentType = table.Column<string>(maxLength: 4000, nullable: false),
+                    ContentDisposition = table.Column<string>(maxLength: 4000, nullable: false)
+                },
+                 constraints: table =>
+                 {
+                     table.PrimaryKey("PK_ImageID", x => x.ImageID);
+                 }
+                );
+        }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
@@ -128,6 +145,9 @@ namespace ESW_Shelter.Data.Migrations
 
             migrationBuilder.DropTable(
                 name: "AnimalRace");
+
+            migrationBuilder.DropTable(
+                name: "Images");
         }
     }
 }

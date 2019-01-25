@@ -9,18 +9,18 @@
 
 <div class="row">
     <div class="col-md-10">
-        <label asp-for="SelectedProducts" class="control-label">Tabela De Produtos</label>
-        <form asp-controller="Donations" asp-action="Edit" method="get">
-            Nome do produto: <input type="text" name="SearchString" style="color:black;" placeholder="Nome do produto">
-            <select asp-for="AnimalType" asp-items="Model.AnimalTypes">
-                <option value="">Todos os Animais</option>
-            </select>
-            <select asp-for="ProductType" asp-items="Model.ProductTypes">
-                <option value="">Todos os Produtos</option>
-            </select>
-            <input type="submit" value="Pesquisar" style="background-color: coral" />
-        </form>
-        <hr />
+        <!--<label asp-for="SelectedProducts" class="control-label">Tabela De Produtos</label>
+    <form asp-controller="Donations" asp-action="Edit" method="get">
+        Nome do produto: <input type="text" name="SearchString" style="color:black;" placeholder="Nome do produto">
+        <select asp-for="AnimalType" asp-items="Model.AnimalTypes">
+            <option value="">Todos os Animais</option>
+        </select>
+        <select asp-for="ProductType" asp-items="Model.ProductTypes">
+            <option value="">Todos os Produtos</option>
+        </select>
+        <input type="submit" value="Pesquisar" style="background-color: coral" />
+    </form>
+    <hr />-->
         <form asp-action="Edit">
             <div class="form-group">
                 <table class="table">

@@ -7,7 +7,7 @@ namespace ESW_Shelter.Models
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int AnimalUsersID { get; set; }
+        public int AnimalUserID { get; set; }
 
         [ForeignKey("Animal")]
         [Required]

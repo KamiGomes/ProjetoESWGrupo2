@@ -36,9 +36,6 @@ namespace ESW_Shelter.Models
         [Display(Prompt = "Faça uma breve descrição sobre o animal!", Name = "Descrição")]
         public string Description{ get;set;}
 
-        [Display(Name = "Fotografia")]
-        public string Picture { get; set; }
-
         [ForeignKey("AnimalType")]
         [Required(ErrorMessage = "Escolha um tipo para este Animal!")]
         [Display(Prompt = "Examplo: Cachorro", Name = "Tipo de Animal")]
@@ -54,6 +51,10 @@ namespace ESW_Shelter.Models
 
         [NotMapped]
         public string OwnerName { get; set; }
+
+        [NotMapped]
+        [Display(Name = "Fotografia")]
+        public IFormFile Foto { get; set; }
 
         [NotMapped]
         public String AnimaltypeName { get; set; }

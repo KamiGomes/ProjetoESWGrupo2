@@ -29,7 +29,7 @@
                 @Html.DisplayNameFor(model => model.Animals[0].Description)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Animals[0].Picture)
+                @Html.DisplayNameFor(model => model.Animals[0].Foto)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Animals[0].AnimalTypeFK)
@@ -62,7 +62,15 @@
                 @Html.DisplayFor(modelItem => item.Description)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Picture)
+                @if (Model.Pictures.Exists(e => e.AnimalFK == item.AnimalID))
+                {
+                    var pic = Model.Pictures.Where(e => e.AnimalFK.Equals(item.AnimalID)).FirstOrDefault();
+                    <img src="~/images/Galeria_@item.AnimalID/@pic.FileName" alt="Icon" class="" width="70" height="70" />
+                }
+                else
+                {
+
+                }
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.AnimaltypeName)

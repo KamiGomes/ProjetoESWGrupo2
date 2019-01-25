@@ -19,6 +19,51 @@ namespace ESW_Shelter.Data.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+            modelBuilder.Entity("ESW_Shelter.Models.Animal", b =>
+                {
+                    b.Property<int>("AnimalID")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("AnimalRaceFK");
+
+                    b.Property<int>("AnimalTypeFK");
+
+                    b.Property<DateTime>("DateOfBirth");
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(2000);
+
+                    b.Property<bool>("Disinfection");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(256);
+
+                    b.Property<bool>("Neutered");
+
+                    b.Property<int>("OwnerFK");
+
+                    b.HasKey("AnimalID");
+
+                    b.ToTable("Animal");
+                });
+
+            modelBuilder.Entity("ESW_Shelter.Models.AnimalProduct", b =>
+                {
+                    b.Property<int>("AnimalProductID")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("AnimalFK");
+
+                    b.Property<int>("ProductFK");
+
+                    b.HasKey("AnimalProductID");
+
+                    b.ToTable("AnimalProduct");
+                });
+
             modelBuilder.Entity("ESW_Shelter.Models.AnimalRace", b =>
                 {
                     b.Property<int>("AnimalRaceID")
@@ -47,6 +92,21 @@ namespace ESW_Shelter.Data.Migrations
                     b.HasKey("AnimalTypeID");
 
                     b.ToTable("AnimalTypes");
+                });
+
+            modelBuilder.Entity("ESW_Shelter.Models.AnimalUsers", b =>
+                {
+                    b.Property<int>("AnimalUserID")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("AnimalFK");
+
+                    b.Property<int>("UsersFK");
+
+                    b.HasKey("AnimalUserID");
+
+                    b.ToTable("AnimalUsers");
                 });
 
             modelBuilder.Entity("ESW_Shelter.Models.Donation", b =>
