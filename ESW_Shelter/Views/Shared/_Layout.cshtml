@@ -115,9 +115,6 @@
             </script>
             <script src="~/js/site.min.js" asp-append-version="true"></script>
         </environment>
-        <div class="modal" id="modal">
-
-        </div>
         @if (TempData["Message"] != null)
         {
             <script> $(document).ready(function () { alert('@TempData["Message"].ToString()'); }); </script>

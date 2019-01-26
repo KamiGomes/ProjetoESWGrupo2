@@ -17,7 +17,7 @@ namespace ESW_Shelter.Models
         [Display(Prompt = "Examplo: Nome do Ficheiro", Name = "Nome")]
         public string Name { get; set; }
 
-        [Required(ErrorMessage = "Nome em falta!")]
+        [Required(ErrorMessage = "Tamanho em falta!")]
         [Display(Prompt = "Examplo: 555kb", Name = "Tamanho")]
         public long Length { get; set; }
 

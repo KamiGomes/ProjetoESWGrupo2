@@ -47,7 +47,12 @@ namespace ESW_Shelter.Models
         public int AnimalRaceFK { get; set; }
 
         [ForeignKey("Users")]
+        [Display(Name = "Adoptado Por")]
         public int OwnerFK { get; set; }
+
+        [NotMapped]
+        [Display(Name = "Padrinhos")]
+        public int GodFathers { get; set; }
 
         [NotMapped]
         public string OwnerName { get; set; }
@@ -65,6 +70,10 @@ namespace ESW_Shelter.Models
         [NotMapped]
         [Display(Name = "Escolha produtos que possam ser necessários!")]
         public List<int> ProductFK { get; set; }
+
+        [NotMapped]
+        [Display(Name = "Abaixo contêm uma lista de objetos(Medicamentos,Comida, Outros) que este animal necessita!")]
+        public List<int> ProductFKDetails { get; set; }
 
         [NotMapped]
         [Display( Name = "Idade")]

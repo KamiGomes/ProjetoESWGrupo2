@@ -73,7 +73,8 @@ namespace ESW_Shelter.Controllers
             var animalIndexVM = new AnimalIndexViewModel
             {
                 Animals = result,
-                Pictures = _context.Images.AsParallel().ToList()
+                Pictures = _context.Images.AsParallel().ToList(),
+                UsersNames = _context.Users.AsParallel().ToList()
             };
 
             /**/
@@ -129,9 +130,48 @@ namespace ESW_Shelter.Controllers
                 OwnerName = ""
             }).ToList();
 
+            var animalProductQuery = from animalProduct in _context.AnimalProduct
+                                     join prod in _context.Products on animalProduct.ProductFK equals prod.ProductID
+                                     join prodType in _context.ProductTypes on prod.ProductTypeFK equals prodType.ProductTypeID
+                                     where animalProduct.AnimalFK.Equals(id)
+                                     select new
+                                     {
+                                         ProductID = prod.ProductID,
+                                         Name = prod.Name,
+                                         ProductTypeName = prodType.Name
+                                     };
+
+            var animalProductResult = animalProductQuery.ToList().Select(e => new Product
+            {
+                ProductID = e.ProductID,
+                Name = e.Name,
+                ProductTypeName = e.ProductTypeName
+            }).ToList();
+
+
+            var godfatherQuery = from animalUsers in _context.AnimalUsers
+                                 join users in _context.Users on animalUsers.UsersFK equals users.UserID
+                                 where animalUsers.AnimalFK.Equals(id)
+                                 select new
+                                 {
+                                     UserID = users.UserID,
+                                     Name = users.Name
+                                 };
+            var godfatherResult = godfatherQuery.ToList().Select(e => new Users
+            {
+                UserID = e.UserID,
+                Name = e.Name
+            }).ToList();
+
             var animalIndexVM = new AnimalIndexViewModel
             {
-                Animals = result
+                Animals = result,
+                AnimalRaces = _context.AnimalRace.AsParallel().ToList(),
+                Pictures = _context.Images.AsParallel().ToList(),
+                AnimalTypes = _context.AnimalTypes.AsParallel().ToList(),
+                Products = animalProductResult,
+                UsersNames = godfatherResult
+
             };
 
             ViewBag.UsersFK = _context.Users.AsParallel();
@@ -166,11 +206,11 @@ namespace ESW_Shelter.Controllers
                 AnimaltypeName = e.AnimaltypeName
             }).ToList();
 
-            ViewBag.GodFathers = _context.Users.Distinct();
+            ViewBag.GodFathers = _context.Users.AsParallel();
             ViewBag.Products = result;
-            ViewBag.AnimalTypeFK = _context.AnimalTypes.Distinct();
-            ViewBag.AnimalRaceFK = _context.AnimalRace.Distinct();
-            ViewBag.UsersFK = _context.Users.Distinct();
+            ViewBag.AnimalTypeFK = _context.AnimalTypes.AsParallel();
+            ViewBag.AnimalRaceFK = _context.AnimalRace.AsParallel();
+            ViewBag.UsersFK = _context.Users.AsParallel();
             return View();
         }
 
@@ -188,7 +228,7 @@ namespace ESW_Shelter.Controllers
                 string[] selectedProductsList = selectedProducts.Split(',');
 
                 string selectedGodfathers = Request.Form["checkGodfather"].ToString();
-                string[] selectedGodfatherList = selectedProducts.Split(',');
+                string[] selectedGodfatherList = selectedGodfathers.Split(',');
                 
                 Animal animalAdd = new Animal()
                 {
@@ -203,14 +243,6 @@ namespace ESW_Shelter.Controllers
                 };
                 _context.Add(animalAdd);
                 _context.SaveChanges();
-
-
-                var img = animal.Foto;
-
-                //Getting file meta data
-                var fileName = Path.GetFileName(animal.Foto.FileName);
-                animal.Description = fileName; // PARA APAGAR
-
                 if (animal.Foto != null)
                 {
                     System.IO.Directory.CreateDirectory(hostingEnvironment.WebRootPath + "/images/Galeria_"+animalAdd.AnimalID);
@@ -253,10 +285,10 @@ namespace ESW_Shelter.Controllers
 
                 if (selectedGodfatherList[0] != "")
                 {
-                    foreach (var temp in selectedGodfatherList)
+                    foreach (var key in selectedGodfatherList)
                     {
 
-                        int godkey = Convert.ToInt32(temp);
+                        int godkey = Convert.ToInt32(key);
                         AnimalUsers aniUsers = new AnimalUsers()
                         {
                             AnimalFK = animalAdd.AnimalID,
@@ -387,12 +419,12 @@ namespace ESW_Shelter.Controllers
                 AnimaltypeName = e.AnimaltypeName
             }).ToList();
 
-           // ViewBag.AnimalProducts = _context.AnimalProduct.Where(e => e.AnimalFK == id).ToList();
-           // ViewBag.GodFathers = _context.AnimalUsers.Where(e => e.AnimalFK == id).ToList();
+            ViewBag.AnimalProducts = _context.AnimalProduct.Where(e => e.AnimalFK == id).ToList();
+            ViewBag.GodFathers = _context.AnimalUsers.Where(e => e.AnimalFK == id).ToList();
             ViewBag.Products = productsResult;
-            ViewBag.AnimalTypeFK = _context.AnimalTypes.Distinct();
-            ViewBag.AnimalRaceFK = _context.AnimalRace.Distinct();
-            ViewBag.UsersFK = _context.Users.Distinct();
+            ViewBag.AnimalTypeFK = _context.AnimalTypes.AsParallel();
+            ViewBag.AnimalRaceFK = _context.AnimalRace.AsParallel();
+            ViewBag.UsersFK = _context.Users.AsParallel();
 
             return View(animalToEdit);
         }
@@ -417,7 +449,7 @@ namespace ESW_Shelter.Controllers
                     string[] selectedProductsList = selectedProducts.Split(',');
 
                     string selectedGodfathers = Request.Form["checkGodfather"].ToString();
-                    string[] selectedGodfatherList = selectedProducts.Split(',');
+                    string[] selectedGodfatherList = selectedGodfathers.Split(',');
 
                     /*Animal animalAdd = new Animal()
                     {
@@ -454,7 +486,7 @@ namespace ESW_Shelter.Controllers
                     removeGodFathers(id);
                     if (selectedGodfatherList[0] != "")
                     {
-                        foreach (var temp in selectedProductsList)
+                        foreach (var temp in selectedGodfatherList)
                         {
 
                             int godkey = Convert.ToInt32(temp);
@@ -511,6 +543,8 @@ namespace ESW_Shelter.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var animal = await _context.Animal.FindAsync(id);
+            removeAnimalProducts(id);
+            removeGodFathers(id);
             _context.Animal.Remove(animal);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));

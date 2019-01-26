@@ -69,7 +69,7 @@ namespace ESW_Shelter.Data.Migrations
                  }
                 );
 
-            migrationBuilder.AddForeignKey(name: "FK_AnimalUsers_AnimalUSers_Users",
+            migrationBuilder.AddForeignKey(name: "FK_AnimalUsersUsers_AnimalUsers_Users",
                     table: "AnimalUsers",
                     column: "UsersFK",
                     principalTable: "Users",
@@ -118,9 +118,9 @@ namespace ESW_Shelter.Data.Migrations
                 {
                     ImageID = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    AnimalFK = table.Column<int>(nullable: false),
+                    AnimalFK = table.Column<int>(nullable: true),
                     Name = table.Column<string>(maxLength: 1000, nullable: false),
-                    Lenght = table.Column<long>(nullable: false),
+                    Length = table.Column<long>(nullable: false),
                     FileName = table.Column<string>(maxLength: 4000, nullable: false),
                     ContentType = table.Column<string>(maxLength: 4000, nullable: false),
                     ContentDisposition = table.Column<string>(maxLength: 4000, nullable: false)

@@ -40,7 +40,9 @@
             <th>
                 @Html.DisplayNameFor(model => model.Animals[0].OwnerFK)
             </th>
-            <th></th>
+            <th>
+                Opções
+            </th>
         </tr>
     </thead>
     <tbody>
@@ -79,7 +81,23 @@
                 @Html.DisplayFor(modelItem => item.AnimalRaceName)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.OwnerName)
+                @if (item.OwnerFK == 0)
+                {
+                    <p>Por Adoptar</p>
+                }
+                else
+                {
+
+                    foreach(var user in Model.UsersNames)
+                    {
+                        if(user.UserID == item.OwnerFK)
+                        {
+                            item.OwnerName = user.Name;
+                            break;
+                        }
+                    }
+                    @Html.DisplayFor(modelItem => item.OwnerName)
+                }
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.AnimalID">Editar</a> |

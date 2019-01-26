@@ -12,6 +12,7 @@ body {
 footer {
     position: relative;
     left: 0;
+    top: 0;
     bottom: 0;
     width: 100%;
     height: 50px;
@@ -468,7 +469,8 @@ h2 {
     width: 200px;
     height: 100%;
     position: absolute;
-    margin: 0;
+    margin: -20px;
+    margin-top: -50px;
     padding: 0;
     background-color: #ff9933;
     box-shadow: black 0px 0px 3px;
