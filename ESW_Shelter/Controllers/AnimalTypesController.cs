@@ -75,6 +75,7 @@ namespace ESW_Shelter.Controllers
             {
                 _context.Add(animalType);
                 await _context.SaveChangesAsync();
+                TempData["Message"] = "Tipo de animal criado com sucesso!";
                 return RedirectToAction(nameof(Index));
             }
             return View(animalType);
@@ -138,6 +139,7 @@ namespace ESW_Shelter.Controllers
                         throw;
                     }
                 }
+                TempData["Message"] = "Tipo de animal editado com sucesso!";
                 return RedirectToAction(nameof(Index));
             }
             return View(animalType);
@@ -177,6 +179,7 @@ namespace ESW_Shelter.Controllers
             var animalType = await _context.AnimalTypes.FindAsync(id);
             _context.AnimalTypes.Remove(animalType);
             await _context.SaveChangesAsync();
+            TempData["Message"] = "Tipo de animal eliminado com sucesso!";
             return RedirectToAction(nameof(Index));
         }
 

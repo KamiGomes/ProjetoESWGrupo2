@@ -76,6 +76,7 @@ namespace ESW_Shelter.Controllers
             {
                 _context.Add(productType);
                 await _context.SaveChangesAsync();
+                TempData["Message"] = "Tipo de produto criado com sucesso!";
                 return RedirectToAction(nameof(Index));
             }
             return View(productType);
@@ -139,6 +140,7 @@ namespace ESW_Shelter.Controllers
                         throw;
                     }
                 }
+                TempData["Message"] = "Tipo de produto editado com sucesso!";
                 return RedirectToAction(nameof(Index));
             }
             return View(productType);
@@ -178,6 +180,7 @@ namespace ESW_Shelter.Controllers
             var productType = await _context.ProductTypes.FindAsync(id);
             _context.ProductTypes.Remove(productType);
             await _context.SaveChangesAsync();
+            TempData["Message"] = "Tipo de produto eliminado com sucesso!";
             return RedirectToAction(nameof(Index));
         }
 

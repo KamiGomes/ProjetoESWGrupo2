@@ -138,6 +138,7 @@ namespace ESW_Shelter.Controllers
                 product.ProductTypeFK = Int32.Parse(Request.Form["ProductTypeFK"].ToString());
                 _context.Add(product);
                 await _context.SaveChangesAsync();
+                TempData["Message"] = "Produto criado com sucesso!";
                 return RedirectToAction(nameof(Index));
             }
             return RedirectToAction(nameof(Index));
@@ -204,6 +205,7 @@ namespace ESW_Shelter.Controllers
                         throw;
                     }
                 }
+                TempData["Message"] = "Produto editado com sucesso!";
                 return RedirectToAction(nameof(Index));
             }
             return View(product);
@@ -265,6 +267,7 @@ namespace ESW_Shelter.Controllers
             var product = await _context.Products.FindAsync(id);
             _context.Products.Remove(product);
             await _context.SaveChangesAsync();
+            TempData["Message"] = "Produto eliminado com sucesso!";
             return RedirectToAction(nameof(Index));
         }
 

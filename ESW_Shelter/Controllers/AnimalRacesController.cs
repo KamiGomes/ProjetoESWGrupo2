@@ -6,11 +6,11 @@ using ESW_Shelter.Models;
 
 namespace ESW_Shelter.Controllers
 {
-    public class AnimalRacesController : Controller
+    public class AnimalRacesController : SharedController
     {
         private readonly ShelterContext _context;
 
-        public AnimalRacesController(ShelterContext context)
+        public AnimalRacesController(ShelterContext context) : base (context)
         {
             _context = context;
         }
@@ -18,12 +18,20 @@ namespace ESW_Shelter.Controllers
         // GET: AnimalRaces
         public async Task<IActionResult> Index()
         {
+            if (!GetAutorization(4))
+            {
+                return ErrorNotFoundOrSomeOtherError();
+            }
             return View(await _context.AnimalRace.ToListAsync());
         }
 
         // GET: AnimalRaces/Details/5
         public async Task<IActionResult> Details(int? id)
         {
+            if (!GetAutorization(4))
+            {
+                return ErrorNotFoundOrSomeOtherError();
+            }
             if (id == null)
             {
                 return NotFound();
@@ -42,6 +50,10 @@ namespace ESW_Shelter.Controllers
         // GET: AnimalRaces/Create
         public IActionResult Create()
         {
+            if (!GetAutorization(4))
+            {
+                return ErrorNotFoundOrSomeOtherError();
+            }
             return View();
         }
 
@@ -52,10 +64,15 @@ namespace ESW_Shelter.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("AnimalRaceID,Name")] AnimalRace animalRace)
         {
+            if (!GetAutorization(4))
+            {
+                return ErrorNotFoundOrSomeOtherError();
+            }
             if (ModelState.IsValid)
             {
                 _context.Add(animalRace);
                 await _context.SaveChangesAsync();
+                TempData["Message"] = "Raça de animal criado com sucesso!";
                 return RedirectToAction(nameof(Index));
             }
             return View(animalRace);
@@ -64,6 +81,10 @@ namespace ESW_Shelter.Controllers
         // GET: AnimalRaces/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
+            if (!GetAutorization(4))
+            {
+                return ErrorNotFoundOrSomeOtherError();
+            }
             if (id == null)
             {
                 return NotFound();
@@ -84,6 +105,10 @@ namespace ESW_Shelter.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("AnimalRaceID,Name")] AnimalRace animalRace)
         {
+            if (!GetAutorization(4))
+            {
+                return ErrorNotFoundOrSomeOtherError();
+            }
             if (id != animalRace.AnimalRaceID)
             {
                 return NotFound();
@@ -107,6 +132,7 @@ namespace ESW_Shelter.Controllers
                         throw;
                     }
                 }
+                TempData["Message"] = "Raça de animal editada com sucesso!";
                 return RedirectToAction(nameof(Index));
             }
             return View(animalRace);
@@ -115,6 +141,10 @@ namespace ESW_Shelter.Controllers
         // GET: AnimalRaces/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
+            if (!GetAutorization(4))
+            {
+                return ErrorNotFoundOrSomeOtherError();
+            }
             if (id == null)
             {
                 return NotFound();
@@ -135,9 +165,14 @@ namespace ESW_Shelter.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
+            if (!GetAutorization(4))
+            {
+                return ErrorNotFoundOrSomeOtherError();
+            }
             var animalRace = await _context.AnimalRace.FindAsync(id);
             _context.AnimalRace.Remove(animalRace);
             await _context.SaveChangesAsync();
+            TempData["Message"] = "Raça de animal eliminada com sucesso!";
             return RedirectToAction(nameof(Index));
         }
 

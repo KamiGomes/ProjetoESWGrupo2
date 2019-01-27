@@ -491,7 +491,7 @@ namespace ESW_Shelter.Controllers
                         throw;
                     }
                 }
-
+                TempData["Message"] = "Doacao editada com sucesso!";
                 return RedirectToAction(nameof(Index));
             }
             return View(donationIVM);
@@ -562,6 +562,7 @@ namespace ESW_Shelter.Controllers
             }
             _context.Donation.Remove(donation);
             await _context.SaveChangesAsync();
+            TempData["Message"] = "Animal eliminada com sucesso!";
             return RedirectToAction(nameof(Index));
         }
         /*

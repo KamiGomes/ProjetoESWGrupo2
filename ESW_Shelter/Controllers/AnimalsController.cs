@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ESW_Shelter.Models;
 using Microsoft.AspNetCore.Http;
 using System.IO;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace ESW_Shelter.Controllers
 {
@@ -22,63 +22,33 @@ namespace ESW_Shelter.Controllers
             hostingEnvironment = environment;
         }
 
+        //FrontEnd
+        public async Task<IActionResult> Animals(string AnimalRace, string AnimalType, bool Neutered, bool Disinfection, string SearchString)
+        {
+            return View(getAnimalToList(AnimalRace, AnimalType, Neutered, Disinfection, SearchString));
+        }
         // GET: Animals
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string AnimalRace, string AnimalType, bool Neutered, bool Disinfection, string SearchString)
         {
             if (!GetAutorization(4))
             {
                 return ErrorNotFoundOrSomeOtherError();
             }
-            /**/
-            var query = from animal in _context.Animal
-                        join animalType in _context.AnimalTypes on animal.AnimalTypeFK equals animalType.AnimalTypeID
-                        join animalRace in _context.AnimalRace on animal.AnimalRaceFK equals animalRace.AnimalRaceID
-                        select new
-                        {
-                            AnimalID = animal.AnimalID,
-                            Name = animal.Name,
-                            DateOfBirth = animal.DateOfBirth,
-                            Disinfection = animal.Disinfection,
-                            Neutered = animal.Neutered,
-                            Description = animal.Description,
-                            AnimalTypeFK = animal.AnimalTypeFK,
-                            AnimalRaceFK = animal.AnimalRaceFK,
-                            OwnerFK = animal.OwnerFK,
-                            AnimaltypeName = animalType.Name,
-                            AnimalRaceName = animalRace.Name
-                        };
 
+            return View(getAnimalToList(AnimalRace, AnimalType, Neutered, Disinfection, SearchString));
+        }
 
-            var result = query.ToList().Select(e => new Animal
+        public async Task<IActionResult> AnimalDetails(int? id)
+        {
+            if (id == null)
             {
-                AnimalID = e.AnimalID,
-                Name = e.Name,
-                DateOfBirth = e.DateOfBirth,
-                Disinfection = e.Disinfection,
-                Neutered = e.Neutered,
-                Description = e.Description,
-                AnimalTypeFK = e.AnimalTypeFK,
-                AnimalRaceFK = e.AnimalRaceFK,
-                OwnerFK = e.OwnerFK,
-                AnimaltypeName = e.AnimaltypeName,
-                AnimalRaceName = e.AnimalRaceName,
-                OwnerName = ""
+                return NotFound();
             }
-            ).ToList();
 
-            System.Diagnostics.Debug.WriteLine("**********************************************************************");
-            System.Diagnostics.Debug.WriteLine(result.FirstOrDefault());
-            System.Diagnostics.Debug.WriteLine("**********************************************************************");
-
-            var animalIndexVM = new AnimalIndexViewModel
-            {
-                Animals = result,
-                Pictures = _context.Images.AsParallel().ToList(),
-                UsersNames = _context.Users.AsParallel().ToList()
-            };
-
-            /**/
-            return View(animalIndexVM);
+            ViewBag.UsersFK = _context.Users.AsParallel();
+            ViewBag.AnimalRaceFK = _context.AnimalRace.AsParallel();
+            ViewBag.AnimalTypeFK = _context.AnimalTypes.AsParallel();
+            return View(getAnimalDetails(id));
         }
 
         // GET: Animals/Details/5
@@ -88,101 +58,23 @@ namespace ESW_Shelter.Controllers
             {
                 return NotFound();
             }
-            /*
-            var animal = await _context.Animal
-                .FirstOrDefaultAsync(m => m.AnimalID == id);
-            if (animal == null)
+            if (!GetAutorization(4))
             {
-                return NotFound();
-            }*/
-
-            var query = from animal in _context.Animal
-                        join animalType in _context.AnimalTypes on animal.AnimalTypeFK equals animalType.AnimalTypeID
-                        join animalRace in _context.AnimalRace on animal.AnimalRaceFK equals animalRace.AnimalRaceID
-                        where animal.AnimalID == id
-                        select new
-                        {
-                            AnimalID = animal.AnimalID,
-                            Name = animal.Name,
-                            DateOfBirth = animal.DateOfBirth,
-                            Disinfection = animal.Disinfection,
-                            Neutered = animal.Neutered,
-                            Description = animal.Description,
-                            AnimalTypeFK = animal.AnimalTypeFK,
-                            AnimalRaceFK = animal.AnimalRaceFK,
-                            OwnerFK = animal.OwnerFK,
-                            AnimaltypeName = animalType.Name,
-                            AnimalRaceName = animalRace.Name
-                        };
-            var result = query.ToList().Select(e => new Animal
-            {
-                AnimalID = e.AnimalID,
-                Name = e.Name,
-                DateOfBirth = e.DateOfBirth,
-                Disinfection = e.Disinfection,
-                Neutered = e.Neutered,
-                Description = e.Description,
-                AnimalTypeFK = e.AnimalTypeFK,
-                AnimalRaceFK = e.AnimalRaceFK,
-                OwnerFK = e.OwnerFK,
-                AnimaltypeName = e.AnimaltypeName,
-                AnimalRaceName = e.AnimalRaceName,
-                OwnerName = ""
-            }).ToList();
-
-            var animalProductQuery = from animalProduct in _context.AnimalProduct
-                                     join prod in _context.Products on animalProduct.ProductFK equals prod.ProductID
-                                     join prodType in _context.ProductTypes on prod.ProductTypeFK equals prodType.ProductTypeID
-                                     where animalProduct.AnimalFK.Equals(id)
-                                     select new
-                                     {
-                                         ProductID = prod.ProductID,
-                                         Name = prod.Name,
-                                         ProductTypeName = prodType.Name
-                                     };
-
-            var animalProductResult = animalProductQuery.ToList().Select(e => new Product
-            {
-                ProductID = e.ProductID,
-                Name = e.Name,
-                ProductTypeName = e.ProductTypeName
-            }).ToList();
-
-
-            var godfatherQuery = from animalUsers in _context.AnimalUsers
-                                 join users in _context.Users on animalUsers.UsersFK equals users.UserID
-                                 where animalUsers.AnimalFK.Equals(id)
-                                 select new
-                                 {
-                                     UserID = users.UserID,
-                                     Name = users.Name
-                                 };
-            var godfatherResult = godfatherQuery.ToList().Select(e => new Users
-            {
-                UserID = e.UserID,
-                Name = e.Name
-            }).ToList();
-
-            var animalIndexVM = new AnimalIndexViewModel
-            {
-                Animals = result,
-                AnimalRaces = _context.AnimalRace.AsParallel().ToList(),
-                Pictures = _context.Images.AsParallel().ToList(),
-                AnimalTypes = _context.AnimalTypes.AsParallel().ToList(),
-                Products = animalProductResult,
-                UsersNames = godfatherResult
-
-            };
-
+                return ErrorNotFoundOrSomeOtherError();
+            }
             ViewBag.UsersFK = _context.Users.AsParallel();
             ViewBag.AnimalRaceFK = _context.AnimalRace.AsParallel();
             ViewBag.AnimalTypeFK = _context.AnimalTypes.AsParallel();
-            return View(animalIndexVM);
+            return View(getAnimalDetails(id));
         }
 
         // GET: Animals/Create
         public IActionResult Create()
         {
+            if (!GetAutorization(4))
+            {
+                return ErrorNotFoundOrSomeOtherError();
+            }
             var query = from product in _context.Products
                         join productsType in _context.ProductTypes on product.ProductTypeFK equals productsType.ProductTypeID
                         join animalsType in _context.AnimalTypes on product.AnimalTypeFK equals animalsType.AnimalTypeID
@@ -221,6 +113,10 @@ namespace ESW_Shelter.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("AnimalID,Name,DateOfBirth,Disinfection,Neutered,Description,Foto,Picture,AnimalTypeFK,AnimalRaceFK,OwnerFK")] Animal animal)
         {
+            if (!GetAutorization(4))
+            {
+                return ErrorNotFoundOrSomeOtherError();
+            }
             if (ModelState.IsValid)
             {
 
@@ -300,6 +196,7 @@ namespace ESW_Shelter.Controllers
                     }
                 }
                 await _context.SaveChangesAsync();
+                TempData["Message"] = "Animal criado com sucesso!";
                 return RedirectToAction(nameof(Index));
             }
             return View(animal);
@@ -308,6 +205,10 @@ namespace ESW_Shelter.Controllers
         // GET: Animals/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
+            if (!GetAutorization(4))
+            {
+                return ErrorNotFoundOrSomeOtherError();
+            }
             if (id == null)
             {
                 return NotFound();
@@ -436,6 +337,10 @@ namespace ESW_Shelter.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("AnimalID,Name,DateOfBirth,Disinfection,Neutered,Description,Picture,AnimalTypeFK,AnimalRaceFK,OwnerFK")] Animal animal)
         {
+            if (!GetAutorization(4))
+            {
+                return ErrorNotFoundOrSomeOtherError();
+            }
             if (id != animal.AnimalID)
             {
                 return NotFound();
@@ -451,18 +356,6 @@ namespace ESW_Shelter.Controllers
                     string selectedGodfathers = Request.Form["checkGodfather"].ToString();
                     string[] selectedGodfatherList = selectedGodfathers.Split(',');
 
-                    /*Animal animalAdd = new Animal()
-                    {
-                        Name = animal.Animals[0].Name,
-                        DateOfBirth = animal.Animals[0].DateOfBirth,
-                        Disinfection = animal.Animals[0].Disinfection,
-                        Neutered = animal.Animals[0].Neutered,
-                        Description = animal.Animals[0].Description,
-                        Picture = animal.Animals[0].Picture,
-                        AnimalTypeFK = animal.Animals[0].AnimalTypeFK,
-                        AnimalRaceFK = animal.Animals[0].AnimalRaceFK,
-                        OwnerFK = animal.Animals[0].OwnerFK
-                    };*/
                     _context.Update(animal);
                     _context.SaveChanges();
 
@@ -514,6 +407,7 @@ namespace ESW_Shelter.Controllers
                         throw;
                     }
                 }
+                TempData["Message"] = "Animal editado com sucesso!";
                 return RedirectToAction(nameof(Index));
             }
             return View(animal);
@@ -522,6 +416,10 @@ namespace ESW_Shelter.Controllers
         // GET: Animals/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
+            if (!GetAutorization(4))
+            {
+                return ErrorNotFoundOrSomeOtherError();
+            }
             if (id == null)
             {
                 return NotFound();
@@ -542,11 +440,16 @@ namespace ESW_Shelter.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
+            if (!GetAutorization(4))
+            {
+                return ErrorNotFoundOrSomeOtherError();
+            }
             var animal = await _context.Animal.FindAsync(id);
             removeAnimalProducts(id);
             removeGodFathers(id);
             _context.Animal.Remove(animal);
             await _context.SaveChangesAsync();
+            TempData["Message"] = "Animal eliminado com sucesso!";
             return RedirectToAction(nameof(Index));
         }
 
@@ -593,6 +496,175 @@ namespace ESW_Shelter.Controllers
                       + "_"
                       + Guid.NewGuid().ToString().Substring(0, 4)
                       + Path.GetExtension(fileName);
+        }
+
+        private AnimalIndexViewModel getAnimalToList(string AnimalRace, string AnimalType, bool Neutered, bool Disinfection, string SearchString)
+        {
+            /**/
+            var query = from animal in _context.Animal
+                        join animalType in _context.AnimalTypes on animal.AnimalTypeFK equals animalType.AnimalTypeID
+                        join animalRace in _context.AnimalRace on animal.AnimalRaceFK equals animalRace.AnimalRaceID
+                        select new
+                        {
+                            AnimalID = animal.AnimalID,
+                            Name = animal.Name,
+                            DateOfBirth = animal.DateOfBirth,
+                            Disinfection = animal.Disinfection,
+                            Neutered = animal.Neutered,
+                            Description = animal.Description,
+                            AnimalTypeFK = animal.AnimalTypeFK,
+                            AnimalRaceFK = animal.AnimalRaceFK,
+                            OwnerFK = animal.OwnerFK,
+                            AnimaltypeName = animalType.Name,
+                            AnimalRaceName = animalRace.Name
+                        };
+
+            if (!string.IsNullOrEmpty(AnimalRace))
+            {
+                query = query.Where(e=> e.AnimalRaceName == AnimalRace);
+            }
+
+            if (!string.IsNullOrEmpty(AnimalType))
+            {
+                query = query.Where(e => e.AnimaltypeName == AnimalType);
+            }
+
+            if (Neutered)
+            {
+                query = query.Where(e => e.Neutered == true);
+            }
+
+            if (Disinfection)
+            {
+                query = query.Where(e => e.Disinfection == true);
+            }
+
+            if (!string.IsNullOrEmpty(SearchString))
+            {
+                query = query.Where(e => e.Name.Contains(SearchString));
+            }
+
+            var result = query.ToList().Select(e => new Animal
+            {
+                AnimalID = e.AnimalID,
+                Name = e.Name,
+                DateOfBirth = e.DateOfBirth,
+                Disinfection = e.Disinfection,
+                Neutered = e.Neutered,
+                Description = e.Description,
+                AnimalTypeFK = e.AnimalTypeFK,
+                AnimalRaceFK = e.AnimalRaceFK,
+                OwnerFK = e.OwnerFK,
+                AnimaltypeName = e.AnimaltypeName,
+                AnimalRaceName = e.AnimalRaceName,
+                OwnerName = ""
+            }
+            ).ToList();
+
+            System.Diagnostics.Debug.WriteLine("**********************************************************************");
+            System.Diagnostics.Debug.WriteLine(result.FirstOrDefault());
+            System.Diagnostics.Debug.WriteLine("**********************************************************************");
+
+            var animalTypeQuery = from animal in _context.AnimalTypes
+                                  orderby animal.Name
+                                  select animal.Name;
+
+            var animalRaceQuery = from race in _context.AnimalRace
+                                   orderby race.Name
+                                   select race.Name;
+
+            var animalIndexVM = new AnimalIndexViewModel
+            {
+                Animals = result,
+                Pictures = _context.Images.AsParallel().ToList(),
+                UsersNames = _context.Users.AsParallel().ToList(),
+                AnimalRacesSelect = new SelectList(animalRaceQuery.Distinct().ToList()),
+                AnimalTypesSelect = new SelectList(animalTypeQuery.Distinct().ToList())
+            };
+
+            return animalIndexVM;
+        }
+
+        private AnimalIndexViewModel getAnimalDetails(int? id)
+        {
+            var query = from animal in _context.Animal
+                        join animalType in _context.AnimalTypes on animal.AnimalTypeFK equals animalType.AnimalTypeID
+                        join animalRace in _context.AnimalRace on animal.AnimalRaceFK equals animalRace.AnimalRaceID
+                        where animal.AnimalID == id
+                        select new
+                        {
+                            AnimalID = animal.AnimalID,
+                            Name = animal.Name,
+                            DateOfBirth = animal.DateOfBirth,
+                            Disinfection = animal.Disinfection,
+                            Neutered = animal.Neutered,
+                            Description = animal.Description,
+                            AnimalTypeFK = animal.AnimalTypeFK,
+                            AnimalRaceFK = animal.AnimalRaceFK,
+                            OwnerFK = animal.OwnerFK,
+                            AnimaltypeName = animalType.Name,
+                            AnimalRaceName = animalRace.Name
+                        };
+            var result = query.ToList().Select(e => new Animal
+            {
+                AnimalID = e.AnimalID,
+                Name = e.Name,
+                DateOfBirth = e.DateOfBirth,
+                Disinfection = e.Disinfection,
+                Neutered = e.Neutered,
+                Description = e.Description,
+                AnimalTypeFK = e.AnimalTypeFK,
+                AnimalRaceFK = e.AnimalRaceFK,
+                OwnerFK = e.OwnerFK,
+                AnimaltypeName = e.AnimaltypeName,
+                AnimalRaceName = e.AnimalRaceName,
+                OwnerName = ""
+            }).ToList();
+
+            var animalProductQuery = from animalProduct in _context.AnimalProduct
+                                     join prod in _context.Products on animalProduct.ProductFK equals prod.ProductID
+                                     join prodType in _context.ProductTypes on prod.ProductTypeFK equals prodType.ProductTypeID
+                                     where animalProduct.AnimalFK.Equals(id)
+                                     select new
+                                     {
+                                         ProductID = prod.ProductID,
+                                         Name = prod.Name,
+                                         ProductTypeName = prodType.Name
+                                     };
+
+            var animalProductResult = animalProductQuery.ToList().Select(e => new Product
+            {
+                ProductID = e.ProductID,
+                Name = e.Name,
+                ProductTypeName = e.ProductTypeName
+            }).ToList();
+
+
+            var godfatherQuery = from animalUsers in _context.AnimalUsers
+                                 join users in _context.Users on animalUsers.UsersFK equals users.UserID
+                                 where animalUsers.AnimalFK.Equals(id)
+                                 select new
+                                 {
+                                     UserID = users.UserID,
+                                     Name = users.Name
+                                 };
+            var godfatherResult = godfatherQuery.ToList().Select(e => new Users
+            {
+                UserID = e.UserID,
+                Name = e.Name
+            }).ToList();
+
+            var animalIndexVM = new AnimalIndexViewModel
+            {
+                Animals = result,
+                AnimalRaces = _context.AnimalRace.AsParallel().ToList(),
+                Pictures = _context.Images.AsParallel().ToList(),
+                AnimalTypes = _context.AnimalTypes.AsParallel().ToList(),
+                Products = animalProductResult,
+                UsersNames = godfatherResult
+
+            };
+            return animalIndexVM;
         }
     }
 }
