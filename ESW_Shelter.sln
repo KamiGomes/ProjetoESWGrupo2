@@ -5,7 +5,9 @@ VisualStudioVersion = 15.0.28306.52
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ESW_Shelter", "ESW_Shelter\ESW_Shelter.csproj", "{F862B4F7-ED8E-4054-A2BF-ABD49556AD4D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AnimalRacesControllerTests", "AnimalRacesControllerTests\AnimalRacesControllerTests.csproj", "{C2085D96-DF12-444B-B036-3268A11C4AFE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AnimalRacesControllerTests", "AnimalRacesControllerTests\AnimalRacesControllerTests.csproj", "{C2085D96-DF12-444B-B036-3268A11C4AFE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AnimalControllerTests", "AnimalControllerTests\AnimalControllerTests.csproj", "{0577C6DD-A3C9-4DB0-805D-BE0541A6FFDA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{C2085D96-DF12-444B-B036-3268A11C4AFE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C2085D96-DF12-444B-B036-3268A11C4AFE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C2085D96-DF12-444B-B036-3268A11C4AFE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0577C6DD-A3C9-4DB0-805D-BE0541A6FFDA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0577C6DD-A3C9-4DB0-805D-BE0541A6FFDA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0577C6DD-A3C9-4DB0-805D-BE0541A6FFDA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0577C6DD-A3C9-4DB0-805D-BE0541A6FFDA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

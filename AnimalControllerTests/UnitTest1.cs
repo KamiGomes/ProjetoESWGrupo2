@@ -1,7 +1,7 @@
 using System;
 using Xunit;
 
-namespace ESW_Shelter_Tests
+namespace AnimalControllerTests
 {
     public class UnitTest1
     {

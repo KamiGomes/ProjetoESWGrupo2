@@ -16,10 +16,10 @@ namespace ESW_Shelter.Controllers
     {
         private readonly ShelterContext _context;
         private readonly IHostingEnvironment hostingEnvironment;
-        public AnimalsController(ShelterContext context, IHostingEnvironment environment) : base(context)
+        public AnimalsController(ShelterContext context) : base(context)
         {
             _context = context;
-            hostingEnvironment = environment;
+           // hostingEnvironment = environment;
         }
 
         //FrontEnd
@@ -30,10 +30,10 @@ namespace ESW_Shelter.Controllers
         // GET: Animals
         public async Task<IActionResult> Index(string AnimalRace, string AnimalType, bool Neutered, bool Disinfection, string SearchString)
         {
-            if (!GetAutorization(4))
+           /* if (!GetAutorization(4))
             {
                 return ErrorNotFoundOrSomeOtherError();
-            }
+            }*/
 
             return View(getAnimalToList(AnimalRace, AnimalType, Neutered, Disinfection, SearchString));
         }
@@ -71,10 +71,10 @@ namespace ESW_Shelter.Controllers
         // GET: Animals/Create
         public IActionResult Create()
         {
-            if (!GetAutorization(4))
+            /*if (!GetAutorization(4))
             {
                 return ErrorNotFoundOrSomeOtherError();
-            }
+            }*/
             var query = from product in _context.Products
                         join productsType in _context.ProductTypes on product.ProductTypeFK equals productsType.ProductTypeID
                         join animalsType in _context.AnimalTypes on product.AnimalTypeFK equals animalsType.AnimalTypeID
@@ -113,10 +113,10 @@ namespace ESW_Shelter.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("AnimalID,Name,DateOfBirth,Disinfection,Neutered,Description,Foto,Picture,AnimalTypeFK,AnimalRaceFK,OwnerFK")] Animal animal)
         {
-            if (!GetAutorization(4))
+           /* if (!GetAutorization(4))
             {
                 return ErrorNotFoundOrSomeOtherError();
-            }
+            }*/
             if (ModelState.IsValid)
             {
 
@@ -205,10 +205,10 @@ namespace ESW_Shelter.Controllers
         // GET: Animals/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (!GetAutorization(4))
+            /*if (!GetAutorization(4))
             {
                 return ErrorNotFoundOrSomeOtherError();
-            }
+            }*/
             if (id == null)
             {
                 return NotFound();
@@ -337,10 +337,10 @@ namespace ESW_Shelter.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("AnimalID,Name,DateOfBirth,Disinfection,Neutered,Description,Picture,AnimalTypeFK,AnimalRaceFK,OwnerFK")] Animal animal)
         {
-            if (!GetAutorization(4))
+           /* if (!GetAutorization(4))
             {
                 return ErrorNotFoundOrSomeOtherError();
-            }
+            }*/
             if (id != animal.AnimalID)
             {
                 return NotFound();
@@ -350,16 +350,16 @@ namespace ESW_Shelter.Controllers
             {
                 try
                 {
-                    string selectedProducts = Request.Form["checkProduct"].ToString();
+                    /*string selectedProducts = Request.Form["checkProduct"].ToString();
                     string[] selectedProductsList = selectedProducts.Split(',');
 
                     string selectedGodfathers = Request.Form["checkGodfather"].ToString();
-                    string[] selectedGodfatherList = selectedGodfathers.Split(',');
+                    string[] selectedGodfatherList = selectedGodfathers.Split(',');*/
 
                     _context.Update(animal);
                     _context.SaveChanges();
 
-                    removeAnimalProducts(id);
+                   /* removeAnimalProducts(id);
                     if (selectedProductsList[0] != "")
                     {
                         foreach (var temp in selectedProductsList)
@@ -393,7 +393,7 @@ namespace ESW_Shelter.Controllers
                             _context.SaveChanges();
 
                         }
-                    }
+                    }*/
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
@@ -407,7 +407,7 @@ namespace ESW_Shelter.Controllers
                         throw;
                     }
                 }
-                TempData["Message"] = "Animal editado com sucesso!";
+                //TempData["Message"] = "Animal editado com sucesso!";
                 return RedirectToAction(nameof(Index));
             }
             return View(animal);
@@ -416,10 +416,10 @@ namespace ESW_Shelter.Controllers
         // GET: Animals/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (!GetAutorization(4))
+           /* if (!GetAutorization(4))
             {
                 return ErrorNotFoundOrSomeOtherError();
-            }
+            }*/
             if (id == null)
             {
                 return NotFound();
@@ -440,16 +440,16 @@ namespace ESW_Shelter.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            if (!GetAutorization(4))
+            /*if (!GetAutorization(4))
             {
                 return ErrorNotFoundOrSomeOtherError();
-            }
+            }*/
             var animal = await _context.Animal.FindAsync(id);
-            removeAnimalProducts(id);
-            removeGodFathers(id);
+            //removeAnimalProducts(id);
+            //removeGodFathers(id);
             _context.Animal.Remove(animal);
             await _context.SaveChangesAsync();
-            TempData["Message"] = "Animal eliminado com sucesso!";
+            //TempData["Message"] = "Animal eliminado com sucesso!";
             return RedirectToAction(nameof(Index));
         }
 
@@ -519,7 +519,7 @@ namespace ESW_Shelter.Controllers
                             AnimalRaceName = animalRace.Name
                         };
 
-            if (!string.IsNullOrEmpty(AnimalRace))
+            /*if (!string.IsNullOrEmpty(AnimalRace))
             {
                 query = query.Where(e=> e.AnimalRaceName == AnimalRace);
             }
@@ -543,7 +543,7 @@ namespace ESW_Shelter.Controllers
             {
                 query = query.Where(e => e.Name.Contains(SearchString));
             }
-
+            */
             var result = query.ToList().Select(e => new Animal
             {
                 AnimalID = e.AnimalID,
@@ -560,7 +560,7 @@ namespace ESW_Shelter.Controllers
                 OwnerName = ""
             }
             ).ToList();
-
+            
             System.Diagnostics.Debug.WriteLine("**********************************************************************");
             System.Diagnostics.Debug.WriteLine(result.FirstOrDefault());
             System.Diagnostics.Debug.WriteLine("**********************************************************************");
