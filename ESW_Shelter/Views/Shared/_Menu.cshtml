@@ -1,0 +1,29 @@
+﻿
+<li class="nav-item dropdown navbar-right">
+    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        Login
+    </a>
+    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+        <div class="dropdown-item">
+            <form asp-action="Login" asp-controller="Users" method="Post">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-group">
+                    <label value="Email" class="control-label">Email</label>
+                    <input type="email" name="Email" class="form-control" />
+                    <!--<span asp-validation-for="Email" class="text-danger"></span>-->
+                </div>
+                <div class="form-group">
+                    <label value="Password" class="control-label">Password</label>
+                    <input type="password" name="Password" id="logpass" class="form-control" />
+                    <!--<span asp-validation-for="Password" class="text-danger"></span>-->
+                    <input type="checkbox" onchange="document.getElementById('logpass').type = this.checked ? 'text' : 'password'">
+                    Mostrar Password
+                </div>
+                <div class="form-group buttons">
+                    <a asp-area="" asp-controller="Users" asp-action="Register">Registar</a>
+                    <input type="submit" value="Login" class="btn btn-primary button-image right" />
+                </div>
+            </form>
+        </div>
+    </div>
+</li>

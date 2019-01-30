@@ -1,0 +1,55 @@
+﻿@model ESW_Shelter.Models.AnimalIndexViewModel
+
+@{
+    ViewData["Title"] = "Animals";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<div class="row about">
+    <h2>Os Nossos Animais</h2>
+    <hr />
+    <form asp-controller="Animals" asp-action="Animals" method="get">
+        Nome do animal: <input type="text" name="SearchString" style="color:black;" placeholder="Nome do animal">
+        <select asp-for="AnimalType" asp-items="Model.AnimalTypesSelect">
+            <option value="">Todos os Tipos de Animais</option>
+        </select>
+        <select asp-for="AnimalRace" asp-items="Model.AnimalRacesSelect">
+            <option value="">Todas as Raças de Animais</option>
+        </select>
+            <label>
+                <input asp-for="Neutered" /> @Html.DisplayNameFor(model => model.Animals[0].Neutered)
+            </label>
+
+
+            <label>
+                <input asp-for="Disinfection" /> @Html.DisplayNameFor(model => model.Animals[0].Disinfection)
+            </label>
+
+        <input type="submit" value="Pesquisar" style="background-color: coral" />
+    </form>
+    <br />
+    @foreach (var item in Model.Animals)
+    {
+        <div class="col-lg-1" style="border-style: double;">
+            <p>
+                @if (Model.Pictures.Exists(e => e.AnimalFK == item.AnimalID))
+                {
+                    var pic = Model.Pictures.Where(e => e.AnimalFK.Equals(item.AnimalID)).FirstOrDefault();
+                    <img src="~/images/Galeria_@item.AnimalID/@pic.FileName" alt="Icon" class="" width="125" height="125" />
+                }
+                else
+                {
+
+                }
+            </p>
+            <p>@Html.DisplayFor(modelItem => item.Name)</p>
+            <p>@Html.DisplayFor(modelItem => item.AnimaltypeName)</p>
+            <p>@Html.DisplayFor(modelItem => item.AnimalRaceName)</p>
+            <a class="nav-item nav-link active" asp-area="" asp-controller="Animals" asp-action="AnimalDetails" asp-route-id="@item.AnimalID">Ver Mais Informações</a>
+        </div>
+    }
+</div>
+
+
+

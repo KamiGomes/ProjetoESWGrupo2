@@ -1,0 +1,154 @@
+﻿@model ESW_Shelter.Models.AnimalIndexViewModel
+
+@{
+    ViewData["Title"] = "Details";
+    Layout = "~/Views/Shared/_BackLayout.cshtml";
+}
+
+<h2>@Html.DisplayFor(model => model.Animals[0].Name)</h2>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.Animals[0].AnimalID">Editar</a>
+</div>
+<hr />
+<div>
+    <div class="row">
+        <div class="col-md-4">
+            @if (Model.Pictures.Exists(e => e.AnimalFK == Model.Animals[0].AnimalID))
+            {
+                var pic = Model.Pictures.Where(e => e.AnimalFK.Equals(Model.Animals[0].AnimalID)).FirstOrDefault();
+                <img src="~/images/Galeria_@Model.Animals[0].AnimalID/@pic.FileName" alt="Sem Imagem" class="" width="350" height="350" />
+            }
+            else
+            {
+
+            }
+        </div>
+        <div class="col-md-6">
+            <dl class="dl-horizontal">
+                <dt>
+                    @Html.DisplayNameFor(model => model.Animals[0].Name)
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.Animals[0].Name)
+                </dd>
+                <dt>
+                    @Html.DisplayNameFor(model => model.Animals[0].DateOfBirth)
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.Animals[0].DateOfBirth)
+                </dd>
+                <dt>
+                    @Html.DisplayNameFor(model => model.Animals[0].Disinfection)
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.Animals[0].Disinfection)
+                </dd>
+                <dt>
+                    @Html.DisplayNameFor(model => model.Animals[0].Neutered)
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.Animals[0].Neutered)
+                </dd>
+                <dt>
+                    @Html.DisplayNameFor(model => model.Animals[0].Description)
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.Animals[0].Description)
+                </dd>
+                <dt>
+                    @Html.DisplayNameFor(model => model.Animals[0].AnimalTypeFK)
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.Animals[0].AnimaltypeName)
+                </dd>
+                <dt>
+                    @Html.DisplayNameFor(model => model.Animals[0].AnimalRaceFK)
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.Animals[0].AnimalRaceName)
+                </dd>
+                <dt>
+                    @Html.DisplayNameFor(model => model.Animals[0].OwnerFK)
+                </dt>
+                <dd>
+                    @if (Model.Animals[0].OwnerFK == 0)
+                    {
+                        <p>Por Adoptar</p>
+                    }
+                    else
+                    {
+                        @Html.DisplayFor(model => model.Animals[0].OwnerName)
+                    }
+                </dd>
+            </dl>
+
+            <div class="form-group">
+                <label asp-for="Animals[0].ProductFKDetails" class="control-label"></label>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Animals[0].Name)
+                            </th>
+                            <th>
+                                Tipo de produto
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model.Products.Count() == 0)
+                        {
+                            <tr>
+                                <td>
+                                    <p>Este animal não tem necessidades especiais!</p>
+                                </td>
+                                <td></td>
+                            </tr>
+                        }
+                        @foreach (Product item in Model.Products)
+                        {
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Name)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.ProductTypeName)
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+            <div class="form-group">
+                <label asp-for="Animals[0].GodFathers" class="control-label"></label>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Animals[0].Name)
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model.UsersNames.Count() == 0)
+                        {
+                            <tr>
+                                <td>
+                                    <p>Este animal não tem padrinhos</p>
+                                </td>
+                            </tr>
+                        }
+                        @foreach (Users item in Model.UsersNames)
+                        {
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Name)
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

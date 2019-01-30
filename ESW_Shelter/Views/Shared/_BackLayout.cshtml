@@ -1,0 +1,24 @@
+﻿
+@using Microsoft.AspNetCore.Http;
+@{
+    ViewData["User_Name"] = Context.Session.GetString("User_Name");
+    ViewData["UserID"] = Context.Session.GetString("UserID");
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="row">
+    <div class="subMenu">
+        <div class="vertical-menu">
+            <a asp-area="" asp-controller="Users" asp-action="Index">Utilizadores</a>
+            <a asp-area="" asp-controller="Roles" asp-action="Index">Permissões</a>
+            <a asp-area="" asp-controller="Donations" asp-action="Index">Donativos</a>
+            <a asp-area="" asp-controller="Products" asp-action="Index">Produtos</a>
+            <a asp-area="" asp-controller="ProductTypes" asp-action="Index">Tipos de Produto</a>
+            <a asp-area="" asp-controller="Animals" asp-action="Index">Animais</a>
+            <a asp-area="" asp-controller="AnimalTypes" asp-action="Index">Tipos de Animais</a>
+            <a asp-area="" asp-controller="AnimalRaces" asp-action="Index">Raças de Animais</a>
+        </div>
+    </div>
+    <div class="col-md-9 no-float admin"> @RenderBody()</div>
+</div>
+
