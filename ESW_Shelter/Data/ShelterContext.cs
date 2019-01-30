@@ -13,11 +13,9 @@ namespace ESW_Shelter.Models
         {
         }
 
-        public DbSet<Users> Users { get; set; }
-        public DbSet<Roles> Roles { get; set; }
-        public DbSet<AnimalType> AnimalTypes { get; set; }
-        public DbSet<ProductType> ProductTypes { get; set; }
-        public DbSet<Product> Products { get; set; }
-    }
+        public DbSet<ESW_Shelter.Models.Users> Users { get; set; }
+        public DbSet<ESW_Shelter.Models.UsersInfo> UsersInfo { get; set; }
+        public DbSet<ESW_Shelter.Models.Roles> Roles { get; set; }
 
+    }
 }
