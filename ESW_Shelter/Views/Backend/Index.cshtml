@@ -1,45 +1,4 @@
 ﻿@{
     ViewData["Title"] = "Management";
+    Layout = "~/Views/Shared/_BackLayout.cshtml";
 }
-<style>
-    .vertical-menu {
-        width: 200px;
-    }
-
-        .vertical-menu a {
-            /*background-color: #eee;*/
-            background-image: linear-gradient(to bottom, #ff9933 32%, #ffcc99 88%);
-            color: black;
-            display: block;
-            padding: 12px;
-            text-decoration: none;
-        }
-
-            .vertical-menu a:hover {
-                background-color: #ccc;
-            }
-
-            .vertical-menu a.active {
-                background-color: #4CAF50;
-                color: white;
-            }
-</style>
-
-<div class="row">
-    <h2>Management</h2>
-</div>
-<div class="container-fluid">
-    <div class="row">
-        <div class="col-4 col-sm-6">
-            <div class="vertical-menu">
-                <a href="#" class="active">Home</a>
-                <a href="#">Users</a>
-                <a href="#">Donations</a>
-                <a href="#">Animals</a>
-            </div>
-        </div>
-        <div class="col-8 col-sm-6">
-            <p>This Page is for backend! Administrators only!</p>
-        </div>
-    </div>
-</div>

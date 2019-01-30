@@ -10,11 +10,11 @@ using System.Data.Entity;
 
 namespace ESW_Shelter.Controllers
 {
-    public class ProductsController : Controller
+    public class ProductsController : SharedController
     {
         private readonly ShelterContext _context;
 
-        public ProductsController(ShelterContext context)
+        public ProductsController(ShelterContext context) : base(context)
         {
             _context = context;
         }
@@ -22,7 +22,10 @@ namespace ESW_Shelter.Controllers
         // GET: Products
         public async Task<IActionResult> Index(string searchString, string animalType, string productType)
         {
-
+            if (!GetAutorization(4))
+            {
+                return ErrorNotFoundOrSomeOtherError();
+            }
             var query = from product in _context.Products
                         join productsType in _context.ProductTypes on product.ProductTypeFK equals productsType.ProductTypeID
                         join animalsType in _context.AnimalTypes on product.AnimalTypeFK equals animalsType.AnimalTypeID
@@ -79,10 +82,14 @@ namespace ESW_Shelter.Controllers
 
             return View(productIndexVM);
         }
-        
+
         // GET: Products/Details/5
         public async Task<IActionResult> Details(int? id)
         {
+            if (!GetAutorization(4))
+            {
+                return ErrorNotFoundOrSomeOtherError();
+            }
             if (id == null)
             {
                 return NotFound();
@@ -101,6 +108,10 @@ namespace ESW_Shelter.Controllers
         // GET: Products/Create
         public IActionResult Create()
         {
+            if (!GetAutorization(4))
+            {
+                return ErrorNotFoundOrSomeOtherError();
+            }
             ViewBag.AnimalsTypes = _context.AnimalTypes.AsParallel();
             ViewBag.ProductType = _context.ProductTypes.AsParallel();
             return View();
@@ -113,12 +124,21 @@ namespace ESW_Shelter.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("ProductID,Name,Quantity,AnimalTypeFK,ProductTypeFK")] Product product)
         {
+            if (!GetAutorization(4))
+            {
+                return ErrorNotFoundOrSomeOtherError();
+            }
+            if(!checkValues(product))
+            {
+                return RedirectToAction(nameof(Create));
+            }
             if (ModelState.IsValid)
             {
                 product.AnimalTypeFK = Int32.Parse(Request.Form["AnimalTypeFK"].ToString());
                 product.ProductTypeFK = Int32.Parse(Request.Form["ProductTypeFK"].ToString());
                 _context.Add(product);
                 await _context.SaveChangesAsync();
+                TempData["Message"] = "Produto criado com sucesso!";
                 return RedirectToAction(nameof(Index));
             }
             return RedirectToAction(nameof(Index));
@@ -127,6 +147,10 @@ namespace ESW_Shelter.Controllers
         // GET: Products/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
+            if (!GetAutorization(4))
+            {
+                return ErrorNotFoundOrSomeOtherError();
+            }
             ViewBag.AnimalsTypes = _context.AnimalTypes.AsParallel();
             ViewBag.ProductType = _context.ProductTypes.AsParallel();
 
@@ -150,6 +174,14 @@ namespace ESW_Shelter.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("ProductID,Name,Quantity,AnimalTypeFK,ProductTypeFK")] Product product)
         {
+            if (!GetAutorization(4))
+            {
+                return ErrorNotFoundOrSomeOtherError();
+            }
+            if (!checkValues(product))
+            {
+                return RedirectToAction(nameof(Create));
+            }
             if (id != product.ProductID)
             {
                 return NotFound();
@@ -173,6 +205,7 @@ namespace ESW_Shelter.Controllers
                         throw;
                     }
                 }
+                TempData["Message"] = "Produto editado com sucesso!";
                 return RedirectToAction(nameof(Index));
             }
             return View(product);
@@ -181,6 +214,10 @@ namespace ESW_Shelter.Controllers
         // GET: Products/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
+            if (!GetAutorization(4))
+            {
+                return ErrorNotFoundOrSomeOtherError();
+            }
             if (id == null)
             {
                 return NotFound();
@@ -223,15 +260,50 @@ namespace ESW_Shelter.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
+            if (!GetAutorization(4))
+            {
+                return ErrorNotFoundOrSomeOtherError();
+            }
             var product = await _context.Products.FindAsync(id);
             _context.Products.Remove(product);
             await _context.SaveChangesAsync();
+            TempData["Message"] = "Produto eliminado com sucesso!";
             return RedirectToAction(nameof(Index));
         }
 
         private bool ProductExists(int id)
         {
             return _context.Products.Any(e => e.ProductID == id);
+        }
+
+        private bool checkValues(Product product)
+        {
+            if (product.AnimalTypeFK <= 0)
+            {
+                TempData["Message"] = "Por favor insira um tipo de animal!";
+                return false;
+            }
+            if (product.ProductTypeFK <= 0)
+            {
+                TempData["Message"] = "Por favor escolha um tipo de produto!";
+                return false;
+            }
+            if (string.IsNullOrEmpty(product.Name))
+            {
+                TempData["Message"] = "Por favor insira um nome para o produto!";
+                return false;
+            }
+            if (product.Quantity <= -1)
+            {
+                TempData["Message"] = "Quantidade não pode ser negativa!";
+                return false;
+            }
+            if (product.ProductID <= -1)
+            {
+                TempData["Message"] = "Algo de errado aconteceu!";
+                return false;
+            }
+            return true;
         }
     }
 }

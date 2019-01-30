@@ -2,6 +2,17 @@
   "version": 3,
   "targets": {
     ".NETCoreApp,Version=v2.1": {
+      "EntityFramework/6.2.0": {
+        "type": "package",
+        "compile": {
+          "lib/net45/EntityFramework.SqlServer.dll": {},
+          "lib/net45/EntityFramework.dll": {}
+        },
+        "runtime": {
+          "lib/net45/EntityFramework.SqlServer.dll": {},
+          "lib/net45/EntityFramework.dll": {}
+        }
+      },
       "httpsecurecookie/0.1.1": {
         "type": "package",
         "compile": {
@@ -24,7 +35,7 @@
           "lib/net45/System.Web.Mvc.dll": {}
         }
       },
-      "Microsoft.AspNet.Razor/3.2.3": {
+      "Microsoft.AspNet.Razor/3.2.7": {
         "type": "package",
         "compile": {
           "lib/net45/System.Web.Razor.dll": {}
@@ -2867,6 +2878,15 @@
           "lib/netstandard1.0/Remotion.Linq.dll": {}
         }
       },
+      "RestSharp/106.5.4": {
+        "type": "package",
+        "compile": {
+          "lib/netstandard2.0/RestSharp.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard2.0/RestSharp.dll": {}
+        }
+      },
       "runtime.debian.8-x64.runtime.native.System.Security.Cryptography.OpenSsl/4.3.0": {
         "type": "package",
         "runtimeTargets": {
@@ -3084,6 +3104,18 @@
         },
         "runtime": {
           "lib/netstandard2.0/SendGrid.dll": {}
+        }
+      },
+      "Stripe.net/21.9.0": {
+        "type": "package",
+        "dependencies": {
+          "Newtonsoft.Json": "9.0.1"
+        },
+        "compile": {
+          "lib/netstandard2.0/Stripe.net.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard2.0/Stripe.net.dll": {}
         }
       },
       "System.AppContext/4.3.0": {
@@ -4692,6 +4724,36 @@
     }
   },
   "libraries": {
+    "EntityFramework/6.2.0": {
+      "sha512": "+aB/cnEAr9KqVMjmZwu+Fzy3EOPjCIzNsPAUyn19WbB2u3LFHd2OB3X56ohAj7EBf2hppl9M27nlRnkQxOhoAA==",
+      "type": "package",
+      "path": "entityframework/6.2.0",
+      "hasTools": true,
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "content/net40/App.config.transform",
+        "content/net40/Web.config.transform",
+        "entityframework.6.2.0.nupkg.sha512",
+        "entityframework.nuspec",
+        "lib/net40/EntityFramework.SqlServer.dll",
+        "lib/net40/EntityFramework.SqlServer.xml",
+        "lib/net40/EntityFramework.dll",
+        "lib/net40/EntityFramework.xml",
+        "lib/net45/EntityFramework.SqlServer.dll",
+        "lib/net45/EntityFramework.SqlServer.xml",
+        "lib/net45/EntityFramework.dll",
+        "lib/net45/EntityFramework.xml",
+        "tools/EntityFramework.PowerShell.Utility.dll",
+        "tools/EntityFramework.PowerShell.dll",
+        "tools/EntityFramework.psd1",
+        "tools/EntityFramework.psm1",
+        "tools/about_EntityFramework.help.txt",
+        "tools/init.ps1",
+        "tools/install.ps1",
+        "tools/migrate.exe"
+      ]
+    },
     "httpsecurecookie/0.1.1": {
       "sha512": "repLO2mY2LsePy3cCKQBsU8keiByCcoF36kvudc1wm8PHWPeBjoZUcdolBzybFYT+xVYYhH/cygrk/BcFNwZPQ==",
       "type": "package",
@@ -4719,16 +4781,16 @@
         "microsoft.aspnet.mvc.nuspec"
       ]
     },
-    "Microsoft.AspNet.Razor/3.2.3": {
-      "sha512": "leta+Q73O7+pR8ThTqXmwaNMSqwZQQ3BHfpUHd8S1XaUWe1jRVLitMHqo1AmY7wPNLyankPA1beiUKEGj8Q3Dw==",
+    "Microsoft.AspNet.Razor/3.2.7": {
+      "sha512": "ao+aCwMDXevvGZJnN/emN5/jbC8e0NXkPUk3XXjmuK3n0rhCOIGD0+8CMzhCr7bgGExFa7aXqcWZhl7jiLtNlg==",
       "type": "package",
-      "path": "microsoft.aspnet.razor/3.2.3",
+      "path": "microsoft.aspnet.razor/3.2.7",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
         "lib/net45/System.Web.Razor.dll",
         "lib/net45/System.Web.Razor.xml",
-        "microsoft.aspnet.razor.3.2.3.nupkg.sha512",
+        "microsoft.aspnet.razor.3.2.7.nupkg.sha512",
         "microsoft.aspnet.razor.nuspec"
       ]
     },
@@ -7879,6 +7941,21 @@
         "remotion.linq.nuspec"
       ]
     },
+    "RestSharp/106.5.4": {
+      "sha512": "YaGn6olg2GD0gLy7YDG1FsSnC6TBwgn/zZSONiOj7hPFJJ0Q+k2hBogyalUXkodihVa0ugRwCqSPCiqdNyFKzA==",
+      "type": "package",
+      "path": "restsharp/106.5.4",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "lib/net452/RestSharp.dll",
+        "lib/net452/RestSharp.xml",
+        "lib/netstandard2.0/RestSharp.dll",
+        "lib/netstandard2.0/RestSharp.xml",
+        "restsharp.106.5.4.nupkg.sha512",
+        "restsharp.nuspec"
+      ]
+    },
     "runtime.debian.8-x64.runtime.native.System.Security.Cryptography.OpenSsl/4.3.0": {
       "sha512": "HdSSp5MnJSsg08KMfZThpuLPJpPwE5hBXvHwoKWosyHHfe8Mh5WKT0ylEOf6yNzX6Ngjxe4Whkafh5q7Ymac4Q==",
       "type": "package",
@@ -8164,6 +8241,23 @@
         "lib/netstandard2.0/SendGrid.xml",
         "sendgrid.9.10.0.nupkg.sha512",
         "sendgrid.nuspec"
+      ]
+    },
+    "Stripe.net/21.9.0": {
+      "sha512": "vorCZOoVf024SBPgBbGc2iXv1OeKv+gzEYN7U+tJnlV2UBG3zRYiWQGek0FNJ0a8fkcaubkWaRVdIXAYwzw6vg==",
+      "type": "package",
+      "path": "stripe.net/21.9.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "lib/net45/Stripe.net.dll",
+        "lib/net45/Stripe.net.xml",
+        "lib/netstandard1.2/Stripe.net.dll",
+        "lib/netstandard1.2/Stripe.net.xml",
+        "lib/netstandard2.0/Stripe.net.dll",
+        "lib/netstandard2.0/Stripe.net.xml",
+        "stripe.net.21.9.0.nupkg.sha512",
+        "stripe.net.nuspec"
       ]
     },
     "System.AppContext/4.3.0": {
@@ -12691,13 +12785,17 @@
   },
   "projectFileDependencyGroups": {
     ".NETCoreApp,Version=v2.1": [
+      "EntityFramework >= 6.2.0",
       "Microsoft.AspNet.Mvc >= 5.2.3",
+      "Microsoft.AspNet.Razor >= 3.2.7",
       "Microsoft.AspNetCore.App >= 2.1.6",
       "Microsoft.AspNetCore.Razor.Design >= 2.1.2",
       "Microsoft.AspNetCore.Session >= 2.1.1",
       "Microsoft.NETCore.App >= 2.1.0",
       "Microsoft.VisualStudio.Web.CodeGeneration.Design >= 2.1.6",
+      "RestSharp >= 106.5.4",
       "SendGrid >= 9.10.0",
+      "Stripe.net >= 21.9.0",
       "httpsecurecookie >= 0.1.1"
     ]
   },
@@ -12742,9 +12840,17 @@
     "frameworks": {
       "netcoreapp2.1": {
         "dependencies": {
+          "EntityFramework": {
+            "target": "Package",
+            "version": "[6.2.0, )"
+          },
           "Microsoft.AspNet.Mvc": {
             "target": "Package",
             "version": "[5.2.3, )"
+          },
+          "Microsoft.AspNet.Razor": {
+            "target": "Package",
+            "version": "[3.2.7, )"
           },
           "Microsoft.AspNetCore.App": {
             "target": "Package",
@@ -12768,9 +12874,17 @@
             "target": "Package",
             "version": "[2.1.6, )"
           },
+          "RestSharp": {
+            "target": "Package",
+            "version": "[106.5.4, )"
+          },
           "SendGrid": {
             "target": "Package",
             "version": "[9.10.0, )"
+          },
+          "Stripe.net": {
+            "target": "Package",
+            "version": "[21.9.0, )"
           },
           "httpsecurecookie": {
             "target": "Package",
@@ -12786,6 +12900,16 @@
     }
   },
   "logs": [
+    {
+      "code": "NU1701",
+      "level": "Warning",
+      "warningLevel": 1,
+      "message": "Package 'EntityFramework 6.2.0' was restored using '.NETFramework,Version=v4.6.1' instead of the project target framework '.NETCoreApp,Version=v2.1'. This package may not be fully compatible with your project.",
+      "libraryId": "EntityFramework",
+      "targetGraphs": [
+        ".NETCoreApp,Version=v2.1"
+      ]
+    },
     {
       "code": "NU1701",
       "level": "Warning",
@@ -12810,7 +12934,7 @@
       "code": "NU1701",
       "level": "Warning",
       "warningLevel": 1,
-      "message": "Package 'Microsoft.AspNet.Razor 3.2.3' was restored using '.NETFramework,Version=v4.6.1' instead of the project target framework '.NETCoreApp,Version=v2.1'. This package may not be fully compatible with your project.",
+      "message": "Package 'Microsoft.AspNet.Razor 3.2.7' was restored using '.NETFramework,Version=v4.6.1' instead of the project target framework '.NETCoreApp,Version=v2.1'. This package may not be fully compatible with your project.",
       "libraryId": "Microsoft.AspNet.Razor",
       "targetGraphs": [
         ".NETCoreApp,Version=v2.1"

@@ -2,20 +2,17 @@
 
 @{
     ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_BackLayout.cshtml";
 }
 
-<h2>Index</h2>
+<h2>Roles</h2>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
 <table class="table">
     <thead>
         <tr>
             <th>
                 @Html.DisplayNameFor(model => model.RoleName)
             </th>
-            <th></th>
         </tr>
     </thead>
     <tbody>
@@ -23,11 +20,6 @@
         <tr>
             <td>
                 @Html.DisplayFor(modelItem => item.RoleName)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.RoleID">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.RoleID">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.RoleID">Delete</a>
             </td>
         </tr>
 }
