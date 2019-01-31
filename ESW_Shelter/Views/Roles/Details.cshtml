@@ -2,23 +2,58 @@
 
 @{
     ViewData["Title"] = "Details";
+    Layout = "~/Views/Shared/_BackLayout.cshtml";
+    List<RoleAuthorization> autho = ViewBag.Authorizations;
 }
 
-<h2>Details</h2>
+<h2>@Model.RoleName</h2>
 
 <div>
-    <h4>Roles</h4>
     <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.RoleName)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.RoleName)
-        </dd>
-    </dl>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.RoleName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Create)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Read)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Update)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Delete)
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (Components item in ViewBag.Components)
+            {
+            <tr>
+                <td>
+                    @item.Name
+                </td>
+                <td>
+                    <input name="@item.Name" id=1 type="checkbox" disabled="disabled" class="check" value="1" checked="@(autho.Exists(e=> e.ComponentFK == item.ComponentID) ? autho.Where(e=> e.ComponentFK == item.ComponentID).First().Create.Equals(true) ? "checked" : null : null)" />
+                </td>
+                <td>
+                    <input name="@item.Name" id="2" type="checkbox" disabled="disabled" class="check" value="2" checked="@(autho.Exists(e=> e.ComponentFK == item.ComponentID) ? autho.Where(e=> e.ComponentFK == item.ComponentID).First().Read.Equals(true) ? "checked" : null : null)" />
+                </td>
+                <td>
+                    <input name="@item.Name" id="3" type="checkbox" disabled="disabled" class="check" value="3" checked="@(autho.Exists(e=> e.ComponentFK == item.ComponentID) ? autho.Where(e=> e.ComponentFK == item.ComponentID).First().Update.Equals(true) ? "checked" : null : null)" />
+                </td>
+                <td>
+                    <input name="@item.Name" id="4" type="checkbox" disabled="disabled" class="check" value="4" checked="@(autho.Exists(e=> e.ComponentFK == item.ComponentID) ? autho.Where(e=> e.ComponentFK == item.ComponentID).First().Delete.Equals(true) ? "checked" : null : null)" />
+                </td>
+            </tr>
+            }
+        </tbody>
+    </table>
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model.RoleID">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Edit" asp-route-id="@Model.RoleID">Editar</a>
 </div>

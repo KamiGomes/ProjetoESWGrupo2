@@ -19,9 +19,9 @@ namespace ESW_Shelter.Controllers
         // GET: Roles
         public async Task<IActionResult> Index()
         {
-            if (!GetAutorization(4))
+            if (!GetAuthorization(2, 'r'))
             {
-                return ErrorNotFoundOrSomeOtherError();
+                return NotFound();
             }
             var roles = await _context.Roles.ToListAsync();
             return View(roles);
@@ -30,9 +30,9 @@ namespace ESW_Shelter.Controllers
         // GET: Roles/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (!GetAutorization(4))
+            if (!GetAuthorization(2, 'r'))
             {
-                return ErrorNotFoundOrSomeOtherError();
+                return NotFound();
             }
             if (id == null)
             {
@@ -45,17 +45,19 @@ namespace ESW_Shelter.Controllers
             {
                 return NotFound();
             }
-
+            ViewBag.Components = _context.Components.AsParallel();
+            ViewBag.Authorizations = _context.RoleAuthorization.Where(e => e.RoleFK == roles.RoleID).ToList();
             return View(roles);
         }
 
         // GET: Roles/Create
         public IActionResult Create()
         {
-            if (!GetAutorization(4))
+            if (!GetAuthorization(2, 'c'))
             {
-                return ErrorNotFoundOrSomeOtherError();
+                return NotFound();
             }
+            ViewBag.Components = _context.Components.AsParallel();
             return View();
         }
 
@@ -66,13 +68,57 @@ namespace ESW_Shelter.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("RoleID,RoleName")] Roles roles)
         {
-            if (!GetAutorization(4))
+            if (!GetAuthorization(2, 'c'))
             {
-                return ErrorNotFoundOrSomeOtherError();
+                return NotFound();
             }
             if (ModelState.IsValid)
             {
                 _context.Add(roles);
+                _context.SaveChanges();
+                var componenets = _context.Components.ToList();
+                foreach (var comp in componenets)
+                {
+                    string selectedOptions = Request.Form[comp.Name].ToString();
+                    string[] selectedOptionsList = selectedOptions.Split(',');
+
+                    if(selectedOptionsList[0] != "")
+                    {
+                        RoleAuthorization rAutho = new RoleAuthorization
+                        {
+                            ComponentFK = comp.ComponentID,
+                            RoleFK = roles.RoleID,
+                            Create = false,
+                            Read = false,
+                            Update = false,
+                            Delete = false
+                        };
+
+                        foreach (var val in selectedOptionsList)
+                        {
+                            int id = Int32.Parse(val);
+                            switch (id)
+                            {
+                                case 1:
+                                    rAutho.Create = true;
+                                    break;
+                                case 2:
+                                    rAutho.Read = true;
+                                    break;
+                                case 3:
+                                    rAutho.Update = true;
+                                    break;
+                                case 4:
+                                    rAutho.Delete = true;
+                                    break;
+                                default:
+                                    break;
+                            }
+                        }
+                        _context.Add(rAutho);
+                        _context.SaveChanges();
+                    }
+                }
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
@@ -82,9 +128,9 @@ namespace ESW_Shelter.Controllers
         // GET: Roles/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (!GetAutorization(4))
+            if (!GetAuthorization(2, 'u'))
             {
-                return ErrorNotFoundOrSomeOtherError();
+                return NotFound();
             }
             if (id == null)
             {
@@ -96,6 +142,8 @@ namespace ESW_Shelter.Controllers
             {
                 return NotFound();
             }
+            ViewBag.Components = _context.Components.AsParallel();
+            ViewBag.Authorizations = _context.RoleAuthorization.Where(e=> e.RoleFK == roles.RoleID).ToList();
             return View(roles);
         }
 
@@ -106,9 +154,9 @@ namespace ESW_Shelter.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("RoleID,RoleName")] Roles roles)
         {
-            if (!GetAutorization(4))
+            if (!GetAuthorization(2, 'u'))
             {
-                return ErrorNotFoundOrSomeOtherError();
+                return NotFound();
             }
             if (id != roles.RoleID)
             {
@@ -120,6 +168,50 @@ namespace ESW_Shelter.Controllers
                 try
                 {
                     _context.Update(roles);
+                    var componenets = _context.Components.ToList();
+                    foreach (var comp in componenets)
+                    {
+                        string selectedOptions = Request.Form[comp.Name].ToString();
+                        string[] selectedOptionsList = selectedOptions.Split(',');
+
+                        RoleAuthorization rAutho = new RoleAuthorization
+                        {
+                            ComponentFK = comp.ComponentID,
+                            RoleFK = roles.RoleID,
+                            Create = false,
+                            Read = false,
+                            Update = false,
+                            Delete = false
+                        };
+
+                        if (selectedOptionsList[0] != "")
+                        {
+
+                            foreach (var val in selectedOptionsList)
+                            {
+                                int crudId = Int32.Parse(val);
+                                switch (crudId)
+                                {
+                                    case 1:
+                                        rAutho.Create = true;
+                                        break;
+                                    case 2:
+                                        rAutho.Read = true;
+                                        break;
+                                    case 3:
+                                        rAutho.Update = true;
+                                        break;
+                                    case 4:
+                                        rAutho.Delete = true;
+                                        break;
+                                    default:
+                                        break;
+                                }
+                            }
+                        }
+                        _context.Update(rAutho);
+                        _context.SaveChanges();
+                    }
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
@@ -141,9 +233,9 @@ namespace ESW_Shelter.Controllers
         // GET: Roles/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (!GetAutorization(4))
+            if (!GetAuthorization(2, 'd'))
             {
-                return ErrorNotFoundOrSomeOtherError();
+                return NotFound();
             }
             if (id == null)
             {
@@ -165,9 +257,9 @@ namespace ESW_Shelter.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            if (!GetAutorization(4))
+            if (!GetAuthorization(2, 'd'))
             {
-                return ErrorNotFoundOrSomeOtherError();
+                return NotFound();
             }
             var roles = await _context.Roles.FindAsync(id);
             _context.Roles.Remove(roles);

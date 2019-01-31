@@ -449,6 +449,7 @@ namespace ESW_Shelter.Controllers
             removeGodFathers(id);
             _context.Animal.Remove(animal);
             await _context.SaveChangesAsync();
+            System.IO.Directory.Delete(hostingEnvironment.WebRootPath + "/images/Galeria_" + id);
             TempData["Message"] = "Animal eliminado com sucesso!";
             return RedirectToAction(nameof(Index));
         }

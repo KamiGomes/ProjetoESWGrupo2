@@ -379,17 +379,10 @@ namespace ESW_Shelter.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Login([Bind("Email,Password")] Users users)
         {
-            System.Diagnostics.Debug.WriteLine("*************************");
-            System.Diagnostics.Debug.WriteLine(users.Email);
-            System.Diagnostics.Debug.WriteLine(users.Password);
-            System.Diagnostics.Debug.WriteLine("*************************");
             try
             {
                 if (users.Email.Equals(""))
                 {
-                    System.Diagnostics.Debug.WriteLine("*************************");
-                    System.Diagnostics.Debug.WriteLine("Vazio");
-                    System.Diagnostics.Debug.WriteLine("*************************");
                     TempData["Message"] = "Email or Password incorreto!";
                     ModelState.AddModelError("Email", "Email or Password incorreto!");
                     return View("~/Views/Home/Index.cshtml");
@@ -406,9 +399,6 @@ namespace ESW_Shelter.Controllers
 
                     if (user.Password != users.Password)
                     {
-                        System.Diagnostics.Debug.WriteLine("*************************");
-                        System.Diagnostics.Debug.WriteLine("PasswordErrada");
-                        System.Diagnostics.Debug.WriteLine("*************************");
                         TempData["Message"] = "Password Errada!";
                         ModelState.AddModelError("Email", "Email or Password incorreto!");
                         return View("~/Views/Home/Index.cshtml");
@@ -419,17 +409,11 @@ namespace ESW_Shelter.Controllers
 
                     return RedirectToAction("Index", "Home", null);
                 }
-                System.Diagnostics.Debug.WriteLine("*************************");
-                System.Diagnostics.Debug.WriteLine("Nnehum User");
-                System.Diagnostics.Debug.WriteLine("*************************");
                 TempData["Message"] = "Email or Password incorreto!";
                 ModelState.AddModelError("Email", "Email or Password incorreto!");
                 return View("~/Views/Home/Index.cshtml");
             } catch (Exception ex)
             {
-                System.Diagnostics.Debug.WriteLine("*************************");
-                System.Diagnostics.Debug.WriteLine("Exception");
-                System.Diagnostics.Debug.WriteLine("*************************");
                 TempData["Message"] = "Email or Password incorreto!";
                 ModelState.AddModelError("Email", "Email or Password incorreto!");
                 return View("~/Views/Home/Index.cshtml");
@@ -526,6 +510,9 @@ namespace ESW_Shelter.Controllers
 
             string date31string = user.DateOfBirth.ToString("yyyy/MM/dd");
             user.DateOfBirth = DateTime.ParseExact(date31string, "yyyy/MM/dd", null);
+            /*StripeLib stripeLib = new StripeLib();
+            var plans = stripeLib.GetPlans().Where(e=> e. == user.CustomerId);
+            ViewData["plans"] = plans;*/
             return View(user);
         }
 
@@ -769,11 +756,16 @@ namespace ESW_Shelter.Controllers
                 HttpContext.Session.SetString("User_Name", name);
                 HttpContext.Session.SetString("UserID", id);
                 int idint = Int32.Parse(id);
-                var role = (from user in _context.Users where user.UserID == idint select user.RoleID).First();
-                if (role == 4 || role == 3)
+                int role = _context.Users.Find(idint).RoleID;
+                RoleAuthorization existAcess = _context.RoleAuthorization.Where(e=> e.RoleFK == role).FirstOrDefault();
+                if (existAcess != null)
                 {
                     HttpContext.Session.SetString("Ad", "Ad");
+                } else
+                {
+                    int x = -1;
                 }
+
             }
         }
 
