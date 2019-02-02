@@ -22,9 +22,9 @@ namespace ESW_Shelter.Controllers
         // GET: Products
         public async Task<IActionResult> Index(string searchString, string animalType, string productType)
         {
-            if (!GetAutorization(4))
+            if (!GetAuthorization(4, 'r'))
             {
-                return ErrorNotFoundOrSomeOtherError();
+                return NotFound();
             }
             var query = from product in _context.Products
                         join productsType in _context.ProductTypes on product.ProductTypeFK equals productsType.ProductTypeID
@@ -86,9 +86,9 @@ namespace ESW_Shelter.Controllers
         // GET: Products/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (!GetAutorization(4))
+            if (!GetAuthorization(4, 'r'))
             {
-                return ErrorNotFoundOrSomeOtherError();
+                return NotFound();
             }
             if (id == null)
             {
@@ -108,9 +108,9 @@ namespace ESW_Shelter.Controllers
         // GET: Products/Create
         public IActionResult Create()
         {
-            if (!GetAutorization(4))
+            if (!GetAuthorization(4, 'c'))
             {
-                return ErrorNotFoundOrSomeOtherError();
+                return NotFound();
             }
             ViewBag.AnimalsTypes = _context.AnimalTypes.AsParallel();
             ViewBag.ProductType = _context.ProductTypes.AsParallel();
@@ -124,11 +124,11 @@ namespace ESW_Shelter.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("ProductID,Name,Quantity,AnimalTypeFK,ProductTypeFK")] Product product)
         {
-            if (!GetAutorization(4))
+            if (!GetAuthorization(4, 'c'))
             {
-                return ErrorNotFoundOrSomeOtherError();
+                return NotFound();
             }
-            if(!checkValues(product))
+            if (!checkValues(product))
             {
                 return RedirectToAction(nameof(Create));
             }
@@ -147,9 +147,9 @@ namespace ESW_Shelter.Controllers
         // GET: Products/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (!GetAutorization(4))
+            if (!GetAuthorization(4, 'u'))
             {
-                return ErrorNotFoundOrSomeOtherError();
+                return NotFound();
             }
             ViewBag.AnimalsTypes = _context.AnimalTypes.AsParallel();
             ViewBag.ProductType = _context.ProductTypes.AsParallel();
@@ -174,9 +174,9 @@ namespace ESW_Shelter.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("ProductID,Name,Quantity,AnimalTypeFK,ProductTypeFK")] Product product)
         {
-            if (!GetAutorization(4))
+            if (!GetAuthorization(4, 'u'))
             {
-                return ErrorNotFoundOrSomeOtherError();
+                return NotFound();
             }
             if (!checkValues(product))
             {
@@ -214,9 +214,9 @@ namespace ESW_Shelter.Controllers
         // GET: Products/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (!GetAutorization(4))
+            if (!GetAuthorization(4, 'd'))
             {
-                return ErrorNotFoundOrSomeOtherError();
+                return NotFound();
             }
             if (id == null)
             {
@@ -260,9 +260,9 @@ namespace ESW_Shelter.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            if (!GetAutorization(4))
+            if (!GetAuthorization(4, 'd'))
             {
-                return ErrorNotFoundOrSomeOtherError();
+                return NotFound();
             }
             var product = await _context.Products.FindAsync(id);
             _context.Products.Remove(product);

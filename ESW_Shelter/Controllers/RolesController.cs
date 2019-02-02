@@ -82,17 +82,18 @@ namespace ESW_Shelter.Controllers
                     string selectedOptions = Request.Form[comp.Name].ToString();
                     string[] selectedOptionsList = selectedOptions.Split(',');
 
-                    if(selectedOptionsList[0] != "")
+                    RoleAuthorization rAutho = new RoleAuthorization
                     {
-                        RoleAuthorization rAutho = new RoleAuthorization
-                        {
-                            ComponentFK = comp.ComponentID,
-                            RoleFK = roles.RoleID,
-                            Create = false,
-                            Read = false,
-                            Update = false,
-                            Delete = false
-                        };
+                        ComponentFK = comp.ComponentID,
+                        RoleFK = roles.RoleID,
+                        Create = false,
+                        Read = false,
+                        Update = false,
+                        Delete = false
+                    };
+
+                    if (selectedOptionsList[0] != "")
+                    {
 
                         foreach (var val in selectedOptionsList)
                         {
@@ -115,13 +116,14 @@ namespace ESW_Shelter.Controllers
                                     break;
                             }
                         }
-                        _context.Add(rAutho);
-                        _context.SaveChanges();
                     }
+                    _context.Add(rAutho);
+                    _context.SaveChanges();
                 }
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+            ViewBag.Components = _context.Components.AsParallel();
             return View(roles);
         }
 
@@ -156,10 +158,19 @@ namespace ESW_Shelter.Controllers
         {
             if (!GetAuthorization(2, 'u'))
             {
+                System.Diagnostics.Debug.WriteLine("*************************");
+                System.Diagnostics.Debug.WriteLine("Nao tenho autorização");
+                System.Diagnostics.Debug.WriteLine("*************************");
                 return NotFound();
             }
             if (id != roles.RoleID)
             {
+
+                System.Diagnostics.Debug.WriteLine("*************************");
+                System.Diagnostics.Debug.WriteLine("Id diferente");
+                System.Diagnostics.Debug.WriteLine(id);
+                System.Diagnostics.Debug.WriteLine(roles.RoleID);
+                System.Diagnostics.Debug.WriteLine("*************************");
                 return NotFound();
             }
 
@@ -169,6 +180,14 @@ namespace ESW_Shelter.Controllers
                 {
                     _context.Update(roles);
                     var componenets = _context.Components.ToList();
+                    var roleRules = _context.RoleAuthorization.Where(e => e.RoleFK == id);
+
+                    foreach (RoleAuthorization roleAutho in roleRules.ToList())
+                    {
+                        _context.Remove(roleAutho);
+                        _context.SaveChanges();
+                    }
+
                     foreach (var comp in componenets)
                     {
                         string selectedOptions = Request.Form[comp.Name].ToString();
@@ -209,7 +228,7 @@ namespace ESW_Shelter.Controllers
                                 }
                             }
                         }
-                        _context.Update(rAutho);
+                        _context.Add(rAutho);
                         _context.SaveChanges();
                     }
                     await _context.SaveChangesAsync();
@@ -218,6 +237,9 @@ namespace ESW_Shelter.Controllers
                 {
                     if (!RolesExists(roles.RoleID))
                     {
+                        System.Diagnostics.Debug.WriteLine("*************************");
+                        System.Diagnostics.Debug.WriteLine("Caught Exception");
+                        System.Diagnostics.Debug.WriteLine("*************************");
                         return NotFound();
                     }
                     else

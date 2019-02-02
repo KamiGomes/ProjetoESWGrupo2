@@ -25,9 +25,9 @@ namespace ESW_Shelter.Controllers
         // GET: Donations
         public async Task<IActionResult> Index(string searchString, string animalType, string productType, string clientString, DateTime dateString)
         {
-            if (!GetAutorization(4))
+            if (!GetAuthorization(5, 'r'))
             {
-                return ErrorNotFoundOrSomeOtherError();
+                return NotFound();
             }
             var donationUserQuery = from donation in _context.Donation
                         join user in _context.Users on donation.UsersFK equals user.UserID
@@ -117,9 +117,9 @@ namespace ESW_Shelter.Controllers
         // GET: Donations/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (!GetAutorization(4))
+            if (!GetAuthorization(5, 'r'))
             {
-                return ErrorNotFoundOrSomeOtherError();
+                return NotFound();
             }
             if (id == null)
             {
@@ -139,9 +139,9 @@ namespace ESW_Shelter.Controllers
         // GET: Donations/Create
         public IActionResult Create(string searchString, string animalType, string productType)
         {
-            if (!GetAutorization(4))
+            if (!GetAuthorization(5, 'c'))
             {
-                return ErrorNotFoundOrSomeOtherError();
+                return NotFound();
             }
             List<Product> selectedProducts = new List<Product>();
             if (ViewBag.selectedProducts != null)
@@ -246,9 +246,9 @@ namespace ESW_Shelter.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("DonationID,DateOfDonation,UsersFK")] DonationIndexViewModel donationIVM)
         {
-            if (!GetAutorization(4))
+            if (!GetAuthorization(5, 'c'))
             {
-                return ErrorNotFoundOrSomeOtherError();
+                return NotFound();
             }
 
             if (!checkValues(donationIVM))
@@ -304,10 +304,11 @@ namespace ESW_Shelter.Controllers
         // GET: Donations/Edit/5
         public async Task<IActionResult> Edit(int? id, string searchString, string animalType, string productType)
         {
-            if (!GetAutorization(4))
+            if (!GetAuthorization(5, 'u'))
             {
-                return ErrorNotFoundOrSomeOtherError();
+                return NotFound();
             }
+
             if (id == null)
             {
                 return NotFound();
@@ -400,9 +401,9 @@ namespace ESW_Shelter.Controllers
             {
                 return NotFound();
             }*/
-            if (!GetAutorization(4))
+            if (!GetAuthorization(5, 'u'))
             {
-                return ErrorNotFoundOrSomeOtherError();
+                return NotFound();
             }
 
             if (!checkValues(donationIVM))
@@ -516,9 +517,9 @@ namespace ESW_Shelter.Controllers
         // GET: Donations/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (!GetAutorization(4))
+            if (!GetAuthorization(5, 'd'))
             {
-                return ErrorNotFoundOrSomeOtherError();
+                return NotFound();
             }
             if (id == null)
             {
@@ -540,9 +541,9 @@ namespace ESW_Shelter.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            if (!GetAutorization(4))
+            if (!GetAuthorization(5, 'd'))
             {
-                return ErrorNotFoundOrSomeOtherError();
+                return NotFound();
             }
             var donation = await _context.Donation.FindAsync(id);
             var query = from donationProduct in _context.DonationProduct

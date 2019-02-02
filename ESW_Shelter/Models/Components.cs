@@ -17,5 +17,10 @@ namespace ESW_Shelter.Models
         [Required(ErrorMessage = "Nome em falta!")]
         [Display(Prompt = "Examplo: Users", Name = "Nome do Componente")]
         public String Name { get; set; }
+
+        [StringLength(256, ErrorMessage = "Nome não pode ter mais que 256 caracteres!", MinimumLength = 1)]
+        [Required(ErrorMessage = "Nome em falta!")]
+        [Display(Prompt = "Examplo: Users", Name = "Nome do Componente")]
+        public String NameFront { get; set; }
     }
 }

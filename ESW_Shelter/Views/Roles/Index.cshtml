@@ -27,9 +27,15 @@
                 @Html.DisplayFor(modelItem => item.RoleName)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.RoleID">Editar</a> |
-                <a asp-action="Details" asp-route-id="@item.RoleID">Detalhes</a> |
-                <a asp-action="Delete" asp-route-id="@item.RoleID">Eliminar</a>
+                @if (item.RoleID != 1 && item.RoleID != 2)
+                {
+                    <a asp-action="Edit" asp-route-id="@item.RoleID">Editar |</a>
+                    <a asp-action="Details" asp-route-id="@item.RoleID">Detalhes |</a>
+                    <a asp-action="Delete" asp-route-id="@item.RoleID">Eliminar</a>
+                } else
+                {
+                    <p>Não pode alterar permissões de raiz</p>
+                }
             </td>
         </tr>
 }

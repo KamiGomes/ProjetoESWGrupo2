@@ -1,4 +1,5 @@
 ﻿
+using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -31,5 +32,6 @@ namespace ESW_Shelter.Models
 
         [Display(Name = "Pode eliminar dados?")]
         public bool Delete { get; set; }
+
     }
 }

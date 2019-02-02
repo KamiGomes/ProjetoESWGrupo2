@@ -2,6 +2,8 @@
 using Microsoft.AspNetCore.Mvc;
 using ESW_Shelter.Models;
 using Microsoft.AspNetCore.Http;
+using System;
+using System.Collections.Generic;
 
 namespace ESW_Shelter.Controllers
 {
@@ -59,5 +61,6 @@ namespace ESW_Shelter.Controllers
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
+
     }
 }

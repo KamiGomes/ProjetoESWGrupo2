@@ -136,9 +136,9 @@ namespace ESW_Shelter.Controllers
 
         public async Task<IActionResult> Index(string searchString, string roleType)
         {
-            if (!GetAutorization(4))
+            if (!GetAuthorization(1, 'r'))
             {
-                return RedirectToAction("ErrorNotFoundOrSomeOtherError");
+                return NotFound();
             }
             var query = from usersJ in _context.Users
                         join rolesJ in _context.Roles on usersJ.UserID equals rolesJ.RoleID
@@ -210,13 +210,13 @@ namespace ESW_Shelter.Controllers
         /// </returns>
         public async Task<IActionResult> Details(int? id)
         {
-            if (!GetAutorization(4))
+            if (!GetAuthorization(1, 'r'))
             {
-                return RedirectToAction("ErrorNotFoundOrSomeOtherError");
+                return NotFound();
             }
             if (id == null)
             {
-                return RedirectToAction("ErrorNotFoundOrSomeOtherError");
+                return NotFound();
             }
             return View();
         }
@@ -231,9 +231,9 @@ namespace ESW_Shelter.Controllers
         /// <returns>View();</returns>
         public IActionResult Create()
         {
-            if (!GetAutorization(4))
+            if (!GetAuthorization(1, 'c'))
             {
-                return RedirectToAction("ErrorNotFoundOrSomeOtherError");
+                return NotFound();
             }
             ViewBag.RoleTypes = _context.Roles.AsParallel();
             return View();
@@ -246,9 +246,9 @@ namespace ESW_Shelter.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("UserID,Email,Name,Password,ConfirmedEmail,Street,PostalCode,City,Phone,DateOfBirth,RoleID")] Users users)
         {
-            if (!GetAutorization(4))
+            if (!GetAuthorization(1, 'c'))
             {
-                return RedirectToAction("ErrorNotFoundOrSomeOtherError");
+                return NotFound();
             }
             try
             {
@@ -328,6 +328,7 @@ namespace ESW_Shelter.Controllers
                     var sha256data = sha256.ComputeHash(data);
                     users.Password = sha256data;*/
                     /** End of Password encrypting **/
+                    users.RoleID = 2;
                     _context.Add(users);
 
                     await _context.SaveChangesAsync();
@@ -437,13 +438,13 @@ namespace ESW_Shelter.Controllers
         {
             if (id == null)
             {
-                return RedirectToAction("ErrorNotFoundOrSomeOtherError");
+                return NotFound();
             }
 
             Users users = await _context.Users.FindAsync(id);
             if (users == null)
             {
-                return RedirectToAction("ErrorNotFoundOrSomeOtherError");
+                return NotFound();
             }
             users.ConfirmedEmail = true;
             _context.Update(users);
@@ -478,10 +479,10 @@ namespace ESW_Shelter.Controllers
                 }
                 else
                 {
-                    return RedirectToAction("ErrorNotFoundOrSomeOtherError");
+                    return NotFound();
                 }
             }
-            return RedirectToAction("ErrorNotFoundOrSomeOtherError");
+            return NotFound();
         }
 
         /// <summary>
@@ -500,12 +501,12 @@ namespace ESW_Shelter.Controllers
         {
             if (id == null || HttpContext.Session.GetString("User_Name").Equals("") || HttpContext.Session.GetString("UserID").Equals(""))
             {
-                return RedirectToAction("ErrorNotFoundOrSomeOtherError");
+                return NotFound();
             }
             var user = await _context.Users.FindAsync(id);
             if (user == null)
             {
-                return RedirectToAction("ErrorNotFoundOrSomeOtherError");
+                return NotFound();
             }
 
             string date31string = user.DateOfBirth.ToString("yyyy/MM/dd");
@@ -531,13 +532,13 @@ namespace ESW_Shelter.Controllers
         /// </returns>
         public async Task<IActionResult> Edit(int? id)
         {
-            if (!GetAutorization(4))
+            if (!GetAuthorization(1, 'u'))
             {
-                return RedirectToAction("ErrorNotFoundOrSomeOtherError");
+                return NotFound();
             }
             if (id == null)
             {
-                return RedirectToAction("ErrorNotFoundOrSomeOtherError");
+                return NotFound();
             }
             return View("Edit");
 
@@ -557,7 +558,7 @@ namespace ESW_Shelter.Controllers
             {
                 if (id != users.UserID)
                 {
-                    return RedirectToAction("ErrorNotFoundOrSomeOtherError");
+                    return NotFound();
                 }
                 if (ModelState.IsValid)
                 {
@@ -628,13 +629,13 @@ namespace ESW_Shelter.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("UserID, Email, Password, Name, ConfirmedEmail, RoleID, UserInfoID, Street, PostalCode, City, Phone, AlternativePhone, AlternativeEmail, Facebook, Twitter, Instagram, Tumblr, Website")] Users profile)
         {
-            if (!GetAutorization(4))
+            if (!GetAuthorization(1, 'u'))
             {
-                return RedirectToAction("ErrorNotFoundOrSomeOtherError");
+                return NotFound();
             }
             if (id != profile.UserID)
             {
-                return RedirectToAction("ErrorNotFoundOrSomeOtherError");
+                return NotFound();
             }
             if (ModelState.IsValid)
             {
@@ -655,7 +656,7 @@ namespace ESW_Shelter.Controllers
                 {
                     if (!UsersExists(profile.UserID))
                     {
-                        return RedirectToAction("ErrorNotFoundOrSomeOtherError");
+                        return NotFound();
                     }
                     else
                     {
@@ -682,20 +683,20 @@ namespace ESW_Shelter.Controllers
         /// </returns>
         public async Task<IActionResult> Delete(int? id)
         {
-            if (!GetAutorization(4))
+            if (!GetAuthorization(1, 'd'))
             {
-                return RedirectToAction("ErrorNotFoundOrSomeOtherError");
+                return NotFound();
             }
             if (id == null)
             {
-                return RedirectToAction("ErrorNotFoundOrSomeOtherError");
+                return NotFound();
             }
 
             var users = await _context.Users
                 .FirstOrDefaultAsync(m => m.UserID == id);
             if (users == null)
             {
-                return RedirectToAction("ErrorNotFoundOrSomeOtherError");
+                return NotFound();
             }
             return View(users);
         }
@@ -712,9 +713,9 @@ namespace ESW_Shelter.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            if (!GetAutorization(4))
+            if (!GetAuthorization(1, 'd'))
             {
-                return RedirectToAction("ErrorNotFoundOrSomeOtherError");
+                return NotFound();
             }
             var users = await _context.Users.FindAsync(id);
             _context.Users.Remove(users);

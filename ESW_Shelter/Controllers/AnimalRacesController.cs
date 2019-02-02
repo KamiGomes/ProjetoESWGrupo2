@@ -18,11 +18,11 @@ namespace ESW_Shelter.Controllers
         // GET: AnimalRaces
         public async Task<IActionResult> Index()
         {
-            if(GetAuthorization(7, 'r'))
+            if(!GetAuthorization(7, 'r'))
             {
-                return View(await _context.AnimalRace.ToListAsync());
+                return NotFound();
             }
-            return NotFound();
+            return View(await _context.AnimalRace.ToListAsync());
         }
 
         // GET: AnimalRaces/Details/5
