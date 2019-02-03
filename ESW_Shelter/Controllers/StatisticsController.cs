@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using ESW_Shelter.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace ESW_Shelter.Controllers
 {
@@ -36,12 +37,148 @@ namespace ESW_Shelter.Controllers
                         DimensionOne = "Animais adoptados",
                         Quantity = owned
                     });
-
+                    ViewBag.labelToUse = "Animais Adoptados e por Adoptar";
+                    break;
+                case 1:
+                    (int animalGodfathers, int allAnimals) = getAnimalNoGodFathers();
+                    lstModel.Add(new SimpleReportViewModel
+                    {
+                        DimensionOne = "Animais com Padrinhos",
+                        Quantity = animalGodfathers
+                    });
+                    lstModel.Add(new SimpleReportViewModel
+                    {
+                        DimensionOne = "Animais sem Padrinhos",
+                        Quantity = allAnimals
+                    });
+                    ViewBag.labelToUse = "Animais Com e Sem padrinhos";
+                    break;
+                case 2:
+                    (int animalProducts, int allAnimalsProducts) = getAnimalNoGodFathers();
+                    lstModel.Add(new SimpleReportViewModel
+                    {
+                        DimensionOne = "Animais com necessidades especiais",
+                        Quantity = animalProducts
+                    });
+                    lstModel.Add(new SimpleReportViewModel
+                    {
+                        DimensionOne = "Animais sem necessidades especiais",
+                        Quantity = allAnimalsProducts
+                    });
+                    ViewBag.labelToUse = "Animais Com e Sem Necessidades Especiais";
+                    break;
+                case 3:
+                    List<LoginStatistic> allLogins = _context.LoginStatistic.AsParallel().Where(e=> e.DateStatistic.Month == DateTime.Today.Month 
+                                                                                                    && e.DateStatistic.Year == DateTime.Today.Year).ToList();
+                    foreach(LoginStatistic log in allLogins)
+                    {
+                        lstModel.Add(new SimpleReportViewModel {
+                            DimensionOne = log.DateStatistic.ToString(),
+                            Quantity = log.Count
+                        });
+                    }
+                    ViewBag.labelToUse = "Logins efetuados por dia [Mês corrente]";
+                    break;
+                case 5:
+                    List<Donation> montlyDonation = _context.Donation.Where(e=> e.DateOfDonation.Month == DateTime.Today.Month && e.DateOfDonation.Year == DateTime.Today.Year).Distinct().ToList();
+                    List<SelectListItem> toStatisticsYouGo = new List<SelectListItem> ();
+                    foreach (Donation don in montlyDonation)
+                    {
+                        int total = _context.Donation.Where(e => e.DateOfDonation == don.DateOfDonation).Count();
+                        lstModel.Add(new SimpleReportViewModel
+                        {
+                            DimensionOne = don.DateOfDonation.ToString(),
+                            Quantity = total
+                        });
+                    }
+                    ViewBag.labelToUse = "Doações efetuados por dia [Mês corrente]";
+                    break;
+                case 7:
+                    List<RegisterStatistics> registerStatistics = _context.RegisterStatistics.AsParallel().Where(e => e.DateStatistic.Month == DateTime.Today.Month
+                                                                                                    && e.DateStatistic.Year == DateTime.Today.Year).ToList();
+                    foreach (RegisterStatistics regis in registerStatistics)
+                    {
+                        lstModel.Add(new SimpleReportViewModel
+                        {
+                            DimensionOne = regis.DateStatistic.ToString(),
+                            Quantity = regis.Count
+                        });
+                    }
+                    ViewBag.labelToUse = "Registos efetuados por dia [Mês corrente]";
+                    break;
+                case 8:
+                    List<Product> productsStockWeek = _context.Products.AsParallel().ToList();
+                    foreach (Product prod in productsStockWeek)
+                    {
+                        lstModel.Add(new SimpleReportViewModel
+                        {
+                            DimensionOne = prod.Name+"- Stock Semanal: "+ prod.WeekStock+", Stock Mensal: "+prod.MonthStock,
+                            Quantity = prod.Quantity
+                        });
+                    }
+                    ViewBag.labelToUse = "Quantidade do Stock de Produtos Existentes [Para semana e Mês] ";
+                    break;
+                default:
+                    graf = 0;
+                    break;
+            }
+            switch (graf)
+            {
+                case 0:
+                    ViewBag.typeOfChart = "bar";
+                    break;
+                case 1:
+                    ViewBag.typeOfChart = "pie";
+                    break;
+                case 2:
+                    ViewBag.typeOfChart = "line";
                     break;
                 default:
                     break;
             }
+            return View(lstModel);
+        }
 
+        public ActionResult IndexStacked(int statistic)
+        {
+            var lstModel = new List<StackedViewModel>();
+            switch (statistic)
+            {
+                case 0:
+                    var total = from donP in _context.DonationProduct
+                                join don in _context.Donation on donP.DonationFK equals don.DonationID
+                                group donP by new { donP.ProductFK, don.DateOfDonation } into gGroup
+                                select new
+                                {
+                                    Total = gGroup.Sum(e=> e.Quantity),
+                                    Product = gGroup.Key.ProductFK,
+                                    Date = gGroup.Key.DateOfDonation
+                                };
+
+                    var listed = total.ToList();
+
+                    List<Donation> allDonationsOfMonth = _context.Donation.Where(e => e.DateOfDonation.Month == DateTime.Today.Month && e.DateOfDonation.Year == DateTime.Today.Year).Distinct().ToList();
+                    foreach(Donation don in allDonationsOfMonth)
+                    {
+
+                        var ofDate = total.Where(e=> e.Date == don.DateOfDonation);
+
+                        List<SimpleReportViewModel> allProductsInDate = ofDate.ToList().Select(e => new SimpleReportViewModel()
+                        {
+                            DimensionOne = _context.Products.Where(p => p.ProductID == e.Product).First().Name,
+                            Quantity = e.Total
+                        }).ToList();
+
+                        lstModel.Add(new StackedViewModel()
+                        {
+                            StackedDimensionOne = don.DateOfDonation.ToString(),
+                            LstData = allProductsInDate
+                        });
+                    }
+                    break;
+                default:
+                    break;
+            }
             return View(lstModel);
         }
 
@@ -52,119 +189,21 @@ namespace ESW_Shelter.Controllers
             return (owned, noOwner);
         }
 
-        public IActionResult Bar()
+        private (int,int) getAnimalNoGodFathers()
         {
-            Random rnd = new Random();
-            //list of department  
-            var lstModel = new List<SimpleReportViewModel>();
-            lstModel.Add(new SimpleReportViewModel
-            {
-                DimensionOne = "Technology",
-                Quantity = rnd.Next(10)
-            });
-            lstModel.Add(new SimpleReportViewModel
-            {
-                DimensionOne = "Sales",
-                Quantity = rnd.Next(10)
-            });
-            lstModel.Add(new SimpleReportViewModel
-            {
-                DimensionOne = "Marketing",
-                Quantity = rnd.Next(10)
-            });
-            lstModel.Add(new SimpleReportViewModel
-            {
-                DimensionOne = "Human Resource",
-                Quantity = rnd.Next(10)
-            });
-            lstModel.Add(new SimpleReportViewModel
-            {
-                DimensionOne = "Research and Development",
-                Quantity = rnd.Next(10)
-            });
-            lstModel.Add(new SimpleReportViewModel
-            {
-                DimensionOne = "Acconting",
-                Quantity = rnd.Next(10)
-            });
-            lstModel.Add(new SimpleReportViewModel
-            {
-                DimensionOne = "Support",
-                Quantity = rnd.Next(10)
-            });
-            lstModel.Add(new SimpleReportViewModel
-            {
-                DimensionOne = "Logistics",
-                Quantity = rnd.Next(10)
-            });
-            return View(lstModel);
+            int animalGodfathers = _context.AnimalUsers.Select(e => e.AnimalFK).Distinct().Count();
+            int allAnimals = _context.Animal.AsParallel().Count();
+            return (animalGodfathers, allAnimals-animalGodfathers < 0 ? 0 : allAnimals-animalGodfathers);
         }
 
-        public IActionResult Pie()
+        private (int,int) getAnimalWithProducts()
         {
-            Random rnd = new Random();
-            //list of drinks  
-            var lstModel = new List<SimpleReportViewModel>();
-            lstModel.Add(new SimpleReportViewModel
-            {
-                DimensionOne = "Beer",
-                Quantity = rnd.Next(10)
-            });
-            lstModel.Add(new SimpleReportViewModel
-            {
-                DimensionOne = "Wine",
-                Quantity = rnd.Next(10)
-            });
-            lstModel.Add(new SimpleReportViewModel
-            {
-                DimensionOne = "Whisky",
-                Quantity = rnd.Next(10)
-            });
-            lstModel.Add(new SimpleReportViewModel
-            {
-                DimensionOne = "Water",
-                Quantity = rnd.Next(10)
-            });
-            return View(lstModel);
+            int animalProducts = _context.AnimalProduct.Select(e => e.AnimalFK).Distinct().Count();
+            int allAnimals = _context.Animal.AsParallel().Count();
+            return (animalProducts, allAnimals - animalProducts < 0 ? 0 : allAnimals - animalProducts);
         }
 
-        public IActionResult Line()
-        {
-            Random rnd = new Random();
-            //list of countries  
-            var lstModel = new List<SimpleReportViewModel>();
-            lstModel.Add(new SimpleReportViewModel
-            {
-                DimensionOne = "Brazil",
-                Quantity = rnd.Next(10)
-            });
-            lstModel.Add(new SimpleReportViewModel
-            {
-                DimensionOne = "USA",
-                Quantity = rnd.Next(10)
-            });
-            lstModel.Add(new SimpleReportViewModel
-            {
-                DimensionOne = "Portugal",
-                Quantity = rnd.Next(10)
-            });
-            lstModel.Add(new SimpleReportViewModel
-            {
-                DimensionOne = "Russia",
-                Quantity = rnd.Next(10)
-            });
-            lstModel.Add(new SimpleReportViewModel
-            {
-                DimensionOne = "Ireland",
-                Quantity = rnd.Next(10)
-            });
-            lstModel.Add(new SimpleReportViewModel
-            {
-                DimensionOne = "Germany",
-                Quantity = rnd.Next(10)
-            });
-            return View(lstModel);
-        }
+       
 
         public IActionResult Stacked()
         {

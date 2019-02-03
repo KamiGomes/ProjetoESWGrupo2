@@ -20,6 +20,16 @@ namespace ESW_Shelter.Models
         [Display(Prompt = "Examplo: 10", Name = "Quantidade")]
         public int Quantity { get; set; }
 
+        [Required(ErrorMessage = "Stock semanal em falta!")]
+        [Range(0, int.MaxValue, ErrorMessage = "Por favor, insira só números inteiros!")]
+        [Display(Prompt = "Examplo: 10", Name = "Stock semanal necessário")]
+        public int WeekStock { get; set; }
+
+        [Required(ErrorMessage = "Stock mensal em falta!")]
+        [Range(0, int.MaxValue, ErrorMessage = "Por favor, insira só números inteiros!")]
+        [Display(Prompt = "Examplo: 10", Name = "Stock mensal necessário")]
+        public int MonthStock { get; set; }
+
         [ForeignKey("AnimalType")]
         [Required(ErrorMessage = "Escolha um animal para este alimento!")]
         [Display(Prompt = "Examplo: Cão", Name = "Para animal")]

@@ -408,6 +408,47 @@ namespace ESW_Shelter.Controllers
                     LoginSV(user.Name, user.UserID.ToString());
                     TempData["Message"] = "Login efetuado com sucesso!";
 
+                    string date31string = DateTime.Today.ToString("yyyy/MM/dd");
+                    DateTime today = DateTime.ParseExact(date31string, "yyyy/MM/dd", null);
+
+                    var checkDate = _context.LoginStatistic.Where(e => e.DateStatistic.Equals(today)).FirstOrDefault();
+                    if(checkDate != null)
+                    {
+                        LoginStatistic update = checkDate;
+                        update.Count += 1;
+                        _context.LoginStatistic.Update(update);
+                    } else
+                    {
+                        //TimeSpan difference = end - start;
+                        LoginStatistic newStatistic = new LoginStatistic
+                        {
+                            DateStatistic = today,
+                            Count = 1
+                        };
+                        var lastDate = _context.LoginStatistic.LastOrDefault();
+                        if(lastDate != null)
+                        {
+                            TimeSpan difference = today - lastDate.DateStatistic;
+                            if(difference.Days != 1)
+                            {
+                                int daysMissing = difference.Days;
+                                while(daysMissing != 1)
+                                {
+                                    LoginStatistic fillTable = new LoginStatistic
+                                    {
+                                        DateStatistic = DateTime.ParseExact(DateTime.Today.AddDays(-daysMissing).ToString("yyyy/MM/dd"), "yyyy/MM/dd", null),
+                                        Count = 0
+                                    };
+                                    _context.LoginStatistic.Add(fillTable);
+                                    _context.SaveChanges();
+                                    --daysMissing;
+                                }
+                            }
+                        }
+                        _context.LoginStatistic.Add(newStatistic);
+                    }
+                    _context.SaveChanges();
+
                     return RedirectToAction("Index", "Home", null);
                 }
                 TempData["Message"] = "Email or Password incorreto!";

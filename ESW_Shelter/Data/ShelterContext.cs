@@ -24,5 +24,7 @@ namespace ESW_Shelter.Models
         public DbSet<Images> Images { get; set; }
         public DbSet<Components> Components { get; set; }
         public DbSet<RoleAuthorization> RoleAuthorization { get; set; }
+        public DbSet<LoginStatistic> LoginStatistic { get; set; }
+        public DbSet<RegisterStatistics> RegisterStatistics { get; set; }
     }
 }

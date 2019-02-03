@@ -19,11 +19,6 @@ namespace ESW_Shelter.Controllers
             return View();
         }
 
-        public IActionResult AdministrationAcess()
-        {
-            return View();
-        }
-
         public IActionResult FrontEndLayout()
         {
             return View();

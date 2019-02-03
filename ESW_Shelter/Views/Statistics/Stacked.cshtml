@@ -20,53 +20,55 @@
     var label = @Html.Raw(label2);
     var aux = 0;
     var barChartData = {
-    labels: @Html.Raw(label2),
-    datasets: []
+        labels: @Html.Raw(label2),
+        datasets: []
     }
     XLabels.forEach(function(a, i) {
-    var data = [];
+        var data = [];
     YValues.forEach(function(a, i) {
-    data.push(a[aux]);
+        data.push(a[aux]);
     });
     barChartData.datasets.push({
-    label: XLabels[aux],
-    backgroundColor: random_rgba(),
-    data: data
-    });
-    aux++;
+        label: XLabels[aux],
+        backgroundColor: random_rgba(),
+        data: data
+        });
+
+        aux++;
     });
     var options = {
-    maintainAspectRatio: false,
-    scales: {
-    yAxes: [{
-    ticks: {
-    min: 0,
-    beginAtZero: true
-    },
-    stacked: true,
-    gridLines: {
-    display: true,
-    color: "rgba(255,99,164,0.2)"
-    }
-    }],
-    xAxes: [{
-    stacked: true,
-    gridLines: {
-    display: false
-    }
-    }]
-    }
+        maintainAspectRatio: false,
+        scales: {
+        yAxes: [{
+        ticks: {
+        min: 0,
+        beginAtZero: true
+        },
+        stacked: true,
+        gridLines: {
+        display: true,
+        color: "rgba(255,99,164,0.2)"
+        }
+        }],
+        xAxes: [{
+        stacked: true,
+        gridLines: {
+        display: false
+        }
+        }]
+        }
     };
 
     function random_rgba() {
-    var o = Math.round,
-    r = Math.random,
-    s = 255;
-    return 'rgba(' + o(r() * s) + ',' + o(r() * s) + ',' + o(r() * s) + ',' + r().toFixed(1) + ')';
+        var o = Math.round,
+        r = Math.random,
+        s = 255;
+        return 'rgba(' + o(r() * s) + ',' + o(r() * s) + ',' + o(r() * s) + ',' + r().toFixed(1) + ')';
     }
     var myChart = new Chart(ctx, {
-    options: options,
-    data: barChartData,
-    type: 'bar'
-    });
-    }); </script>  
+        options: options,
+        data: barChartData,
+        type: 'bar'
+        });
+    }); 
+</script>  

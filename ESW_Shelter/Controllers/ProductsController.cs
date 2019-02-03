@@ -34,6 +34,8 @@ namespace ESW_Shelter.Controllers
                             ProductID = product.ProductID,
                             Name = product.Name,
                             Quantity = product.Quantity,
+                            WeekStock = product.WeekStock,
+                            MonthStock = product.MonthStock,
                             AnimalTypeFK = product.AnimalTypeFK,
                             ProductTypeFK = product.ProductTypeFK,
                             ProductTypeName = productsType.Name,
@@ -60,6 +62,8 @@ namespace ESW_Shelter.Controllers
                 ProductID = e.ProductID,
                 Name = e.Name,
                 Quantity = e.Quantity,
+                WeekStock = e.WeekStock,
+                MonthStock = e.MonthStock,
                 ProductTypeName = e.ProductTypeName,
                 AnimaltypeName = e.AnimaltypeName
             }).ToList();
@@ -122,7 +126,7 @@ namespace ESW_Shelter.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ProductID,Name,Quantity,AnimalTypeFK,ProductTypeFK")] Product product)
+        public async Task<IActionResult> Create([Bind("ProductID,Name,Quantity,WeekStock,MonthStock,AnimalTypeFK,ProductTypeFK")] Product product)
         {
             if (!GetAuthorization(4, 'c'))
             {
@@ -172,7 +176,7 @@ namespace ESW_Shelter.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ProductID,Name,Quantity,AnimalTypeFK,ProductTypeFK")] Product product)
+        public async Task<IActionResult> Edit(int id, [Bind("ProductID,Name,Quantity,WeekStock,MonthStock,AnimalTypeFK,ProductTypeFK")] Product product)
         {
             if (!GetAuthorization(4, 'u'))
             {
