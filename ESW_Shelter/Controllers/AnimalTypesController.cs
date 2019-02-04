@@ -27,7 +27,7 @@ namespace ESW_Shelter.Controllers
             }
             return View(await _context.AnimalTypes.ToListAsync());
         }
-
+        
         // GET: AnimalTypes/Details/5
         public async Task<IActionResult> Details(int? id)
         {
@@ -70,6 +70,10 @@ namespace ESW_Shelter.Controllers
             if (!GetAuthorization(6, 'c'))
             {
                 return NotFound();
+            }
+            if (!checkValues(animalType))
+            {
+                return View(animalType);
             }
             if (ModelState.IsValid)
             {
@@ -118,7 +122,7 @@ namespace ESW_Shelter.Controllers
             }
             if (id != animalType.AnimalTypeID)
             {
-                return ErrorNotFoundOrSomeOtherError();
+                return NotFound();
             }
 
             if (ModelState.IsValid)
@@ -175,6 +179,13 @@ namespace ESW_Shelter.Controllers
             if (!GetAuthorization(6, 'd'))
             {
                 return NotFound();
+            }
+            var check = _context.Animal.Where(e => e.AnimalTypeFK == id);
+            var check2 = _context.Products.Where(e => e.AnimalTypeFK == id);
+            if (check.Any() || check2.Any())
+            {
+                TempData["Message"] = "Tipo de animal que pretende eliminar têm animais associados a ela! Por favor altere primeiro (Animais ou Produtos) e depois tente eliminar novamente!";
+                return RedirectToAction(nameof(Index));
             }
             var animalType = await _context.AnimalTypes.FindAsync(id);
             _context.AnimalTypes.Remove(animalType);

@@ -177,6 +177,12 @@ namespace ESW_Shelter.Controllers
             {
                 return NotFound();
             }
+            var check = _context.Products.Where(e => e.ProductTypeFK == id);
+            if (check.Any())
+            {
+                TempData["Message"] = "Tipo de produto que pretende eliminar têm animais associados a ela! Por favor altere primeiro os produtos associados e depois tente eliminar novamente!";
+                return RedirectToAction(nameof(Index));
+            }
             var productType = await _context.ProductTypes.FindAsync(id);
             _context.ProductTypes.Remove(productType);
             await _context.SaveChangesAsync();

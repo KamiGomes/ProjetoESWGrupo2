@@ -191,6 +191,21 @@ namespace ESW_Shelter.Data.Migrations
                     b.ToTable("Images");
                 });
 
+            modelBuilder.Entity("ESW_Shelter.Models.LoginStatistic", b =>
+                {
+                    b.Property<int>("LoginStatisticID")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("Count");
+
+                    b.Property<DateTime>("DateStatistic");
+
+                    b.HasKey("LoginStatisticID");
+
+                    b.ToTable("LoginStatistic");
+                });
+
             modelBuilder.Entity("ESW_Shelter.Models.Product", b =>
                 {
                     b.Property<int>("ProductID")
@@ -199,6 +214,8 @@ namespace ESW_Shelter.Data.Migrations
 
                     b.Property<int>("AnimalTypeFK");
 
+                    b.Property<int>("MonthStock");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(256);
@@ -206,6 +223,8 @@ namespace ESW_Shelter.Data.Migrations
                     b.Property<int>("ProductTypeFK");
 
                     b.Property<int>("Quantity");
+
+                    b.Property<int>("WeekStock");
 
                     b.HasKey("ProductID");
 
@@ -225,6 +244,21 @@ namespace ESW_Shelter.Data.Migrations
                     b.HasKey("ProductTypeID");
 
                     b.ToTable("ProductTypes");
+                });
+
+            modelBuilder.Entity("ESW_Shelter.Models.RegisterStatistics", b =>
+                {
+                    b.Property<int>("RegisterStatisticID")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("Count");
+
+                    b.Property<DateTime>("DateStatistic");
+
+                    b.HasKey("RegisterStatisticID");
+
+                    b.ToTable("RegisterStatistics");
                 });
 
             modelBuilder.Entity("ESW_Shelter.Models.RoleAuthorization", b =>

@@ -150,9 +150,6 @@ namespace ESW_Shelter.Controllers
                 if (savedProducts.Count > 0)
                 {
                     selectedProducts = savedProducts;
-                    System.Diagnostics.Debug.WriteLine("*************************");
-                    System.Diagnostics.Debug.WriteLine(selectedProducts[0].Name);
-                    System.Diagnostics.Debug.WriteLine("*************************");
                 }
             }
             if (Request.HasFormContentType && Request.Form != null && Request.Form.Count() > 0)
@@ -261,7 +258,6 @@ namespace ESW_Shelter.Controllers
                    
                 string selected = Request.Form["checkProduct"].ToString();
                 string[] selectedList = selected.Split(',');
-
                 Donation donation = new Donation
                 {
                     DateOfDonation = donationIVM.DateOfDonation,
@@ -276,7 +272,11 @@ namespace ESW_Shelter.Controllers
                     {
 
                         int prodKey = Convert.ToInt32(temp);
-                        int newQuant = Convert.ToInt32(Request.Form["quantityProduct " + Convert.ToInt32(temp)].ToString());
+                        int newQuant = 0;
+                        if (Request.Form["quantityProduct " + Convert.ToInt32(temp)] != "")
+                        {
+                            newQuant = Convert.ToInt32(Request.Form["quantityProduct " + Convert.ToInt32(temp)].ToString());
+                        }
                         DonationProduct donationProduct = new DonationProduct
                         {
                             DonationFK = donation.DonationID,
@@ -379,13 +379,14 @@ namespace ESW_Shelter.Controllers
             var donationIndexVM = new DonationIndexViewModel
             {
                 Products = result,
-                EditDonation = donation,
+                DateOfDonation = donation.DateOfDonation,
+                UsersFK = donation.UsersFK,
                 AnimalTypes = new SelectList(animalTypeQuery.Distinct().ToList()),
                 ProductTypes = new SelectList(productTypeQuery.Distinct().ToList()),
                 DonationProducts = donationProducts
             };
-            string date31string = donationIndexVM.EditDonation.DateOfDonation.ToString("yyyy/MM/dd");
-            donationIndexVM.EditDonation.DateOfDonation = DateTime.ParseExact(date31string, "yyyy/MM/dd", null);
+            string date31string = donationIndexVM.DateOfDonation.ToString("yyyy/MM/dd");
+            donationIndexVM.DateOfDonation = DateTime.ParseExact(date31string, "yyyy/MM/dd", null);
             ViewBag.UsersFK = _context.Users.AsParallel();
             return View(donationIndexVM);
         }
@@ -408,7 +409,7 @@ namespace ESW_Shelter.Controllers
 
             if (!checkValues(donationIVM))
             {
-                return Redirect(nameof(Create));
+                return Redirect(nameof(Edit));
             }
 
             if (ModelState.IsValid)
@@ -417,24 +418,16 @@ namespace ESW_Shelter.Controllers
                 {
                     string selected = Request.Form["checkProduct"].ToString();
                     string[] selectedList = selected.Split(',');
-                    /*System.Diagnostics.Debug.WriteLine("*************************");
-                    System.Diagnostics.Debug.WriteLine(selectedList[0]=="");
-                    System.Diagnostics.Debug.WriteLine("*************************");*/
-                    var result2 = _context.Donation.Find(id);
-                    if (result2 != null)
-                    {
-                        result2.DateOfDonation = donationIVM.DateOfDonation;
-                        _context.SaveChanges();
-                    }
-                    /*Donation donation = new Donation
-                    {
-                        WDateOfDonation = donationIVM.DateOfDonation,
-                        UsersFK = donationIVM.UsersFK
-                    };
-                    _context.Update(donation);
-                    _context.SaveChanges();*/
+
+                    Donation toEdit = _context.Donation.FirstOrDefault(e => e.DonationID == id);
+                    toEdit.DateOfDonation = donationIVM.DateOfDonation;
+                    toEdit.UsersFK = donationIVM.UsersFK;
+                    _context.Update(toEdit);
+                    _context.SaveChanges();
+
                     var x = 0;
                     var allToRemove = _context.DonationProduct.Where(p => p.DonationFK == id);
+
                     foreach (DonationProduct don in allToRemove)
                     {
                         var result3 = _context.Products.SingleOrDefault(p => p.ProductID == don.ProductFK);
@@ -442,17 +435,20 @@ namespace ESW_Shelter.Controllers
                         if (result3 != null)
                         {
                             result3.Quantity -= don.Quantity;
-                           // _context.SaveChangesAsync();
                             _context.DonationProduct.Remove(don);
-
                         }
                     }
+
                     if(selectedList[0]!="")
                     {
                         foreach (var temp in selectedList)
                         {
                             int prodKey = Convert.ToInt32(temp);
-                            int newQuant = Convert.ToInt32(Request.Form["quantityProduct " + Convert.ToInt32(temp)].ToString());
+                            int newQuant = 0;
+                            if (Request.Form["quantityProduct " + Convert.ToInt32(temp)] != "")
+                            {
+                                newQuant = Convert.ToInt32(Request.Form["quantityProduct " + Convert.ToInt32(temp)].ToString());
+                            }
                             DonationProduct donationProduct = new DonationProduct
                             {
                                 DonationFK = id,
@@ -471,13 +467,6 @@ namespace ESW_Shelter.Controllers
                             _context.SaveChanges();
                             _context.Add(donationProduct);
                         }
-                    }
-                    var editdon = _context.Donation.SingleOrDefault(d => d.DonationID == id);
-                    if (editdon != null)
-                    {
-                        editdon.DateOfDonation = donationIVM.DateOfDonation;
-                        editdon.UsersFK = donationIVM.UsersFK;
-                        _context.SaveChanges();
                     }
                     await _context.SaveChangesAsync();
                 }
@@ -582,14 +571,14 @@ namespace ESW_Shelter.Controllers
             return _context.Donation.Any(e => e.DonationID == id);
         }
 
-        private bool checkValues(DonationIndexViewModel donationIVM)
+        private bool checkValues(DonationIndexViewModel donation)
         {
-            if (donationIVM.DateOfDonation == DateTime.MinValue)
+            if (donation.DateOfDonation == DateTime.MinValue)
             {
                 TempData["Message"] = "Escolha uma data para a doação!";
                 return false;
             }
-            if (donationIVM.UsersFK <= -1)
+            if (donation.UsersFK <= 0)
             {
                 TempData["Message"] = "Escolha uma cliente para a doação!";
                 return false;

@@ -74,34 +74,7 @@ namespace ESW_Shelter.Controllers
             {
                 return NotFound();
             }
-            var query = from product in _context.Products
-                        join productsType in _context.ProductTypes on product.ProductTypeFK equals productsType.ProductTypeID
-                        join animalsType in _context.AnimalTypes on product.AnimalTypeFK equals animalsType.AnimalTypeID
-                        select new
-                        {
-                            ProductID = product.ProductID,
-                            Name = product.Name,
-                            Quantity = product.Quantity,
-                            AnimalTypeFK = product.AnimalTypeFK,
-                            ProductTypeFK = product.ProductTypeFK,
-                            ProductTypeName = productsType.Name,
-                            AnimaltypeName = animalsType.Name
-                        };
-
-            var result = query.ToList().Select(e => new Product
-            {
-                ProductID = e.ProductID,
-                Name = e.Name,
-                Quantity = e.Quantity,
-                ProductTypeName = e.ProductTypeName,
-                AnimaltypeName = e.AnimaltypeName
-            }).ToList();
-
-            ViewBag.GodFathers = _context.Users.AsParallel();
-            ViewBag.Products = result;
-            ViewBag.AnimalTypeFK = _context.AnimalTypes.AsParallel();
-            ViewBag.AnimalRaceFK = _context.AnimalRace.AsParallel();
-            ViewBag.UsersFK = _context.Users.AsParallel();
+            setViewBags(-1);
             return View();
         }
 
@@ -115,6 +88,11 @@ namespace ESW_Shelter.Controllers
             if (!GetAuthorization(8, 'c'))
             {
                 return NotFound();
+            }
+            if (!checkValues(animal))
+            {
+                setViewBags(-1);
+                return View(animal);
             }
             if (ModelState.IsValid)
             {
@@ -198,6 +176,7 @@ namespace ESW_Shelter.Controllers
                 TempData["Message"] = "Animal criado com sucesso!";
                 return RedirectToAction(nameof(Index));
             }
+            setViewBags(-1);
             return View(animal);
         }
 
@@ -252,7 +231,8 @@ namespace ESW_Shelter.Controllers
                     OwnerFK = e.OwnerFK,
                     AnimaltypeName = e.AnimaltypeName,
                     AnimalRaceName = e.AnimalRaceName,
-                    OwnerName = ""
+                    OwnerName = "",
+                    Foto = null
                 }).ToList();
                 animalToEdit = result.First();
             } else
@@ -291,41 +271,12 @@ namespace ESW_Shelter.Controllers
                     OwnerFK = e.OwnerFK,
                     AnimaltypeName = e.AnimaltypeName,
                     AnimalRaceName = e.AnimalRaceName,
-                    OwnerName = e.OwnerName
+                    OwnerName = e.OwnerName,
+                    Foto = null
                 });
                 animalToEdit = result.First();
             }
-
-            var productsQuery = from product in _context.Products
-                        join productsType in _context.ProductTypes on product.ProductTypeFK equals productsType.ProductTypeID
-                        join animalsType in _context.AnimalTypes on product.AnimalTypeFK equals animalsType.AnimalTypeID
-                        select new
-                        {
-                            ProductID = product.ProductID,
-                            Name = product.Name,
-                            Quantity = product.Quantity,
-                            AnimalTypeFK = product.AnimalTypeFK,
-                            ProductTypeFK = product.ProductTypeFK,
-                            ProductTypeName = productsType.Name,
-                            AnimaltypeName = animalsType.Name
-                        };
-
-            var productsResult = productsQuery.ToList().Select(e => new Product
-            {
-                ProductID = e.ProductID,
-                Name = e.Name,
-                Quantity = e.Quantity,
-                ProductTypeName = e.ProductTypeName,
-                AnimaltypeName = e.AnimaltypeName
-            }).ToList();
-
-            ViewBag.AnimalProducts = _context.AnimalProduct.Where(e => e.AnimalFK == id).ToList();
-            ViewBag.GodFathers = _context.AnimalUsers.Where(e => e.AnimalFK == id).ToList();
-            ViewBag.Products = productsResult;
-            ViewBag.AnimalTypeFK = _context.AnimalTypes.AsParallel();
-            ViewBag.AnimalRaceFK = _context.AnimalRace.AsParallel();
-            ViewBag.UsersFK = _context.Users.AsParallel();
-
+            setViewBags(Convert.ToInt32(id));
             return View(animalToEdit);
         }
 
@@ -334,7 +285,7 @@ namespace ESW_Shelter.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("AnimalID,Name,DateOfBirth,Disinfection,Neutered,Description,Picture,AnimalTypeFK,AnimalRaceFK,OwnerFK")] Animal animal)
+        public async Task<IActionResult> Edit(int id, [Bind("AnimalID,Name,DateOfBirth,Disinfection,Neutered,Description,Foto,Picture,AnimalTypeFK,AnimalRaceFK,OwnerFK")] Animal animal)
         {
             if (!GetAuthorization(8, 'u'))
             {
@@ -344,7 +295,11 @@ namespace ESW_Shelter.Controllers
             {
                 return NotFound();
             }
-
+            if (!checkValues(animal))
+            {
+                setViewBags(id);
+                return View(animal);
+            }
             if (ModelState.IsValid)
             {
                 try
@@ -354,6 +309,41 @@ namespace ESW_Shelter.Controllers
 
                     string selectedGodfathers = Request.Form["checkGodfather"].ToString();
                     string[] selectedGodfatherList = selectedGodfathers.Split(',');
+
+                    if (animal.Foto != null)
+                    {
+
+                        var result = _context.Images.Where(e => e.AnimalFK == animal.AnimalID);
+                        if (result.Any())
+                        {
+                            Images old = result.First();
+                            System.IO.File.Delete(hostingEnvironment.WebRootPath + "/images/Galeria_" + animal.AnimalID + "/" + old.FileName);
+                            _context.Images.Remove(old);
+                            _context.SaveChanges();
+                        }
+                        else
+                        {
+                            System.IO.Directory.CreateDirectory(hostingEnvironment.WebRootPath + "/images/Galeria_" + animal.AnimalID);
+                        }
+
+                        var uploads = Path.Combine(hostingEnvironment.WebRootPath, "images/Galeria_" + animal.AnimalID);
+                        var uniqueFileName = GetUniqueFileName(animal.Foto.FileName);
+                        var filePath = Path.Combine(uploads, uniqueFileName);
+
+                        animal.Foto.CopyTo(new FileStream(filePath, FileMode.Create));
+
+                        Images image = new Images()
+                        {
+                            AnimalFK = animal.AnimalID,
+                            Name = animal.Foto.Name,
+                            Length = animal.Foto.Length,
+                            FileName = uniqueFileName,
+                            ContentType = animal.Foto.ContentType,
+                            ContentDisposition = animal.Foto.ContentDisposition
+                        };
+                        _context.Add(image);
+                        _context.SaveChanges();
+                    }
 
                     _context.Update(animal);
                     _context.SaveChanges();
@@ -409,6 +399,7 @@ namespace ESW_Shelter.Controllers
                 TempData["Message"] = "Animal editado com sucesso!";
                 return RedirectToAction(nameof(Index));
             }
+            setViewBags(id);
             return View(animal);
         }
 
@@ -443,12 +434,21 @@ namespace ESW_Shelter.Controllers
             {
                 return NotFound();
             }
+            var result = _context.Images.Where(e => e.AnimalFK == id);
+            if (result.Any())
+            {
+                Images old = result.First();
+                System.IO.File.Delete(hostingEnvironment.WebRootPath + "/images/Galeria_" + id + "/" + old.FileName);
+                Directory.Delete(hostingEnvironment.WebRootPath + "/images/Galeria_" + id,false);
+                _context.Images.Remove(old);
+                _context.SaveChanges();
+                //System.IO.File.Delete(hostingEnvironment.WebRootPath + "/images/Galeria_" + id);
+            }
             var animal = await _context.Animal.FindAsync(id);
             removeAnimalProducts(id);
             removeGodFathers(id);
             _context.Animal.Remove(animal);
             await _context.SaveChangesAsync();
-            System.IO.Directory.Delete(hostingEnvironment.WebRootPath + "/images/Galeria_" + id);
             TempData["Message"] = "Animal eliminado com sucesso!";
             return RedirectToAction(nameof(Index));
         }
@@ -561,10 +561,6 @@ namespace ESW_Shelter.Controllers
             }
             ).ToList();
 
-            System.Diagnostics.Debug.WriteLine("**********************************************************************");
-            System.Diagnostics.Debug.WriteLine(result.FirstOrDefault());
-            System.Diagnostics.Debug.WriteLine("**********************************************************************");
-
             var animalTypeQuery = from animal in _context.AnimalTypes
                                   orderby animal.Name
                                   select animal.Name;
@@ -665,6 +661,104 @@ namespace ESW_Shelter.Controllers
 
             };
             return animalIndexVM;
+        }
+
+        private void setViewBags(int id)
+        {
+            /*CREATE */
+            if(id == -1)
+            {
+                var query = from product in _context.Products
+                            join productsType in _context.ProductTypes on product.ProductTypeFK equals productsType.ProductTypeID
+                            join animalsType in _context.AnimalTypes on product.AnimalTypeFK equals animalsType.AnimalTypeID
+                            select new
+                            {
+                                ProductID = product.ProductID,
+                                Name = product.Name,
+                                Quantity = product.Quantity,
+                                AnimalTypeFK = product.AnimalTypeFK,
+                                ProductTypeFK = product.ProductTypeFK,
+                                ProductTypeName = productsType.Name,
+                                AnimaltypeName = animalsType.Name
+                            };
+
+                var result = query.ToList().Select(e => new Product
+                {
+                    ProductID = e.ProductID,
+                    Name = e.Name,
+                    Quantity = e.Quantity,
+                    ProductTypeName = e.ProductTypeName,
+                    AnimaltypeName = e.AnimaltypeName
+                }).ToList();
+
+                ViewBag.GodFathers = _context.Users.AsParallel();
+                ViewBag.Products = result;
+                ViewBag.AnimalTypeFK = _context.AnimalTypes.AsParallel();
+                ViewBag.AnimalRaceFK = _context.AnimalRace.AsParallel();
+                ViewBag.UsersFK = _context.Users.AsParallel();
+            } else
+            {
+                var productsQuery = from product in _context.Products
+                                    join productsType in _context.ProductTypes on product.ProductTypeFK equals productsType.ProductTypeID
+                                    join animalsType in _context.AnimalTypes on product.AnimalTypeFK equals animalsType.AnimalTypeID
+                                    select new
+                                    {
+                                        ProductID = product.ProductID,
+                                        Name = product.Name,
+                                        Quantity = product.Quantity,
+                                        AnimalTypeFK = product.AnimalTypeFK,
+                                        ProductTypeFK = product.ProductTypeFK,
+                                        ProductTypeName = productsType.Name,
+                                        AnimaltypeName = animalsType.Name
+                                    };
+
+                var productsResult = productsQuery.ToList().Select(e => new Product
+                {
+                    ProductID = e.ProductID,
+                    Name = e.Name,
+                    Quantity = e.Quantity,
+                    ProductTypeName = e.ProductTypeName,
+                    AnimaltypeName = e.AnimaltypeName
+                }).ToList();
+
+                ViewBag.AnimalProducts = _context.AnimalProduct.Where(e => e.AnimalFK == id).ToList();
+                ViewBag.GodFathers = _context.AnimalUsers.Where(e => e.AnimalFK == id).ToList();
+                ViewBag.Products = productsResult;
+                ViewBag.AnimalTypeFK = _context.AnimalTypes.AsParallel();
+                ViewBag.AnimalRaceFK = _context.AnimalRace.AsParallel();
+                ViewBag.UsersFK = _context.Users.AsParallel();
+            }
+            /******************************/
+        }
+
+        private bool checkValues(Animal animal)
+        {
+            if (string.IsNullOrEmpty(animal.Name))
+            {
+                TempData["Message"] = "Por favor insira um nome para o animal!";
+                return false;
+            }
+            if (animal.DateOfBirth.Equals(DateTime.MinValue))
+            {
+                TempData["Message"] = "Por favor insira uma data de nascimento para o animal!";
+                return false;
+            }
+            if (animal.AnimalTypeFK <= 0)
+            {
+                TempData["Message"] = "Por favor escolha um tipo de animal!";
+                return false;
+            }
+            if (animal.AnimalRaceFK <= 0)
+            {
+                TempData["Message"] = "Por favor escolha uma raça de animal!";
+                return false;
+            }
+            if (animal.AnimalID <= -1)
+            {
+                TempData["Message"] = "Algo de errado aconteceu!";
+                return false;
+            }
+            return true;
         }
     }
 }

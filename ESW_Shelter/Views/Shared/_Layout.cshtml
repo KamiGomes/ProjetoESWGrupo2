@@ -121,7 +121,7 @@
         </environment>
         @if (TempData["Message"] != null)
         {
-            <script> $(document).ready(function () { alert('@TempData["Message"].ToString()'); }); </script>
+            <script> $(document).ready(function () { alert('@Html.Raw(TempData["Message"].ToString())'); }); </script>
         }
         @RenderSection("Scripts", required: false)
 </body>

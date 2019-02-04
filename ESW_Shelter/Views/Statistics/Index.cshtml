@@ -38,7 +38,7 @@
             </ul>
         </ul>
     </div>
-    <div class="col-lg-6">
+    <div class="col-lg-8">
         <div class="chart-container">
             <canvas id="chart" style="width:100%; height:500px"></canvas>
         </div>
@@ -52,7 +52,7 @@
             var data = {
                     labels: @Html.Raw(XLabels),
                     datasets: [{
-                        label: "@labelToUse",
+                        label: "@Html.Raw(labelToUse)",
                         backgroundColor: [
                             'rgba(255, 99, 132, 0.2)',
                             'rgba(54, 162, 235, 0.2)',

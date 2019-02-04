@@ -45,8 +45,7 @@ namespace ESW_Shelter.Controllers
             {
                 return NotFound();
             }
-            ViewBag.Components = _context.Components.AsParallel();
-            ViewBag.Authorizations = _context.RoleAuthorization.Where(e => e.RoleFK == roles.RoleID).ToList();
+            setViewBags(roles.RoleID);
             return View(roles);
         }
 
@@ -57,7 +56,7 @@ namespace ESW_Shelter.Controllers
             {
                 return NotFound();
             }
-            ViewBag.Components = _context.Components.AsParallel();
+            setViewBags(-1);
             return View();
         }
 
@@ -71,6 +70,11 @@ namespace ESW_Shelter.Controllers
             if (!GetAuthorization(2, 'c'))
             {
                 return NotFound();
+            }
+            if (checkValues(roles))
+            {
+                setViewBags(-1);
+                return View(roles);
             }
             if (ModelState.IsValid)
             {
@@ -117,13 +121,18 @@ namespace ESW_Shelter.Controllers
                             }
                         }
                     }
+                    if(rAutho.Delete || rAutho.Create || rAutho.Update)
+                    {
+                        rAutho.Read = true;
+                    }
                     _context.Add(rAutho);
                     _context.SaveChanges();
                 }
                 await _context.SaveChangesAsync();
+                TempData["Message"] = "Permissão criada com sucesso!";
                 return RedirectToAction(nameof(Index));
             }
-            ViewBag.Components = _context.Components.AsParallel();
+            setViewBags(-1);
             return View(roles);
         }
 
@@ -144,8 +153,7 @@ namespace ESW_Shelter.Controllers
             {
                 return NotFound();
             }
-            ViewBag.Components = _context.Components.AsParallel();
-            ViewBag.Authorizations = _context.RoleAuthorization.Where(e=> e.RoleFK == roles.RoleID).ToList();
+            setViewBags(roles.RoleID);
             return View(roles);
         }
 
@@ -158,22 +166,17 @@ namespace ESW_Shelter.Controllers
         {
             if (!GetAuthorization(2, 'u'))
             {
-                System.Diagnostics.Debug.WriteLine("*************************");
-                System.Diagnostics.Debug.WriteLine("Nao tenho autorização");
-                System.Diagnostics.Debug.WriteLine("*************************");
                 return NotFound();
             }
             if (id != roles.RoleID)
             {
-
-                System.Diagnostics.Debug.WriteLine("*************************");
-                System.Diagnostics.Debug.WriteLine("Id diferente");
-                System.Diagnostics.Debug.WriteLine(id);
-                System.Diagnostics.Debug.WriteLine(roles.RoleID);
-                System.Diagnostics.Debug.WriteLine("*************************");
                 return NotFound();
             }
-
+            if (checkValues(roles))
+            {
+                setViewBags(id);
+                return View(roles);
+            }
             if (ModelState.IsValid)
             {
                 try
@@ -208,8 +211,8 @@ namespace ESW_Shelter.Controllers
 
                             foreach (var val in selectedOptionsList)
                             {
-                                int crudId = Int32.Parse(val);
-                                switch (crudId)
+                                int crudID = Int32.Parse(val);
+                                switch (crudID)
                                 {
                                     case 1:
                                         rAutho.Create = true;
@@ -228,9 +231,14 @@ namespace ESW_Shelter.Controllers
                                 }
                             }
                         }
+                        if (rAutho.Delete || rAutho.Create || rAutho.Update)
+                        {
+                            rAutho.Read = true;
+                        }
                         _context.Add(rAutho);
                         _context.SaveChanges();
                     }
+
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
@@ -247,8 +255,10 @@ namespace ESW_Shelter.Controllers
                         throw;
                     }
                 }
+                TempData["Message"] = "Permissão editada com sucesso!";
                 return RedirectToAction(nameof(Index));
             }
+            setViewBags(id);
             return View(roles);
         }
 
@@ -283,15 +293,56 @@ namespace ESW_Shelter.Controllers
             {
                 return NotFound();
             }
+            var result = _context.Users.Where(e=> e.RoleID == id);
+            foreach(Users user in result.ToList())
+            {
+                user.RoleID = 2;
+                _context.Users.Update(user);
+                _context.SaveChanges();
+            }
+            var deleteAutho = _context.RoleAuthorization.Where(e => e.RoleFK == id);
+            foreach(RoleAuthorization delAutho in deleteAutho.ToList())
+            {
+                _context.RoleAuthorization.Remove(delAutho);
+                _context.SaveChanges();
+            }
             var roles = await _context.Roles.FindAsync(id);
             _context.Roles.Remove(roles);
             await _context.SaveChangesAsync();
+            TempData["Message"] = "Permissão eliminada com sucesso!";
             return RedirectToAction(nameof(Index));
         }
 
         private bool RolesExists(int id)
         {
             return _context.Roles.Any(e => e.RoleID == id);
+        }
+
+        private void setViewBags(int id)
+        {
+            if(id == -1)
+            {
+                ViewBag.Components = _context.Components.AsParallel();
+            } else
+            {
+                ViewBag.Components = _context.Components.AsParallel();
+                ViewBag.Authorizations = _context.RoleAuthorization.Where(e => e.RoleFK == id).ToList();
+            }
+        }
+
+        private bool checkValues(Roles role)
+        {
+            if (string.IsNullOrEmpty(role.RoleName))
+            {
+                TempData["Message"] = "Por favor insira um nome para a permissão!";
+                return false;
+            }
+            if (role.RoleID <= -1)
+            {
+                TempData["Message"] = "Algo de errado aconteceu!";
+                return false;
+            }
+            return true;
         }
     }
 }

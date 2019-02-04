@@ -116,8 +116,7 @@ namespace ESW_Shelter.Controllers
             {
                 return NotFound();
             }
-            ViewBag.AnimalsTypes = _context.AnimalTypes.AsParallel();
-            ViewBag.ProductType = _context.ProductTypes.AsParallel();
+            setViewBags();
             return View();
         }
 
@@ -134,7 +133,8 @@ namespace ESW_Shelter.Controllers
             }
             if (!checkValues(product))
             {
-                return RedirectToAction(nameof(Create));
+                setViewBags();
+                return View(product);
             }
             if (ModelState.IsValid)
             {
@@ -155,8 +155,6 @@ namespace ESW_Shelter.Controllers
             {
                 return NotFound();
             }
-            ViewBag.AnimalsTypes = _context.AnimalTypes.AsParallel();
-            ViewBag.ProductType = _context.ProductTypes.AsParallel();
 
             if (id == null)
             {
@@ -168,6 +166,7 @@ namespace ESW_Shelter.Controllers
             {
                 return NotFound();
             }
+            setViewBags();
             return View(product);
         }
 
@@ -184,7 +183,8 @@ namespace ESW_Shelter.Controllers
             }
             if (!checkValues(product))
             {
-                return RedirectToAction(nameof(Create));
+                setViewBags();
+                return View(product);
             }
             if (id != product.ProductID)
             {
@@ -212,6 +212,7 @@ namespace ESW_Shelter.Controllers
                 TempData["Message"] = "Produto editado com sucesso!";
                 return RedirectToAction(nameof(Index));
             }
+            setViewBags();
             return View(product);
         }
 
@@ -268,6 +269,13 @@ namespace ESW_Shelter.Controllers
             {
                 return NotFound();
             }
+            var check = _context.AnimalProduct.Where(e => e.ProductFK == id);
+            var check2 = _context.DonationProduct.Where(e => e.ProductFK == id);
+            if (check.Any() || check2.Any())
+            {
+                TempData["Message"] = "Produto pretende eliminar têm Animais ou Donativos associados a ele! Por favor altere primeiro esses donativos ou animais, e depois tente eliminar novamente!";
+                return RedirectToAction(nameof(Index));
+            }
             var product = await _context.Products.FindAsync(id);
             _context.Products.Remove(product);
             await _context.SaveChangesAsync();
@@ -278,6 +286,12 @@ namespace ESW_Shelter.Controllers
         private bool ProductExists(int id)
         {
             return _context.Products.Any(e => e.ProductID == id);
+        }
+
+        private void setViewBags()
+        {
+            ViewBag.AnimalsTypes = _context.AnimalTypes.AsParallel();
+            ViewBag.ProductType = _context.ProductTypes.AsParallel();
         }
 
         private bool checkValues(Product product)
@@ -297,9 +311,34 @@ namespace ESW_Shelter.Controllers
                 TempData["Message"] = "Por favor insira um nome para o produto!";
                 return false;
             }
+            if (string.IsNullOrEmpty(product.Quantity.ToString()))
+            {
+                TempData["Message"] = "Stock atual não pode estar em branco!";
+                return false;
+            }
             if (product.Quantity <= -1)
             {
-                TempData["Message"] = "Quantidade não pode ser negativa!";
+                TempData["Message"] = "Stock atual não pode ser negativa!";
+                return false;
+            }
+            if (string.IsNullOrEmpty(product.WeekStock.ToString()))
+            {
+                TempData["Message"] = "Stock semanal não pode estar em branco!";
+                return false;
+            }
+            if (product.WeekStock <= -1)
+            {
+                TempData["Message"] = "Stock semanal não pode ser negativa!";
+                return false;
+            }
+            if (string.IsNullOrEmpty(product.MonthStock.ToString()))
+            {
+                TempData["Message"] = "Stock mensal não pode estar em branco!";
+                return false;
+            }
+            if (product.MonthStock <= -1)
+            {
+                TempData["Message"] = "Stock mensal não pode ser negativa!";
                 return false;
             }
             if (product.ProductID <= -1)

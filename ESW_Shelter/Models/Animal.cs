@@ -20,7 +20,8 @@ namespace ESW_Shelter.Models
         public String Name { get; set; }
 
         [DataType(DataType.Date)]
-        [DisplayFormat(DataFormatString = "{0:yyyy/MM/dd}", ApplyFormatInEditMode = true)]
+        [DisplayFormat(DataFormatString = "{0:yyyy/MM/dd}", ApplyFormatInEditMode = true, NullDisplayText = "Insira uma data!")]
+        [Required(ErrorMessage = "Data de Nascimento em falta!")]
         [Display(Name = "Data de Nascimento")]
         public DateTime DateOfBirth { get; set; }
 

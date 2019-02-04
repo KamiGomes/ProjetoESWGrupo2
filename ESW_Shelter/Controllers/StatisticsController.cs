@@ -69,7 +69,7 @@ namespace ESW_Shelter.Controllers
                     break;
                 case 3:
                     List<LoginStatistic> allLogins = _context.LoginStatistic.AsParallel().Where(e=> e.DateStatistic.Month == DateTime.Today.Month 
-                                                                                                    && e.DateStatistic.Year == DateTime.Today.Year).ToList();
+                                                                                                    && e.DateStatistic.Year == DateTime.Today.Year).OrderBy(e => e.DateStatistic).ToList();
                     foreach(LoginStatistic log in allLogins)
                     {
                         lstModel.Add(new SimpleReportViewModel {
@@ -80,14 +80,14 @@ namespace ESW_Shelter.Controllers
                     ViewBag.labelToUse = "Logins efetuados por dia [Mês corrente]";
                     break;
                 case 5:
-                    List<Donation> montlyDonation = _context.Donation.Where(e=> e.DateOfDonation.Month == DateTime.Today.Month && e.DateOfDonation.Year == DateTime.Today.Year).Distinct().ToList();
+                    List<DateTime> montlyDonation = _context.Donation.Where(e=> e.DateOfDonation.Month == DateTime.Today.Month && e.DateOfDonation.Year == DateTime.Today.Year).OrderBy(e=> e.DateOfDonation).Select(e => e.DateOfDonation).Distinct().ToList();
                     List<SelectListItem> toStatisticsYouGo = new List<SelectListItem> ();
-                    foreach (Donation don in montlyDonation)
+                    foreach (DateTime don in montlyDonation)
                     {
-                        int total = _context.Donation.Where(e => e.DateOfDonation == don.DateOfDonation).Count();
+                        int total = _context.Donation.Where(e => e.DateOfDonation == don).Count();
                         lstModel.Add(new SimpleReportViewModel
                         {
-                            DimensionOne = don.DateOfDonation.ToString(),
+                            DimensionOne = don.ToString(),
                             Quantity = total
                         });
                     }
@@ -95,7 +95,7 @@ namespace ESW_Shelter.Controllers
                     break;
                 case 7:
                     List<RegisterStatistics> registerStatistics = _context.RegisterStatistics.AsParallel().Where(e => e.DateStatistic.Month == DateTime.Today.Month
-                                                                                                    && e.DateStatistic.Year == DateTime.Today.Year).ToList();
+                                                                                                    && e.DateStatistic.Year == DateTime.Today.Year).OrderBy(e => e.DateStatistic).ToList();
                     foreach (RegisterStatistics regis in registerStatistics)
                     {
                         lstModel.Add(new SimpleReportViewModel
@@ -157,24 +157,31 @@ namespace ESW_Shelter.Controllers
 
                     var listed = total.ToList();
 
-                    List<Donation> allDonationsOfMonth = _context.Donation.Where(e => e.DateOfDonation.Month == DateTime.Today.Month && e.DateOfDonation.Year == DateTime.Today.Year).Distinct().ToList();
-                    foreach(Donation don in allDonationsOfMonth)
+                    var allDonationsOfMonth = _context.Donation.Where(e => e.DateOfDonation.Month == DateTime.Today.Month && e.DateOfDonation.Year == DateTime.Today.Year).Distinct();
+                    if(allDonationsOfMonth.Any())
                     {
-
-                        var ofDate = total.Where(e=> e.Date == don.DateOfDonation);
-
-                        List<SimpleReportViewModel> allProductsInDate = ofDate.ToList().Select(e => new SimpleReportViewModel()
+                        foreach (Donation don in allDonationsOfMonth.ToList())
                         {
-                            DimensionOne = _context.Products.Where(p => p.ProductID == e.Product).First().Name,
-                            Quantity = e.Total
-                        }).ToList();
 
-                        lstModel.Add(new StackedViewModel()
-                        {
-                            StackedDimensionOne = don.DateOfDonation.ToString(),
-                            LstData = allProductsInDate
-                        });
+                            var ofDate = total.Where(e => e.Date == don.DateOfDonation);
+
+                            if(ofDate.Any())
+                            {
+                                List<SimpleReportViewModel> allProductsInDate = ofDate.ToList().Select(e => new SimpleReportViewModel()
+                                {
+                                    DimensionOne = _context.Products.Where(p => p.ProductID == e.Product).First().Name,
+                                    Quantity = e.Total
+                                }).ToList();
+
+                                lstModel.Add(new StackedViewModel()
+                                {
+                                    StackedDimensionOne = don.DateOfDonation.ToString(),
+                                    LstData = allProductsInDate
+                                });
+                            }
+                        }
                     }
+
                     break;
                 default:
                     break;

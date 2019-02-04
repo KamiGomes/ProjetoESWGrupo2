@@ -68,6 +68,10 @@ namespace ESW_Shelter.Controllers
             {
                 return NotFound();
             }
+            if (!checkValues(animalRace))
+            {
+                return View(animalRace);
+            }
             if (ModelState.IsValid)
             {
                 _context.Add(animalRace);
@@ -113,7 +117,10 @@ namespace ESW_Shelter.Controllers
             {
                 return NotFound();
             }
-
+            if (!checkValues(animalRace))
+            {
+                return View(animalRace);
+            }
             if (ModelState.IsValid)
             {
                 try
@@ -169,6 +176,12 @@ namespace ESW_Shelter.Controllers
             {
                 return NotFound();
             }
+            var check = _context.Animal.Where(e => e.AnimalRaceFK == id);
+            if (check.Any())
+            {
+                TempData["Message"] = "Raça de animal que pretende eliminar têm animais associados a ela! Por favor altere primeiro esses animais e depois tente eliminar novamente!";
+                return RedirectToAction(nameof(Index));
+            }
             var animalRace = await _context.AnimalRace.FindAsync(id);
             _context.AnimalRace.Remove(animalRace);
             await _context.SaveChangesAsync();
@@ -179,6 +192,22 @@ namespace ESW_Shelter.Controllers
         private bool AnimalRaceExists(int id)
         {
             return _context.AnimalRace.Any(e => e.AnimalRaceID == id);
+        }
+
+
+        private bool checkValues(AnimalRace animalRace)
+        {
+            if (string.IsNullOrEmpty(animalRace.Name))
+            {
+                TempData["Message"] = "Por favor insira um nome para a raça!";
+                return false;
+            }
+            if (animalRace.AnimalRaceID <= 0)
+            {
+                TempData["Message"] = "Algo de errado aconteceu!";
+                return false;
+            }
+            return true;
         }
     }
 }

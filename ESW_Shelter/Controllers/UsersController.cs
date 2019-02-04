@@ -15,94 +15,7 @@ using ESW_Shelter.Libs;
 //					('administrador@admin.pt', 'Admin', 'Admin-12',1,4,'Cidade','2018/12/16',000000000,'0000-000','Nenhuma')
 namespace ESW_Shelter.Controllers
 {
-    /// <summary>
-    /// <para>Este controlador trata de todas as funções CRUD que tenham a ver com os Users e UsersInfo e também com o Login e o Logout.</para>
-    /// </summary>
-    /// <remarks>
-    /// <para> Todo os métodos abaixo fazem parte deste controlador </para>
-    /// <list type="table">
-    /// <listheader>
-    ///     <term>Método</term>
-    ///     <description>Descrição</description>
-    /// </listheader>
-    /// <item>
-    ///     <term><seealso cref="Index"/></term>
-    ///     <description>Método que vai ser chamado ao entrar na rota "/Users". Vai mostrar todos os utilizadores.</description>
-    /// </item>
-    /// <item>
-    ///     <term><seealso cref="Details(int?)"/></term>
-    ///     <description>Método que vai ser chamado na rota "/Users/Details/x". Mostra os detalhes de um utilizador.</description>
-    /// </item>
-    /// <item>
-    ///     <term><seealso cref="Create"/></term>
-    ///     <description>Método que vai ser chamado na rota "/Users/Create". Vai mostrar o formulário de criação de um novo utilizador.</description>
-    /// </item>
-    /// <item>
-    ///     <term><seealso cref="SucessCreation"/></term>
-    ///     <description>Método é chamado quando a crição de uma nova conta de utilizador é efetuada. Vai direcionar o utilizador para a HomePage.</description>
-    /// </item>
-    /// <item>
-    ///     <term><seealso cref="Create(Users)"/></term>
-    ///     <description>Método que vai ser chamado na rota "/Users/Create". Vai guardar um Users recebido do formulário.</description>
-    /// </item>
-    /// <item>
-    ///     <term><seealso cref="Login"/></term>
-    ///     <description>Método que vai ser chamado na rota "/Users/Login". Vai redireccionar a página para a HomePage.</description>
-    /// </item>
-    /// <item>
-    ///     <term><seealso cref="Login(Users)"/></term>
-    ///     <description>Método que vai ser chamado na rota "/Users/Login". Vai receber um Users de um formulário, e verificar se as condições estão certas para dar acesso á conta.</description>
-    /// </item>
-    /// <item>
-    ///     <term><seealso cref="ConfirmEmail(int?)"/></term>
-    ///     <description>Método que vai ser chamado na rota "/Users/ConfirmEmail/X". Vai receber um id de um Users, e caso esse id esteja correto, verifica o email desse utilizador.</description>
-    /// </item>
-    /// <item>
-    ///     <term><seealso cref="Logout(int?)"/></term>
-    ///     <description>Método que vai ser chamado na rota "/Users/Logout". Vai receber um id de um Users, e caso esse id esteja correto, faz logout da conta dele.</description>
-    /// </item>
-    /// <item>
-    ///     <term><seealso cref="Profile(int?)"/></term>
-    ///     <description>Método que vai ser chamado na rota "/Users/Profile/X". Vai receber um id de um Users, e caso esse id esteja correto, mostra a página de perfil desse utilizador.</description>
-    /// </item>
-    /// <item>
-    ///     <term><seealso cref="Edit(int?)"/></term>
-    ///     <description>Método que vai ser chamado na rota "/Users/Edit/X". Vai receber um id de um Users, e caso esse id esteja correto, mostra a página de edição de dados desse utilizador (Backend).</description>
-    /// </item>
-    /// <item>
-    ///     <term><seealso cref="Edit(int, Profile)"/></term>
-    ///     <description>Método que vai ser chamado na rota "/Users/Edit/X". Vai receber um id de um Users e uma variável Profile, para que os dados desse Users seja alterado.</description>
-    /// </item>
-    /// <item>
-    ///     <term><seealso cref="Delete(int?)"/></term>
-    ///     <description>Método que vai ser chamado na rota "/Users/Delete/X". Vai receber um id de um Users para que esse seja eliminado.</description>
-    /// </item>
-    /// <item>
-    ///     <term><seealso cref="DeleteConfirmed(int)"/></term>
-    ///     <description>Método que vai ser chamado na rota "/Users/Delete/X". Vai receber um id de um Users para ser eleminado.</description>
-    /// </item>
-    /// <item>
-    ///     <term><seealso cref="ErrorNotFoundOrSomeOtherError"/></term>
-    ///     <description>Método que é chamado quando existe algum acesso não desejado, ou algum erro ocorrido no lado do servidor.</description>
-    /// </item>
-    /// <item>
-    ///     <term><seealso cref="UsersExists(int)"/></term>
-    ///     <description>Método que vai verificar se existe um Users com o id recebido.</description>
-    /// </item>
-    /// <item>
-    ///     <term><seealso cref="UsersInfoExists(int)"/></term>
-    ///     <description>Método que vai verificar se existe um UsersInfo com o id recebido.</description>
-    /// </item>
-    /// <item>
-    ///     <term><seealso cref="LoginSV(string, string)"/></term>
-    ///     <description>Método que vai definir as session variables que o login é efetuado.</description>
-    /// </item>
-    /// <item>
-    ///     <term><seealso cref="GetLogin"/></term>
-    ///     <description>Método que redefine os session variables, para que não haja perda de dados.</description>
-    /// </item>
-    /// </list>
-    /// </remarks>
+
     public class UsersController : SharedController
     {
 
@@ -117,23 +30,6 @@ namespace ESW_Shelter.Controllers
             _configuration = configuration;
         }
 
-        /// <summary>
-        /// <para>Método que vai ser chamado ao entrar na rota "/Users". Vai mostrar todos os utilizadores.</para>
-        /// <para>O método procura todos os Users e UsersInfo associados através de uma query em LINQ, e ao terminar essa pesquisa, para cada um dos rows, cria 
-        /// uma variável Profile, para que seja enviada para a View</para>
-        /// </summary>
-        /// <permission cref="Administrador">Administradores do sistema.</permission>  
-        /// <remarks>
-        /// <para><b>Query Utilizada</b></para>
-        /// <code>
-        /// from user in _context.Users
-        /// join userInfo in _context.UsersInfo on user.UserID equals userInfo.UserID
-        /// select new {(....)}.AsEnumerable().Select(x => new Profile{(...)}.ToList();
-        /// </code>
-        /// <para><b>View associada: </b>"-Views/Users/Index.cshtml"</para>
-        /// </remarks>
-        /// <returns>View(userProfile)</returns>
-
         public async Task<IActionResult> Index(string searchString, string roleType)
         {
             if (!GetAuthorization(1, 'r'))
@@ -141,7 +37,7 @@ namespace ESW_Shelter.Controllers
                 return NotFound();
             }
             var query = from usersJ in _context.Users
-                        join rolesJ in _context.Roles on usersJ.UserID equals rolesJ.RoleID
+                        join rolesJ in _context.Roles on usersJ.RoleID equals rolesJ.RoleID
                         select new
                         {
                             UserID = usersJ.UserID,
@@ -185,29 +81,6 @@ namespace ESW_Shelter.Controllers
             return View(usersIndexVM);
         }
 
-
-        /// <summary>
-        /// <para>Método que vai ser chamado na rota "/Users/Details/x". Utilizando uma query LINQ, vai buscar os dados de um Users e UsersInfo associados, cujo id de Users seja
-        /// igual ao id recebido.</para>
-        /// <para>Caso existe algum erro (inexistência de id ou mesmo utilizador) o método é redirecionado para o <seealso cref="ErrorNotFoundOrSomeOtherError"/>.
-        /// Caso esteja tudo correto, irá ser visualizado todos os dados de um utilizador.</para>
-        /// </summary>
-        /// <param name="id"> ID de um Users</param>
-        /// <permission cref="Administrador">Administradores do sistema.</permission>  
-        /// <remarks>
-        /// <para><b>Query Utilizada</b></para>
-        /// <code>
-        ///     (from user in _context.Users
-        ///      join userInfo in _context.UsersInfo on user.UserID equals userInfo.UserID
-        ///      where user.UserID == id
-        ///      select new{...}).AsEnumerable().Select(x => new Profile{}).First();
-        /// </code>
-        /// <para><b>View associada: </b>"-Views/Users/Details.cshtml"</para>
-        /// </remarks>
-        /// <returns>
-        /// <para> Se o id ou mesmo o Users não existir - <seealso cref="ErrorNotFoundOrSomeOtherError"/></para>
-        /// <para> Se sucesso - View(userProfile)</para>
-        /// </returns>
         public async Task<IActionResult> Details(int? id)
         {
             if (!GetAuthorization(1, 'r'))
@@ -218,17 +91,47 @@ namespace ESW_Shelter.Controllers
             {
                 return NotFound();
             }
-            return View();
+
+            var users = await _context.Users
+                .FirstOrDefaultAsync(m => m.UserID == id);
+            if (users == null)
+            {
+                return NotFound();
+            }
+            var query = from usersJ in _context.Users
+                        join rolesJ in _context.Roles on usersJ.RoleID equals rolesJ.RoleID
+                        where usersJ.UserID == id
+                        select new
+                        {
+                            UserID = usersJ.UserID,
+                            Name = usersJ.Name,
+                            Email = usersJ.Email,
+                            ConfirmedEmail = usersJ.ConfirmedEmail,
+                            City = usersJ.City,
+                            DateOfBirth = usersJ.DateOfBirth,
+                            Phone = usersJ.Phone,
+                            PostalCode = usersJ.PostalCode,
+                            Street = usersJ.Street,
+                            RoleName = rolesJ.RoleName
+                        };
+
+            Users result = query.ToList().Select(e => new Users
+            {
+                UserID = e.UserID,
+                Name = e.Name,
+                Email = e.Email,
+                ConfirmedEmail = e.ConfirmedEmail,
+                City = e.City,
+                DateOfBirth = e.DateOfBirth,
+                Phone = e.Phone,
+                PostalCode = e.PostalCode,
+                Street = e.Street,
+                RoleName = e.RoleName
+            }).First();
+
+            return View(result);
         }
 
-        /// <summary>
-        /// <para> Método que vai ser chamado na rota "/Users/Create". Vai mostrar o formulário de criação de um novo utilizador.</para>
-        /// </summary>
-        /// <permission cref="Administrador">Administradores do sistema.</permission>  
-        /// <remarks>
-        /// <para><b>View associada: </b>"-Views/Users/Create.cshtml"</para>
-        /// </remarks>
-        /// <returns>View();</returns>
         public IActionResult Create()
         {
             if (!GetAuthorization(1, 'c'))
@@ -250,32 +153,32 @@ namespace ESW_Shelter.Controllers
             {
                 return NotFound();
             }
-            try
+            if (!checkValues(users))
             {
-                if (ModelState.IsValid)
-                {
-                    users.RoleID = Int32.Parse(Request.Form["RoleFK"].ToString());
-                    _context.Add(users);
-                    await _context.SaveChangesAsync();
-
-                    int user_id = (from user in _context.Users select user.UserID).Max();
-                    //var result = new MailSenderController(_configuration).PostMessage(users.Email, users.Name, users.UserID);
-
-                    /** End of Confirmation Email **/
-
-                    TempData["Message"] = "A conta foi criada com sucesso!Por favor, o utilizador que verifique o seu email e clique no link para concluir o registo da sua conta e prosseguir para o login!";
-                    return RedirectToAction(nameof(Index));
-                }
-                TempData["Message"] = "Por favor, siga os exemplos para continuar!";
-                ModelState.AddModelError("PostalCode", "Código Postal no Formato Errado!");
-                return View();
+                ViewBag.RoleTypes = _context.Roles.AsParallel();
+                return View(users);
             }
-            catch (NullReferenceException e)
+            if (ModelState.IsValid)
             {
-                TempData["Message"] = "Por favor, siga os exemplos para continuar!";
-                ModelState.AddModelError("PostalCode", "Código Postal no Formato Errado!");
-                return View();
+                 _context.Add(users);
+                 await _context.SaveChangesAsync();
+                 /** Send Confirmation Email **/
+                 int user_id = (from user in _context.Users select user.UserID).Max();
+                 var result = new MailSenderController(_configuration).PostMessage(users.Email, users.Name, users.UserID);
+
+                 /** End of Confirmation Email **/
+                 // Register User as a Customer on Stripe
+                 StripeLib stripeLib = new StripeLib();
+                 users.CustomerId = await stripeLib.CreateCustomer(users);
+                 await _context.SaveChangesAsync();
+
+                 insertToRegisterTable();
+                 TempData["Message"] = "Utilizador criado com sucesso!Por favor, o utilizador que verifique o seu email e clique no link para concluir o registo da sua conta e para prosseguir para o login!";
+                 return RedirectToAction(nameof(Index));
             }
+            TempData["Message"] = "Por favor, siga os exemplos para continuar!";
+            ViewBag.RoleTypes = _context.Roles.AsParallel();
+            return View();
         }
 
         [HttpGet]
@@ -283,36 +186,7 @@ namespace ESW_Shelter.Controllers
         {
             return View();
         }
-        /// <summary>
-        /// <para>Método que vai ser chamado na rota "/Users/Create". Vai guardar um Users recebido do formulário. Existe a verificação se o model está correto, isto é,
-        /// todos os campos estão preenchidos corretamente com o Model correspondente. </para>
-        /// <para>Para além da verificação dos campos, verifica-se também a existência de algum email identico na base de dados.</para>
-        /// <para>Cria-se também um UsersInfo, associado ao Id do Users que foi acabado de criar.
-        /// Após a inserção destes dados na base de dados é enviado um email para o inscrito para que este verifique a sua conta.</para>
-        /// </summary>
-        /// <param name="users"> Variável recebida do formulário que foi preenchido na criação de conta. </param>
-        /// <permission cref="Clientes">Novos utilizadores ao sistema.</permission>  
-        /// <remarks>
-        /// <para><b>Criação do Users e UsersInfo</b></para>
-        /// <code>
-        ///     UsersInfo newUserInfo = new UsersInfo();
-        ///     _context.Add(users);
-        ///     _context.SaveChanges();
-        ///     newUserInfo.UserID = _context.Users.Max(user => users.UserID);
-        ///     _context.Add(newUserInfo);
-        ///     await _context.SaveChangesAsync();
-        /// </code>
-        /// <para><b>Envio de Email</b></para>
-        /// <code>
-        /// Inserir aqui quando terminar os testes
-        /// </code>
-        /// <para><b>View associada: </b>"-Views/Users/Create.cshtml"</para>
-        /// </remarks>
-        /// <returns>
-        /// <para>Se Email Existir - View("~/Views/Home/Account.cshtml")</para>
-        /// <para>Se registo for com sucesso - RedirectToAction("SucessCreation")</para>
-        /// <para>Default - return View("~/Views/Home/Index.cshtml")</para>
-        /// </returns>
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Register([Bind("UserID,Email,Name,Password,ConfirmedEmail,Street,PostalCode,City,Phone,DateOfBirth,RoleID")] Users users)
@@ -341,8 +215,9 @@ namespace ESW_Shelter.Controllers
                     // Register User as a Customer on Stripe
                     StripeLib stripeLib = new StripeLib();
                     users.CustomerId = await stripeLib.CreateCustomer(users);
-
                     await _context.SaveChangesAsync();
+
+                    insertToRegisterTable();
 
                     TempData["Message"] = "A sua conta foi criada com sucesso!Por favor verifique o seu email e clique no email para concluir o registo da sua conta e prosseguir para o login!";
                     return RedirectToAction("Index", "Home", null);
@@ -354,28 +229,6 @@ namespace ESW_Shelter.Controllers
             return View(users);
         }
 
-        /// <summary>
-        /// <para>Método que vai ser chamado na rota "/Users/Login". O método recebe uma variável Users com o Email e Password, onde vai ser utilizado para confirmar o login.</para>
-        /// <para>Pesquisa-se a existencia da conta através de uma query LINQ, onde se existir, e se o email estiver confirmado (através do link recebido por email) o utilizador pode entrar.</para>
-        /// <para>Caso exista algum erro (Email ou Password errada, ou não existir o email) é enviado uma mensagem de erro.</para>
-        /// <para>Caso o email não esteja confirmado, uma mensagem de erro é mostrada.</para>
-        /// </summary>
-        /// <param name="users"> Variável de Users, com o Email e Password.</param>
-        /// <permission cref="Clientes">Novos utilizadores ao sistema.</permission>
-        /// <exception cref="InvalidOperationException"></exception>
-        /// <remarks>
-        /// <para><b>Query utilizada para ir buscar Users</b></para>
-        /// <code>
-        /// (from user in _context.Users 
-        /// where user.Email == users.Email &amp;&amp; user.Password == users.Password 
-        /// select user).First();
-        /// </code>
-        /// </remarks>
-        /// <returns>
-        /// <para>Se utilizador não existir - View("~/Views/Home/Index.cshtml")</para>
-        /// <para>Se a confirmação de email não tiver efetuada - View("~/Views/Home/Index.cshtml")</para>
-        /// <para>Se for com sucesso - RedirectToAction("Login")</para>
-        /// </returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Login([Bind("Email,Password")] Users users)
@@ -464,17 +317,6 @@ namespace ESW_Shelter.Controllers
 
         }
 
-        /// <summary>
-        /// <para>Método que vai ser chamado na rota "/Users/ConfirmEmail/X". Vai receber um id de um Users, e com esse id vai pesquisar a existência de um.</para>
-        /// <para>Caso o id seja null, ou a pesquisa resolve na inexistência de um Users, devolve <seealso cref="ErrorNotFoundOrSomeOtherError"/>.</para>
-        /// <para>Caso o Users exista o email fica confirmado e uma envia uma mensagem para o utilizador.</para>
-        /// </summary>
-        /// <param name="id"> Id do Users cujo email vai ser verificado</param>
-        /// <permission cref="Clientes">Novos utilizadores ao sistema.</permission>
-        /// <returns>
-        /// <para>Caso exista algum erro - RedirectToAction("ErrorNotFoundOrSomeOtherError")</para>
-        /// <para>Se tudo correr bem - View("~/Views/Home/Index.cshtml")</para>
-        /// </returns>
         public async Task<IActionResult> ConfirmEmail(int? id)
         {
             if (id == null)
@@ -494,19 +336,6 @@ namespace ESW_Shelter.Controllers
             return View("~/Views/Home/Index.cshtml");
         }
 
-        /// <summary>
-        /// <para>Método que vai ser chamado na rota "/Users/Logout". Vai receber um id de um Users e caso esse id seja válido, verifica a existência de um Users
-        /// com esse Id.</para> 
-        /// <para>Caso o Users exista, utiliza-se o <seealso cref="LoginSV(string, string)"/> para eliminar as variáveis de sessão, e manda-se uma
-        /// mensagem de confirmação de logout.</para>
-        /// <para>Caso exista algum erro, o id ou o Users seja null, é retornado um <seealso cref="ErrorNotFoundOrSomeOtherError"/></para>
-        /// </summary>
-        /// <param name="id"> ID de um Users</param>
-        /// <permission cref="Clientes">Novos utilizadores ao sistema.</permission>
-        /// <returns>
-        /// <para> Caso exista algum valor null - <seealso cref="ErrorNotFoundOrSomeOtherError"/></para>
-        /// <para> Caso corra tudo bem - View("~/Views/Home/Index.cshtml")</para>
-        /// </returns>
         public async Task<IActionResult> Logout(int? id)
         {
             if (id != null)
@@ -526,18 +355,6 @@ namespace ESW_Shelter.Controllers
             return NotFound();
         }
 
-        /// <summary>
-        /// <para>Método que vai ser chamado na rota "/Users/Profile/X". Vai receber um id de um Users para que esse possa alterar os seus dados.</para>
-        /// <para> Caso o id seja null ou as variáveis de sessão sejam null, retorna-se <seealso cref="ErrorNotFoundOrSomeOtherError"/>.</para>
-        /// <para> Caso esteja tudo correto, vai buscar o Users com o id recebido, cria uma variável de Profile, e devolve juntamente com a view a ser apresentada.</para>
-        /// <para> Caso a busca do Users seja null, devolve o mesmo a cima descrito.</para>
-        /// </summary>
-        /// <param name="id"> Id do Users</param>
-        /// <permission cref="Clientes">Novos utilizadores ao sistema.</permission>
-        /// <returns>
-        /// <para> Caso exista algum erro - RedirectToAction("ErrorNotFoundOrSomeOtherError")</para>
-        /// <para> Caso corra tudo bem - View("~/Views/Home/Profile.cshtml", profile)</para>
-        /// </returns>
         public async Task<IActionResult> Profile(int? id)
         {
             if (id == null || HttpContext.Session.GetString("User_Name").Equals("") || HttpContext.Session.GetString("UserID").Equals(""))
@@ -558,39 +375,22 @@ namespace ESW_Shelter.Controllers
             return View(user);
         }
 
-        /// <summary>
-        /// <para>Método que vai ser chamado na rota "/Users/Edit/X". Vai receber um id de um Users para o administrador possa alterar os seus dados.</para>
-        /// <para> Caso o id seja null ou as variáveis de sessão sejam null, retorna-se <seealso cref="ErrorNotFoundOrSomeOtherError"/>.</para>
-        /// <para> Caso esteja tudo correto, vai buscar o Users com o id recebido, cria uma variável de Profile, e devolve juntamente com a view a ser apresentada.</para>
-        /// <para> Caso a busca do Users seja null, devolve o mesmo a cima descrito.</para>
-        /// <para> Caso não seja administrador ( Verificação no <seealso cref="GetLogin"/> onde se for false é porque não é) manda o mesmo erro.</para>
-        /// </summary>
-        /// <param name="id"> Id do Users</param>
-        /// <permission cref="Administradores">Administradores do sistema.</permission>
-        /// <returns>
-        /// <para> Caso exista algum erro - RedirectToAction("ErrorNotFoundOrSomeOtherError")</para>
-        /// <para> Caso corra tudo bem - View("Edit", profile)</para>
-        /// </returns>
         public async Task<IActionResult> Edit(int? id)
         {
-            if (!GetAuthorization(1, 'u'))
-            {
-                return NotFound();
-            }
             if (id == null)
             {
                 return NotFound();
             }
-            return View("Edit");
 
+            var users = await _context.Users.FindAsync(id);
+            if (users == null)
+            {
+                return NotFound();
+            }
+            ViewBag.RoleTypes = _context.Roles.AsParallel();
+            return View(users);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="id"></param>
-        /// <param name="profile"></param>
-        /// <returns></returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Profile(int id, [Bind("UserID,Email,Name,Password,ConfirmedEmail,Street,PostalCode,City,Phone,DateOfBirth,RoleID")] Users users)
@@ -620,82 +420,32 @@ namespace ESW_Shelter.Controllers
             }
         }
 
-        /// <summary>
-        /// <para>Método que vai ser chamado na rota "/Users/Edit/X". Vai receber um id de um Users e uma variável Profile que vem do formulário para edição dos dados.</para>
-        /// <para> Caso esteja tudo correto, cria-se variáveis Users e UsersInfo dos modelos e preenche-se com os valores recebidos para que essas variáveis sejam atualizadas com a ajuda do _context.</para>
-        /// <para> Caso o id seja null retorna-se <seealso cref="ErrorNotFoundOrSomeOtherError"/>.</para>
-        /// <para> Caso o modelo não esteja válido, retorna-se uma mensagem para o utilizador e a mesma view</para>
-        /// </summary>
-        /// <param name="id"> Id de Users para editar os dados.</param>
-        /// <param name="profile"> Variável Profile que contem todos os campos para atualizar</param>
-        /// <permission cref="Administradores">Administradores do sistema.</permission>
-        /// <remarks>
-        /// <para><b>Variável Users</b></para>
-        /// <code>
-        /// Users updateUser = new Users()
-        /// {
-        ///     UserID = profile.UserID,
-        ///     Email = profile.Email,
-        ///     Name = profile.Name,
-        ///     Password = profile.Password,
-        ///     ConfirmedEmail = profile.ConfirmedEmail,
-        ///     RoleID = profile.RoleID
-        ///};
-        /// </code>
-        /// <para><b>Variável UsersInfo</b></para>
-        /// <code>
-        ///UsersInfo updateUserInfo = new UsersInfo()
-        ///{
-        ///    UserInfoID = profile.UserInfoID,
-        ///    Street = profile.Street,
-        ///    PostalCode = profile.PostalCode,
-        ///    City = profile.City,
-        ///    Phone = profile.Phone,
-        ///    AlternativePhone = profile.AlternativePhone,
-        ///    AlternativeEmail = profile.AlternativeEmail,
-        ///    Facebook = profile.Facebook,
-        ///    Twitter = profile.Twitter,
-        ///    Instagram = profile.Instagram,
-        ///    Tumblr = profile.Tumblr,
-        ///    Website = profile.Website,
-        ///    UserID = profile.UserID
-        ///};
-        /// </code>
-        /// </remarks>
-        /// <returns>
-        /// <para> Caso exista algum erro - <seealso cref="ErrorNotFoundOrSomeOtherError"/></para>
-        /// <para> Caso tudo corra bem - <seealso cref="Edit(int?)"/></para>
-        /// </returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("UserID, Email, Password, Name, ConfirmedEmail, RoleID, UserInfoID, Street, PostalCode, City, Phone, AlternativePhone, AlternativeEmail, Facebook, Twitter, Instagram, Tumblr, Website")] Users profile)
+        public async Task<IActionResult> Edit(int id, [Bind("UserID,Email,Name,Password,ConfirmedEmail,Street,PostalCode,City,Phone,DateOfBirth,RoleID")] Users user)
         {
             if (!GetAuthorization(1, 'u'))
             {
                 return NotFound();
             }
-            if (id != profile.UserID)
+            if (id != user.UserID)
             {
                 return NotFound();
+            }
+            if (!checkValues(user))
+            {
+                ViewBag.RoleTypes = _context.Roles.AsParallel();
+                return View(user);
             }
             if (ModelState.IsValid)
             {
                 try
                 {
-                    Users updateUser = new Users()
-                    {
-                        UserID = profile.UserID,
-                        Email = profile.Email,
-                        Name = profile.Name,
-                        Password = profile.Password,
-                        ConfirmedEmail = profile.ConfirmedEmail,
-                        RoleID = profile.RoleID
-                    };
-                    _context.Users.Update(updateUser);
+                    _context.Users.Update(user);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!UsersExists(profile.UserID))
+                    if (!UsersExists(user.UserID))
                     {
                         return NotFound();
                     }
@@ -706,10 +456,11 @@ namespace ESW_Shelter.Controllers
                 }
 
                 await _context.SaveChangesAsync();
-                TempData["Message"] = "Perfil atualizado com sucesso!";
-                return RedirectToAction("Edit", "Users", new { id = profile.UserID });
+                TempData["Message"] = "Utilizador editado com sucesso!";
+                return RedirectToAction(nameof(Index));
             }
-            return RedirectToAction("Index", "Home", null);
+            ViewBag.RoleTypes = _context.Roles.AsParallel();
+            return View(user);
         }
 
         /// <summary>
@@ -742,14 +493,6 @@ namespace ESW_Shelter.Controllers
             return View(users);
         }
 
-        /// <summary>
-        /// <para>Método que vai ser chamado na rota "/Users/Delete/X". Vai receber um id de um Users para ser eleminado após ter recebido a confirmação pela parte do Administrador.</para>
-        /// </summary>
-        /// <param name="id"> Id de Users a ser eliminado</param>
-        /// <permission cref="Administradores">Administradores do sistema.</permission>
-        /// <returns>
-        /// RedirectToAction(nameof(Index));
-        /// </returns>
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
@@ -757,6 +500,25 @@ namespace ESW_Shelter.Controllers
             if (!GetAuthorization(1, 'd'))
             {
                 return NotFound();
+            }
+            var result = _context.AnimalUsers.Where(e => e.UsersFK == id);
+            if(result.Any())
+            {
+                foreach(AnimalUsers aniUs in result.ToList())
+                {
+                    _context.AnimalUsers.Remove(aniUs);
+                    _context.SaveChanges();
+                }
+            }
+            var result2 = _context.Donation.Where(e => e.UsersFK == id);
+            if (result2.Any())
+            {
+                foreach(Donation don in result2.ToList())
+                {
+                    don.UsersFK = 1;
+                    _context.Update(don);
+                    _context.SaveChanges();
+                }
             }
             var users = await _context.Users.FindAsync(id);
             _context.Users.Remove(users);
@@ -766,25 +528,11 @@ namespace ESW_Shelter.Controllers
         }
 
 
-        /// <summary>
-        /// <para>Método que vai verificar se existe um Users com o id recebido.</para>
-        /// </summary>
-        /// <param name="id">Id de Users</param>
-        /// <returns>
-        /// <para>_context.Users.Any(e => e.UserID == id)</para>
-        /// </returns>
         private bool UsersExists(int id)
         {
             return _context.Users.Any(e => e.UserID == id);
         }
 
-        /// <summary>
-        /// <para>Método que vai definir as session variables que o login é efetuado.</para>
-        /// <para>Caso o recebido seja vazio, as variáveis de sessão são removidas ( chamado pelo <seealso cref="Logout(int?)"/> )</para>
-        /// <para>Verifica o role do utilizador, e caso seja admin, declara-se uma outra vairável de sessão</para>
-        /// </summary>
-        /// <param name="name"> Nome do utilizador</param>
-        /// <param name="id"> Id do utilizador </param>
         private void LoginSV(String name, String id)
         {
             if (name.Equals(""))
@@ -811,13 +559,6 @@ namespace ESW_Shelter.Controllers
             }
         }
 
-        /// <summary>
-        /// <para>Método que redefine os session variables, para que não haja perda de dados. Verifica ainda se é admin ou não e devolve conforme o resultado.</para>
-        /// </summary>
-        /// <returns>
-        /// <para> Caso a variável de sessão "Ad" não exista - false</para>
-        /// <para> Caso a variável de sessão "Ad" exista - true</para>
-        /// </returns>
         private bool GetLogin()
         {
             if (HttpContext.Session.GetString("User_Name") != null && HttpContext.Session.GetString("UserID") != null)
@@ -848,6 +589,81 @@ namespace ESW_Shelter.Controllers
             if (cards.Count() == 0) return null;
             
             return cards.First().Id;
+        }
+
+        private void insertToRegisterTable()
+        {
+            string date31string = DateTime.Today.ToString("yyyy/MM/dd");
+            DateTime today = DateTime.ParseExact(date31string, "yyyy/MM/dd", null);
+
+            var checkDate = _context.RegisterStatistics.Where(e => e.DateStatistic.Equals(today)).FirstOrDefault();
+            if (checkDate != null)
+            {
+                RegisterStatistics update = checkDate;
+                update.Count += 1;
+                _context.RegisterStatistics.Update(update);
+            }
+            else
+            {
+                //TimeSpan difference = end - start;
+                RegisterStatistics newStatistic = new RegisterStatistics
+                {
+                    DateStatistic = today,
+                    Count = 1
+                };
+                var lastDate = _context.RegisterStatistics.LastOrDefault();
+                if (lastDate != null)
+                {
+                    TimeSpan difference = today - lastDate.DateStatistic;
+                    if (difference.Days != 1)
+                    {
+                        int daysMissing = difference.Days;
+                        while (daysMissing != 1)
+                        {
+                            RegisterStatistics fillTable = new RegisterStatistics
+                            {
+                                DateStatistic = DateTime.ParseExact(DateTime.Today.AddDays(-daysMissing).ToString("yyyy/MM/dd"), "yyyy/MM/dd", null),
+                                Count = 0
+                            };
+                            _context.RegisterStatistics.Add(fillTable);
+                            _context.SaveChanges();
+                            --daysMissing;
+                        }
+                    }
+                }
+                _context.RegisterStatistics.Add(newStatistic);
+            }
+            _context.SaveChanges();
+        }
+
+        private bool checkValues(Users user)
+        {
+            if (string.IsNullOrEmpty(user.Name))
+            {
+                TempData["Message"] = "Por favor insira um nome!";
+                return false;
+            }
+            if (string.IsNullOrEmpty(user.Email))
+            {
+                TempData["Message"] = "Por favor insira um email!";
+                return false;
+            }
+            if (string.IsNullOrEmpty(user.Password))
+            {
+                TempData["Message"] = "Por favor insira uma password!";
+                return false;
+            }
+            if (user.RoleID <= 0)
+            {
+                TempData["Message"] = "Por favor escolha uma permissão!";
+                return false;
+            }
+            if (user.UserID <= -1)
+            {
+                TempData["Message"] = "Algo de errado aconteceu!";
+                return false;
+            }
+            return true;
         }
 
         [HttpPost, ActionName("Card")]
