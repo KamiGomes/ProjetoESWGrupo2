@@ -42,7 +42,6 @@ footer {
     box-shadow: rgba(0,0,0,0.5) 0 -1px 5px;
 }
 
-
 .navbar-static-top {
     border-width: 0 !important;
 }
@@ -225,7 +224,21 @@ li:hover {
     }
 }
 
+.food {
+    position: fixed !important;
+    z-index: 1000;
+    bottom: 20px !important;
+    right: 35px !important;
+    background: #FF9933;
+    box-shadow: black 0px 0px 5px;
+    padding: 10px;
+    border-radius: 10pc;
+}
+
 .menu-has-image {
+    position: absolute;
+    bottom: 0px;
+    right: 0px;
     padding: 14px 15px !important;
 }
 
