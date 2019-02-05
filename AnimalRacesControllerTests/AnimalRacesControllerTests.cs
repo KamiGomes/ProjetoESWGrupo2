@@ -120,7 +120,7 @@ namespace AnimalRacesControllerTests
                 var controller = new AnimalRacesController(context);
                 var result = await controller.Edit(2, new AnimalRace() { AnimalRaceID = 2, Name = "" });
 
-                Assert.IsType<NotFoundResult>(result);
+                Assert.IsType<RedirectToActionResult>(result);
             }
         }
 
@@ -230,7 +230,7 @@ namespace AnimalRacesControllerTests
                     new AnimalRace { Name = "animal3" });
                 context.SaveChanges();
                 var controller = new AnimalRacesController(context);
-                var result = await controller.DeleteConfirmed(9);
+                var result = await controller.DeleteConfirmed(8);
                 Assert.IsType<RedirectToActionResult>(result);
 
             }
