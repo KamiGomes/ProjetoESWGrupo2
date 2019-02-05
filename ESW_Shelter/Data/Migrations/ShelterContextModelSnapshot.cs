@@ -109,6 +109,25 @@ namespace ESW_Shelter.Data.Migrations
                     b.ToTable("AnimalUsers");
                 });
 
+            modelBuilder.Entity("ESW_Shelter.Models.Components", b =>
+                {
+                    b.Property<int>("ComponentID")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(256);
+
+                    b.Property<string>("NameFront")
+                        .IsRequired()
+                        .HasMaxLength(256);
+
+                    b.HasKey("ComponentID");
+
+                    b.ToTable("Components");
+                });
+
             modelBuilder.Entity("ESW_Shelter.Models.Donation", b =>
                 {
                     b.Property<int>("DonationID")
@@ -141,6 +160,52 @@ namespace ESW_Shelter.Data.Migrations
                     b.ToTable("DonationProduct");
                 });
 
+            modelBuilder.Entity("ESW_Shelter.Models.Images", b =>
+                {
+                    b.Property<int>("ImageID")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("AnimalFK");
+
+                    b.Property<string>("ContentDisposition")
+                        .IsRequired()
+                        .HasMaxLength(4000);
+
+                    b.Property<string>("ContentType")
+                        .IsRequired()
+                        .HasMaxLength(4000);
+
+                    b.Property<string>("FileName")
+                        .IsRequired()
+                        .HasMaxLength(4000);
+
+                    b.Property<long>("Length");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(1000);
+
+                    b.HasKey("ImageID");
+
+                    b.ToTable("Images");
+                });
+
+            modelBuilder.Entity("ESW_Shelter.Models.LoginStatistic", b =>
+                {
+                    b.Property<int>("LoginStatisticID")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("Count");
+
+                    b.Property<DateTime>("DateStatistic");
+
+                    b.HasKey("LoginStatisticID");
+
+                    b.ToTable("LoginStatistic");
+                });
+
             modelBuilder.Entity("ESW_Shelter.Models.Product", b =>
                 {
                     b.Property<int>("ProductID")
@@ -149,6 +214,8 @@ namespace ESW_Shelter.Data.Migrations
 
                     b.Property<int>("AnimalTypeFK");
 
+                    b.Property<int>("MonthStock");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(256);
@@ -156,6 +223,8 @@ namespace ESW_Shelter.Data.Migrations
                     b.Property<int>("ProductTypeFK");
 
                     b.Property<int>("Quantity");
+
+                    b.Property<int>("WeekStock");
 
                     b.HasKey("ProductID");
 
@@ -175,6 +244,44 @@ namespace ESW_Shelter.Data.Migrations
                     b.HasKey("ProductTypeID");
 
                     b.ToTable("ProductTypes");
+                });
+
+            modelBuilder.Entity("ESW_Shelter.Models.RegisterStatistics", b =>
+                {
+                    b.Property<int>("RegisterStatisticID")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("Count");
+
+                    b.Property<DateTime>("DateStatistic");
+
+                    b.HasKey("RegisterStatisticID");
+
+                    b.ToTable("RegisterStatistics");
+                });
+
+            modelBuilder.Entity("ESW_Shelter.Models.RoleAuthorization", b =>
+                {
+                    b.Property<int>("RoleAuthorizationID")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("ComponentFK");
+
+                    b.Property<bool>("Create");
+
+                    b.Property<bool>("Delete");
+
+                    b.Property<bool>("Read");
+
+                    b.Property<int>("RoleFK");
+
+                    b.Property<bool>("Update");
+
+                    b.HasKey("RoleAuthorizationID");
+
+                    b.ToTable("RoleAuthorization");
                 });
 
             modelBuilder.Entity("ESW_Shelter.Models.Roles", b =>

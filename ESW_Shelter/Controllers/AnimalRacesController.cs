@@ -18,20 +18,20 @@ namespace ESW_Shelter.Controllers
         // GET: AnimalRaces
         public async Task<IActionResult> Index()
         {
-           /* if (!GetAutorization(4))
+            if(!GetAuthorization(7, 'r'))
             {
-                return ErrorNotFoundOrSomeOtherError();
-            }*/
+                return NotFound();
+            }
             return View(await _context.AnimalRace.ToListAsync());
         }
 
         // GET: AnimalRaces/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            /*if (!GetAutorization(4))
+            if (!GetAuthorization(7, 'r'))
             {
-                return ErrorNotFoundOrSomeOtherError();
-            }*/
+                return NotFound();
+            }
             if (id == null)
             {
                 return NotFound();
@@ -50,10 +50,10 @@ namespace ESW_Shelter.Controllers
         // GET: AnimalRaces/Create
         public IActionResult Create()
         {
-           /* if (!GetAutorization(4))
+            if (!GetAuthorization(7, 'c'))
             {
-                return ErrorNotFoundOrSomeOtherError();
-            }*/
+                return NotFound();
+            }
             return View();
         }
 
@@ -64,10 +64,14 @@ namespace ESW_Shelter.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("AnimalRaceID,Name")] AnimalRace animalRace)
         {
-           /* if (!GetAutorization(4))
+            if (!GetAuthorization(7, 'c'))
             {
-                return ErrorNotFoundOrSomeOtherError();
-            }*/
+                return NotFound();
+            }
+            if (!checkValues(animalRace))
+            {
+                return View(animalRace);
+            }
             if (ModelState.IsValid)
             {
                 _context.Add(animalRace);
@@ -81,10 +85,10 @@ namespace ESW_Shelter.Controllers
         // GET: AnimalRaces/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            /*if (!GetAutorization(4))
+            if (!GetAuthorization(7, 'u'))
             {
-                return ErrorNotFoundOrSomeOtherError();
-            }*/
+                return NotFound();
+            }
             if (id == null)
             {
                 return NotFound();
@@ -105,15 +109,18 @@ namespace ESW_Shelter.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("AnimalRaceID,Name")] AnimalRace animalRace)
         {
-           /* if (!GetAutorization(4))
+            if (!GetAuthorization(7, 'u'))
             {
-                return ErrorNotFoundOrSomeOtherError();
-            }*/
+                return NotFound();
+            }
             if (id != animalRace.AnimalRaceID)
             {
                 return NotFound();
             }
-
+            if (!checkValues(animalRace))
+            {
+                return View(animalRace);
+            }
             if (ModelState.IsValid)
             {
                 try
@@ -132,7 +139,7 @@ namespace ESW_Shelter.Controllers
                         throw;
                     }
                 }
-               // TempData["Message"] = "Raça de animal editada com sucesso!";
+                TempData["Message"] = "Raça de animal editada com sucesso!";
                 return RedirectToAction(nameof(Index));
             }
             return View(animalRace);
@@ -141,10 +148,10 @@ namespace ESW_Shelter.Controllers
         // GET: AnimalRaces/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            /*if (!GetAutorization(4))
+            if (!GetAuthorization(7, 'd'))
             {
-                return ErrorNotFoundOrSomeOtherError();
-            }*/
+                return NotFound();
+            }
             if (id == null)
             {
                 return NotFound();
@@ -165,20 +172,42 @@ namespace ESW_Shelter.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-           /* if (!GetAutorization(4))
+            if (!GetAuthorization(7, 'd'))
             {
-                return ErrorNotFoundOrSomeOtherError();
-            }*/
+                return NotFound();
+            }
+            var check = _context.Animal.Where(e => e.AnimalRaceFK == id);
+            if (check.Any())
+            {
+                TempData["Message"] = "Raça de animal que pretende eliminar têm animais associados a ela! Por favor altere primeiro esses animais e depois tente eliminar novamente!";
+                return RedirectToAction(nameof(Index));
+            }
             var animalRace = await _context.AnimalRace.FindAsync(id);
             _context.AnimalRace.Remove(animalRace);
             await _context.SaveChangesAsync();
-//            TempData["Message"] = "Raça de animal eliminada com sucesso!";
+            TempData["Message"] = "Raça de animal eliminada com sucesso!";
             return RedirectToAction(nameof(Index));
         }
 
         private bool AnimalRaceExists(int id)
         {
             return _context.AnimalRace.Any(e => e.AnimalRaceID == id);
+        }
+
+
+        private bool checkValues(AnimalRace animalRace)
+        {
+            if (string.IsNullOrEmpty(animalRace.Name))
+            {
+                TempData["Message"] = "Por favor insira um nome para a raça!";
+                return false;
+            }
+            if (animalRace.AnimalRaceID <= 0)
+            {
+                TempData["Message"] = "Algo de errado aconteceu!";
+                return false;
+            }
+            return true;
         }
     }
 }

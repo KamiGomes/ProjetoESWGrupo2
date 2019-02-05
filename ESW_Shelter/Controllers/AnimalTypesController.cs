@@ -21,19 +21,19 @@ namespace ESW_Shelter.Controllers
         // GET: AnimalTypes
         public async Task<IActionResult> Index()
         {
-            if (!GetAutorization(4))
+            if (!GetAuthorization(6, 'r'))
             {
-                return ErrorNotFoundOrSomeOtherError();
+                return NotFound();
             }
             return View(await _context.AnimalTypes.ToListAsync());
         }
-
+        
         // GET: AnimalTypes/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (!GetAutorization(4))
+            if (!GetAuthorization(6, 'r'))
             {
-                return ErrorNotFoundOrSomeOtherError();
+                return NotFound();
             }
             if (id == null)
             {
@@ -53,9 +53,9 @@ namespace ESW_Shelter.Controllers
         // GET: AnimalTypes/Create
         public async Task<IActionResult> Create()
         {
-            if (!GetAutorization(4))
+            if (!GetAuthorization(6, 'c'))
             {
-                return ErrorNotFoundOrSomeOtherError();
+                return NotFound();
             }
             return View();
         }
@@ -67,9 +67,13 @@ namespace ESW_Shelter.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("AnimalTypeID,Name")] AnimalType animalType)
         {
-            if (!GetAutorization(4))
+            if (!GetAuthorization(6, 'c'))
             {
-                return ErrorNotFoundOrSomeOtherError();
+                return NotFound();
+            }
+            if (!checkValues(animalType))
+            {
+                return View(animalType);
             }
             if (ModelState.IsValid)
             {
@@ -84,9 +88,9 @@ namespace ESW_Shelter.Controllers
         // GET: AnimalTypes/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (!GetAutorization(4))
+            if (!GetAuthorization(6, 'u'))
             {
-                return ErrorNotFoundOrSomeOtherError();
+                return NotFound();
             }
             if (id == null)
             {
@@ -108,9 +112,9 @@ namespace ESW_Shelter.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("AnimalTypeID,Name")] AnimalType animalType)
         {
-            if (!GetAutorization(4))
+            if (!GetAuthorization(6, 'u'))
             {
-                return ErrorNotFoundOrSomeOtherError();
+                return NotFound();
             }
             if (!checkValues(animalType))
             {
@@ -118,7 +122,7 @@ namespace ESW_Shelter.Controllers
             }
             if (id != animalType.AnimalTypeID)
             {
-                return ErrorNotFoundOrSomeOtherError();
+                return NotFound();
             }
 
             if (ModelState.IsValid)
@@ -148,9 +152,9 @@ namespace ESW_Shelter.Controllers
         // GET: AnimalTypes/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (!GetAutorization(4))
+            if (!GetAuthorization(6, 'd'))
             {
-                return ErrorNotFoundOrSomeOtherError();
+                return NotFound();
             }
             if (id == null)
             {
@@ -172,9 +176,16 @@ namespace ESW_Shelter.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            if (!GetAutorization(4))
+            if (!GetAuthorization(6, 'd'))
             {
-                return ErrorNotFoundOrSomeOtherError();
+                return NotFound();
+            }
+            var check = _context.Animal.Where(e => e.AnimalTypeFK == id);
+            var check2 = _context.Products.Where(e => e.AnimalTypeFK == id);
+            if (check.Any() || check2.Any())
+            {
+                TempData["Message"] = "Tipo de animal que pretende eliminar têm animais associados a ela! Por favor altere primeiro (Animais ou Produtos) e depois tente eliminar novamente!";
+                return RedirectToAction(nameof(Index));
             }
             var animalType = await _context.AnimalTypes.FindAsync(id);
             _context.AnimalTypes.Remove(animalType);

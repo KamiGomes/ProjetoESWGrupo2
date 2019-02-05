@@ -3,6 +3,7 @@
 @{
     ViewData["Title"] = "Create";
     Layout = "~/Views/Shared/_BackLayout.cshtml";
+    List<Product> products = ViewBag.Products;
 }
 
 <h2>Criar um novo Donativo</h2>
@@ -10,17 +11,17 @@
 <div class="row">
     <div class="col-md-10">
         <!-- <label asp-for="SelectedProducts" class="control-label">Tabela De Produtos</label>
-     <form asp-controller="Donations" asp-action="Create" method="get">
-         Nome do produto: <input type="text" name="SearchString" style="color:black;" placeholder="Nome do produto">
-         <select asp-for="AnimalType" asp-items="Model.AnimalTypes">
-             <option value="">Todos os Animais</option>
-         </select>
-         <select asp-for="ProductType" asp-items="Model.ProductTypes">
-             <option value="">Todos os Produtos</option>
-         </select>
-         <input type="submit" value="Pesquisar" style="background-color: coral" />
-     </form>
-     <hr />-->
+        <form asp-controller="Donations" asp-action="Create" method="get">
+            Nome do produto: <input type="text" name="SearchString" style="color:black;" placeholder="Nome do produto">
+            <select asp-for="AnimalType" asp-items="Model.AnimalTypes">
+                <option value="">Todos os Animais</option>
+            </select>
+            <select asp-for="ProductType" asp-items="Model.ProductTypes">
+                <option value="">Todos os Produtos</option>
+            </select>
+            <input type="submit" value="Pesquisar" style="background-color: coral" />
+        </form>
+        <hr />-->
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
@@ -138,14 +139,14 @@
             </div>
         </form>
         <!--<form asp-controller="Donations" asp-action="Create" method="get">
-        Nome do produto: <input type="text" name="SearchString" style="color:black;" placeholder="Nome do produto">
-        <select asp-for="AnimalType" asp-items="Model.AnimalTypes">
-            <option value="">Todos os Animais</option>
-        </select>
-        <select asp-for="ProductType" asp-items="Model.ProductTypes">
-            <option value="">Todos os Produtos</option>
-        </select>
-        <input type="submit" value="Pesquisar" style="background-color: coral" />
-    </form>-->
+            Nome do produto: <input type="text" name="SearchString" style="color:black;" placeholder="Nome do produto">
+            <select asp-for="AnimalType" asp-items="Model.AnimalTypes">
+                <option value="">Todos os Animais</option>
+            </select>
+            <select asp-for="ProductType" asp-items="Model.ProductTypes">
+                <option value="">Todos os Produtos</option>
+            </select>
+            <input type="submit" value="Pesquisar" style="background-color: coral" />
+        </form>-->
     </div>
 </div>

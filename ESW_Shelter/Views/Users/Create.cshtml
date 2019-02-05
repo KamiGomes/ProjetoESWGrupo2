@@ -10,18 +10,18 @@
     <div class="col-md-4">
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="UserID" />
-            <input type="hidden" asp-for="ConfirmedEmail" />
-            <input type="hidden" asp-for="RoleID" />
             <div class="form-group">
-                <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control" />
-                <span asp-validation-for="Name" class="text-danger"></span>
+                <input asp-for="ConfirmedEmail" class="form-control" value="false" type="hidden" />
             </div>
             <div class="form-group">
                 <label asp-for="Email" class="control-label"></label>
                 <input asp-for="Email" class="form-control" />
                 <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Password" class="control-label"></label>
@@ -50,14 +50,14 @@
             </div>
             <div class="form-group">
                 <label asp-for="DateOfBirth" class="control-label"></label>
-                <input asp-for="DateOfBirth" class="form-control" value="1900-01-01"/>
+                <input asp-for="DateOfBirth" value="1990-01-01" class="form-control" />
                 <span asp-validation-for="DateOfBirth" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="RoleID" class="control-label"></label>
-                <select class="input-lg" name="RoleFK" id="AnimalTypeFK">
+                <select class="input-lg" name="RoleID" id="RoleID">
                     <option value="0" style="color:#ccc !important;">
-                        Por favor seleccione um role!
+                        Por favor escolha uma permissão!
                     </option>
                     @foreach (Roles item in ViewBag.RoleTypes)
                     {

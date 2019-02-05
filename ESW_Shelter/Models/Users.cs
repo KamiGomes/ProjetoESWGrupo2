@@ -50,7 +50,7 @@ namespace ESW_Shelter.Models
         public String Street { get; set; }
 
         [StringLength(10, ErrorMessage = "Código-Postal não pode ter mais de 10 caracteres!", MinimumLength = 5)]
-        [RegularExpression(@"\d{4}(-\d{3})?", ErrorMessage = "Por favor, siga o formato do exemplo!")]
+        //[RegularExpression(ErrorMessage = "Por favor, siga o formato do exemplo!")]
         [Display(Prompt = "Examplo: 4000-010", Name = "Código-Postal")]
         public String PostalCode { get; set; }
 
@@ -74,6 +74,7 @@ namespace ESW_Shelter.Models
         public int RoleID { get; set; }
 
         [NotMapped]
+        [Display(Name = "Permissão")]
         public String RoleName { get; set; }
 
         [DataType("String")]

@@ -7,7 +7,7 @@
 
 <h2>Eliminar - @Model.Name</h2>
 
-<h3>Têm a certeza que quer elminar @Model.Name? Após a eliminação, os dados não pode ser recuperados!</h3>
+<h3>Têm a certeza que quer elminar @Model.Name? Avisa-se que se algum Donativo ou Animal que tiver relacionado com este Produto, terá que alterar antes de eliminar!</h3>
 <div>
     <h4>Product</h4>
     <hr />
@@ -23,6 +23,18 @@
         </dt>
         <dd>
             @Html.DisplayFor(model => model.Quantity)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.WeekStock)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.WeekStock)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.MonthStock)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.MonthStock)
         </dd>
         <dt>
             @Html.DisplayNameFor(model => model.AnimalTypeFK)

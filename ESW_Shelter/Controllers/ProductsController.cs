@@ -22,9 +22,9 @@ namespace ESW_Shelter.Controllers
         // GET: Products
         public async Task<IActionResult> Index(string searchString, string animalType, string productType)
         {
-            if (!GetAutorization(4))
+            if (!GetAuthorization(4, 'r'))
             {
-                return ErrorNotFoundOrSomeOtherError();
+                return NotFound();
             }
             var query = from product in _context.Products
                         join productsType in _context.ProductTypes on product.ProductTypeFK equals productsType.ProductTypeID
@@ -34,6 +34,8 @@ namespace ESW_Shelter.Controllers
                             ProductID = product.ProductID,
                             Name = product.Name,
                             Quantity = product.Quantity,
+                            WeekStock = product.WeekStock,
+                            MonthStock = product.MonthStock,
                             AnimalTypeFK = product.AnimalTypeFK,
                             ProductTypeFK = product.ProductTypeFK,
                             ProductTypeName = productsType.Name,
@@ -60,6 +62,8 @@ namespace ESW_Shelter.Controllers
                 ProductID = e.ProductID,
                 Name = e.Name,
                 Quantity = e.Quantity,
+                WeekStock = e.WeekStock,
+                MonthStock = e.MonthStock,
                 ProductTypeName = e.ProductTypeName,
                 AnimaltypeName = e.AnimaltypeName
             }).ToList();
@@ -86,9 +90,9 @@ namespace ESW_Shelter.Controllers
         // GET: Products/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (!GetAutorization(4))
+            if (!GetAuthorization(4, 'r'))
             {
-                return ErrorNotFoundOrSomeOtherError();
+                return NotFound();
             }
             if (id == null)
             {
@@ -108,12 +112,11 @@ namespace ESW_Shelter.Controllers
         // GET: Products/Create
         public IActionResult Create()
         {
-            if (!GetAutorization(4))
+            if (!GetAuthorization(4, 'c'))
             {
-                return ErrorNotFoundOrSomeOtherError();
+                return NotFound();
             }
-            ViewBag.AnimalsTypes = _context.AnimalTypes.AsParallel();
-            ViewBag.ProductType = _context.ProductTypes.AsParallel();
+            setViewBags();
             return View();
         }
 
@@ -122,15 +125,16 @@ namespace ESW_Shelter.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ProductID,Name,Quantity,AnimalTypeFK,ProductTypeFK")] Product product)
+        public async Task<IActionResult> Create([Bind("ProductID,Name,Quantity,WeekStock,MonthStock,AnimalTypeFK,ProductTypeFK")] Product product)
         {
-            if (!GetAutorization(4))
+            if (!GetAuthorization(4, 'c'))
             {
-                return ErrorNotFoundOrSomeOtherError();
+                return NotFound();
             }
-            if(!checkValues(product))
+            if (!checkValues(product))
             {
-                return RedirectToAction(nameof(Create));
+                setViewBags();
+                return View(product);
             }
             if (ModelState.IsValid)
             {
@@ -147,12 +151,10 @@ namespace ESW_Shelter.Controllers
         // GET: Products/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (!GetAutorization(4))
+            if (!GetAuthorization(4, 'u'))
             {
-                return ErrorNotFoundOrSomeOtherError();
+                return NotFound();
             }
-            ViewBag.AnimalsTypes = _context.AnimalTypes.AsParallel();
-            ViewBag.ProductType = _context.ProductTypes.AsParallel();
 
             if (id == null)
             {
@@ -164,6 +166,7 @@ namespace ESW_Shelter.Controllers
             {
                 return NotFound();
             }
+            setViewBags();
             return View(product);
         }
 
@@ -172,15 +175,16 @@ namespace ESW_Shelter.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ProductID,Name,Quantity,AnimalTypeFK,ProductTypeFK")] Product product)
+        public async Task<IActionResult> Edit(int id, [Bind("ProductID,Name,Quantity,WeekStock,MonthStock,AnimalTypeFK,ProductTypeFK")] Product product)
         {
-            if (!GetAutorization(4))
+            if (!GetAuthorization(4, 'u'))
             {
-                return ErrorNotFoundOrSomeOtherError();
+                return NotFound();
             }
             if (!checkValues(product))
             {
-                return RedirectToAction(nameof(Create));
+                setViewBags();
+                return View(product);
             }
             if (id != product.ProductID)
             {
@@ -208,15 +212,16 @@ namespace ESW_Shelter.Controllers
                 TempData["Message"] = "Produto editado com sucesso!";
                 return RedirectToAction(nameof(Index));
             }
+            setViewBags();
             return View(product);
         }
 
         // GET: Products/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (!GetAutorization(4))
+            if (!GetAuthorization(4, 'd'))
             {
-                return ErrorNotFoundOrSomeOtherError();
+                return NotFound();
             }
             if (id == null)
             {
@@ -260,9 +265,16 @@ namespace ESW_Shelter.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            if (!GetAutorization(4))
+            if (!GetAuthorization(4, 'd'))
             {
-                return ErrorNotFoundOrSomeOtherError();
+                return NotFound();
+            }
+            var check = _context.AnimalProduct.Where(e => e.ProductFK == id);
+            var check2 = _context.DonationProduct.Where(e => e.ProductFK == id);
+            if (check.Any() || check2.Any())
+            {
+                TempData["Message"] = "Produto pretende eliminar têm Animais ou Donativos associados a ele! Por favor altere primeiro esses donativos ou animais, e depois tente eliminar novamente!";
+                return RedirectToAction(nameof(Index));
             }
             var product = await _context.Products.FindAsync(id);
             _context.Products.Remove(product);
@@ -274,6 +286,12 @@ namespace ESW_Shelter.Controllers
         private bool ProductExists(int id)
         {
             return _context.Products.Any(e => e.ProductID == id);
+        }
+
+        private void setViewBags()
+        {
+            ViewBag.AnimalsTypes = _context.AnimalTypes.AsParallel();
+            ViewBag.ProductType = _context.ProductTypes.AsParallel();
         }
 
         private bool checkValues(Product product)
@@ -293,9 +311,34 @@ namespace ESW_Shelter.Controllers
                 TempData["Message"] = "Por favor insira um nome para o produto!";
                 return false;
             }
+            if (string.IsNullOrEmpty(product.Quantity.ToString()))
+            {
+                TempData["Message"] = "Stock atual não pode estar em branco!";
+                return false;
+            }
             if (product.Quantity <= -1)
             {
-                TempData["Message"] = "Quantidade não pode ser negativa!";
+                TempData["Message"] = "Stock atual não pode ser negativa!";
+                return false;
+            }
+            if (string.IsNullOrEmpty(product.WeekStock.ToString()))
+            {
+                TempData["Message"] = "Stock semanal não pode estar em branco!";
+                return false;
+            }
+            if (product.WeekStock <= -1)
+            {
+                TempData["Message"] = "Stock semanal não pode ser negativa!";
+                return false;
+            }
+            if (string.IsNullOrEmpty(product.MonthStock.ToString()))
+            {
+                TempData["Message"] = "Stock mensal não pode estar em branco!";
+                return false;
+            }
+            if (product.MonthStock <= -1)
+            {
+                TempData["Message"] = "Stock mensal não pode ser negativa!";
                 return false;
             }
             if (product.ProductID <= -1)

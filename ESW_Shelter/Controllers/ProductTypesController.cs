@@ -18,9 +18,9 @@ namespace ESW_Shelter.Controllers
         // GET: ProductTypes
         public async Task<IActionResult> Index()
         {
-            if (!GetAutorization(4))
+            if (!GetAuthorization(3, 'r'))
             {
-                return ErrorNotFoundOrSomeOtherError();
+                return NotFound();
             }
             return View(await _context.ProductTypes.ToListAsync());
         }
@@ -28,9 +28,9 @@ namespace ESW_Shelter.Controllers
         // GET: ProductTypes/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (!GetAutorization(4))
+            if (!GetAuthorization(3, 'r'))
             {
-                return ErrorNotFoundOrSomeOtherError();
+                return NotFound();
             }
             if (id == null)
             {
@@ -50,9 +50,9 @@ namespace ESW_Shelter.Controllers
         // GET: ProductTypes/Create
         public IActionResult Create()
         {
-            if (!GetAutorization(4))
+            if (!GetAuthorization(3, 'c'))
             {
-                return ErrorNotFoundOrSomeOtherError();
+                return NotFound();
             }
             return View();
         }
@@ -64,9 +64,9 @@ namespace ESW_Shelter.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("ProductTypeID,Name")] ProductType productType)
         {
-            if (!GetAutorization(4))
+            if (!GetAuthorization(3, 'c'))
             {
-                return ErrorNotFoundOrSomeOtherError();
+                return NotFound();
             }
             if (!checkValues(productType))
             {
@@ -85,9 +85,9 @@ namespace ESW_Shelter.Controllers
         // GET: ProductTypes/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (!GetAutorization(4))
+            if (!GetAuthorization(3, 'u'))
             {
-                return ErrorNotFoundOrSomeOtherError();
+                return NotFound();
             }
             if (id == null)
             {
@@ -109,9 +109,9 @@ namespace ESW_Shelter.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("ProductTypeID,Name")] ProductType productType)
         {
-            if (!GetAutorization(4))
+            if (!GetAuthorization(3, 'u'))
             {
-                return ErrorNotFoundOrSomeOtherError();
+                return NotFound();
             }
             if (!checkValues(productType))
             {
@@ -149,9 +149,9 @@ namespace ESW_Shelter.Controllers
         // GET: ProductTypes/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (!GetAutorization(4))
+            if (!GetAuthorization(3, 'd'))
             {
-                return ErrorNotFoundOrSomeOtherError();
+                return NotFound();
             }
             if (id == null)
             {
@@ -173,9 +173,15 @@ namespace ESW_Shelter.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            if (!GetAutorization(4))
+            if (!GetAuthorization(3, 'd'))
             {
-                return ErrorNotFoundOrSomeOtherError();
+                return NotFound();
+            }
+            var check = _context.Products.Where(e => e.ProductTypeFK == id);
+            if (check.Any())
+            {
+                TempData["Message"] = "Tipo de produto que pretende eliminar têm animais associados a ela! Por favor altere primeiro os produtos associados e depois tente eliminar novamente!";
+                return RedirectToAction(nameof(Index));
             }
             var productType = await _context.ProductTypes.FindAsync(id);
             _context.ProductTypes.Remove(productType);
