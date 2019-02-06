@@ -33,6 +33,31 @@ namespace ESW_Shelter.Libs
             return service.List(options).ToArray<Stripe.Plan>();
         }
 
+        public bool HasSubscription(string customerId)
+        {
+            var subscriptionService = new Stripe.SubscriptionService();
+            Stripe.StripeList<Stripe.Subscription> response = subscriptionService.List(new Stripe.SubscriptionListOptions
+            {
+                CustomerId = customerId
+            });
+
+            return response.Count() >= 1;
+        }
+
+        public void DeleteSubscriptions(string customerId)
+        {
+            var subscriptionService = new Stripe.SubscriptionService();
+            Stripe.StripeList<Stripe.Subscription> subscriptions = subscriptionService.List(new Stripe.SubscriptionListOptions
+            {
+                CustomerId = customerId
+            });
+
+            foreach (Stripe.Subscription subscription in subscriptions)
+            {
+                subscriptionService.Cancel(subscription.Id, null);
+            }
+        }
+
         public string Subscribe(string customerId, string planId)
         {
 
