@@ -35,7 +35,7 @@
             {
             <tr>
                 <td>
-                    @item.Name
+                    @item.NameFront
                 </td>
                 <td>
                     <input name="@item.Name" id=1 type="checkbox" disabled="disabled" class="check" value="1" checked="@(autho.Exists(e=> e.ComponentFK == item.ComponentID) ? autho.Where(e=> e.ComponentFK == item.ComponentID).First().Create.Equals(true) ? "checked" : null : null)" />
