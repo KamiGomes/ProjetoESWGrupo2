@@ -65,12 +65,12 @@ namespace ESW_Shelter.Libs
             {
                 CustomerId = customerId
             });
-
+           
             if (subscriptions.Count() == 0)
             {
-                return "Sem Subscrições";
+                return "N/A";
             }
-
+           
             return subscriptions.First().Plan.Nickname;
         }
 

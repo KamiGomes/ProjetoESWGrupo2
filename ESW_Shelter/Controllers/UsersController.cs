@@ -45,7 +45,8 @@ namespace ESW_Shelter.Controllers
                             Email = usersJ.Email,
                             ConfirmedEmail = usersJ.ConfirmedEmail,
                             RoleName = rolesJ.RoleName,
-                            RoleID = rolesJ.RoleID
+                            RoleID = rolesJ.RoleID,
+                            CustomerID = usersJ.CustomerId
                         };
 
             if (!String.IsNullOrEmpty(searchString))
@@ -65,7 +66,8 @@ namespace ESW_Shelter.Controllers
                 Email = e.Email,
                 ConfirmedEmail = e.ConfirmedEmail,
                 RoleName = e.RoleName,
-                RoleID = e.RoleID
+                RoleID = e.RoleID,
+                CustomerId = e.CustomerID
             }).ToList();
 
             var rolesTypesQuery = from roles in _context.Roles
@@ -77,6 +79,23 @@ namespace ESW_Shelter.Controllers
                 Users = result,
                 RolesType = new SelectList(rolesTypesQuery.Distinct().ToList()),
             };
+
+            Dictionary<int, string> dict = new Dictionary<int, string>();
+            StripeLib stripeLib = new StripeLib();
+            foreach (Users user in result)
+            {
+               try
+                {
+                    dict.Add(user.UserID, stripeLib.GetSubscription(user.CustomerId));
+                }
+                catch (Exception ex)
+                {
+                    dict.Add(user.UserID, "N/A");
+                }
+
+            }
+
+            ViewBag.Subscriptions = dict;
 
             return View(usersIndexVM);
         }
@@ -376,7 +395,7 @@ namespace ESW_Shelter.Controllers
                 ViewBag.subscription = stripeLib.GetSubscription(user.CustomerId);
             } catch (Exception ex)
             {
-                ViewBag.subscription = "Sem Subscrições";
+                ViewBag.subscription = "N/A";
             }
 
             return View(user);
