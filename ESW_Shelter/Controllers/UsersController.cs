@@ -369,9 +369,16 @@ namespace ESW_Shelter.Controllers
 
             string date31string = user.DateOfBirth.ToString("yyyy/MM/dd");
             user.DateOfBirth = DateTime.ParseExact(date31string, "yyyy/MM/dd", null);
-            /*StripeLib stripeLib = new StripeLib();
-            var plans = stripeLib.GetPlans().Where(e=> e. == user.CustomerId);
-            ViewData["plans"] = plans;*/
+
+            try
+            {
+                StripeLib stripeLib = new StripeLib();
+                ViewBag.subscription = stripeLib.GetSubscription(user.CustomerId);
+            } catch (Exception ex)
+            {
+                ViewBag.subscription = "Sem Subscrições";
+            }
+
             return View(user);
         }
 

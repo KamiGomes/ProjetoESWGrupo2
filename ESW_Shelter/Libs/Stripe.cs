@@ -58,6 +58,22 @@ namespace ESW_Shelter.Libs
             }
         }
 
+        public string GetSubscription(string customerId)
+        {
+            var subscriptionService = new Stripe.SubscriptionService();
+            Stripe.StripeList<Stripe.Subscription> subscriptions = subscriptionService.List(new Stripe.SubscriptionListOptions
+            {
+                CustomerId = customerId
+            });
+
+            if (subscriptions.Count() == 0)
+            {
+                return "Sem Subscrições";
+            }
+
+            return subscriptions.First().Plan.Nickname;
+        }
+
         public string Subscribe(string customerId, string planId)
         {
 
