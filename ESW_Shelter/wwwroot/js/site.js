@@ -51,6 +51,14 @@ $(document).ready(() => {
         });
     }
 
+    $('#statsSelect').add('#grafSelect').change(function () {
+        if ($('#statsSelect').val() != '-1' && $('#grafSelect').val() != '-1') {
+            $('#statisticsSubmit').prop('disabled', false);
+        } else {
+            $('#statisticsSubmit').prop('disabled', true);
+        }
+    });
+
     $('#planSelector').click(function (plansButton) {
         let dataEnabled = (this.getAttribute("data-enabled") == "true");
 

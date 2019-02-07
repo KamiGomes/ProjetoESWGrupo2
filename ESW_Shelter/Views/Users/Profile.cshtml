@@ -1,12 +1,13 @@
 ﻿@model ESW_Shelter.Models.Users
 
 @{
+    var subscriptionPlan = ViewBag.subscription;
     ViewData["Title"] = "Profile";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 <div class="row profile">
     <p style="margin-left: 10px;">
-        <h2 class="innerH2">Profile</h2>
+        <h2 class="innerH2">Profile - Subscrição (@subscriptionPlan)</h2>
     </p>
     <div class="col-md-5">
         <form asp-action="Profile">

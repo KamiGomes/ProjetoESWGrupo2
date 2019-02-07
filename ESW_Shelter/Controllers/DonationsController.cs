@@ -611,6 +611,12 @@ namespace ESW_Shelter.Controllers
                 var customerId = user.CustomerId;
 
                 StripeLib stripeLib = new StripeLib();
+
+                if (stripeLib.HasSubscription(customerId))
+                {
+                    stripeLib.DeleteSubscriptions(customerId);
+                }
+
                 var subscriptionId = stripeLib.Subscribe(customerId, planId);
 
                 if (subscriptionId == null) return "false";

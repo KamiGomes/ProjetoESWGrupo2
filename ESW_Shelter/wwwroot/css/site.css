@@ -109,7 +109,7 @@ footer {
         }
 
     #myNavBar a {
-        padding: 15px 20px;
+        padding: 15px 10px;
         height: 100%;
         color: white;
         font-weight: bold;
@@ -247,6 +247,10 @@ li:hover {
     position: relative;
     max-width: 22px !important;
     padding: 0 !important;
+}
+
+.donations-image {
+    filter: drop-shadow(0px 0px 1px black);
 }
 
 .img-responsive {
@@ -479,18 +483,16 @@ h2 {
 }
 
 .subMenu {
+    top: 50px;
     width: 200px;
     height: 100%;
     position: absolute;
-    margin: -20px;
+    left: 0;
     margin-top: -50px;
     padding: 0;
     background-color: #ff9933;
     box-shadow: black 0px 0px 3px;
-}
-
-.vertical-menu a:first-child {
-    margin-top: 25%;
+    overflow-y: auto;
 }
 
 .vertical-menu a {
@@ -636,4 +638,23 @@ select {
         float: right;
         margin-top: 20px;
         text-align: right;
+    }
+
+hr {
+    margin: 10px 12.5% !important;
+    border-top: 1px dashed white;
+    width: 75%;
+}
+
+.form-statistics {
+    width: 200px;
+}
+
+    .form-statistics > select {
+        width: 100%;
+        margin: 10px 0;
+    }
+
+    .form-statistics > input {
+        margin-top: 15px;
     }
