@@ -645,3 +645,16 @@ hr {
     border-top: 1px dashed white;
     width: 75%;
 }
+
+.form-statistics {
+    width: 200px;
+}
+
+    .form-statistics > select {
+        width: 100%;
+        margin: 10px 0;
+    }
+
+    .form-statistics > input {
+        margin-top: 15px;
+    }
