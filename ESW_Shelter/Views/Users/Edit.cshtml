@@ -66,9 +66,9 @@
                     </option>
                     @foreach (Roles item in ViewBag.RoleTypes)
                     {
-                        <option value="@item.RoleID" selected="@(Model.RoleID==item.RoleID ? "selected" : null)">
-                            @item.RoleName
-                        </option>
+                    <option value="@item.RoleID" selected="@(Model.RoleID==item.RoleID ? " selected" : null)">
+                        @item.RoleName
+                    </option>
                     }
                 </select>
                 <span asp-validation-for="RoleID" class="text-danger"></span>

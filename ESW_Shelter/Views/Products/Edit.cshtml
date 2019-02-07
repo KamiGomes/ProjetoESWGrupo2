@@ -41,18 +41,18 @@
                     </option>
                     @foreach (AnimalType item in ViewBag.AnimalsTypes)
                     {
-                        if (item.AnimalTypeID == Model.AnimalTypeFK)
-                        {
-                            <option selected="selected" value="@item.AnimalTypeID">
-                                @item.Name
-                            </option>
-                        }
-                        else
-                        {
-                            <option value="@item.AnimalTypeID">
-                                @item.Name
-                            </option>
-                        }
+                    if (item.AnimalTypeID == Model.AnimalTypeFK)
+                    {
+                    <option selected="selected" value="@item.AnimalTypeID">
+                        @item.Name
+                    </option>
+                    }
+                    else
+                    {
+                    <option value="@item.AnimalTypeID">
+                        @item.Name
+                    </option>
+                    }
                     }
                 </select>
                 <span asp-validation-for="AnimalTypeFK" class="text-danger"></span>
@@ -65,18 +65,18 @@
                     </option>
                     @foreach (ProductType item in ViewBag.ProductType)
                     {
-                        if (item.ProductTypeID == Model.ProductTypeFK)
-                        {
-                            <option selected="selected" value="@item.ProductTypeID">
-                                @item.Name
-                            </option>
-                        }
-                        else
-                        {
-                            <option value="@item.ProductTypeID">
-                                @item.Name
-                            </option>
-                        }
+                    if (item.ProductTypeID == Model.ProductTypeFK)
+                    {
+                    <option selected="selected" value="@item.ProductTypeID">
+                        @item.Name
+                    </option>
+                    }
+                    else
+                    {
+                    <option value="@item.ProductTypeID">
+                        @item.Name
+                    </option>
+                    }
                     }
                 </select>
                 <span asp-validation-for="ProductTypeFK" class="text-danger"></span>

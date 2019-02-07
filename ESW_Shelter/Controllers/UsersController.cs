@@ -25,7 +25,7 @@ namespace ESW_Shelter.Controllers
 
         public UsersController(ShelterContext context, IConfiguration configuration) : base(context)
         {
-            
+
             _context = context;
             _configuration = configuration;
         }
@@ -84,7 +84,7 @@ namespace ESW_Shelter.Controllers
             StripeLib stripeLib = new StripeLib();
             foreach (Users user in result)
             {
-               try
+                try
                 {
                     dict.Add(user.UserID, stripeLib.GetSubscription(user.CustomerId));
                 }
@@ -179,21 +179,21 @@ namespace ESW_Shelter.Controllers
             }
             if (ModelState.IsValid)
             {
-                 _context.Add(users);
-                 await _context.SaveChangesAsync();
-                 /** Send Confirmation Email **/
-                 int user_id = (from user in _context.Users select user.UserID).Max();
-                 var result = new MailSenderController(_configuration).PostMessage(users.Email, users.Name, users.UserID);
+                _context.Add(users);
+                await _context.SaveChangesAsync();
+                /** Send Confirmation Email **/
+                int user_id = (from user in _context.Users select user.UserID).Max();
+                var result = new MailSenderController(_configuration).PostMessage(users.Email, users.Name, users.UserID);
 
-                 /** End of Confirmation Email **/
-                 // Register User as a Customer on Stripe
-                 StripeLib stripeLib = new StripeLib();
-                 users.CustomerId = await stripeLib.CreateCustomer(users);
-                 await _context.SaveChangesAsync();
+                /** End of Confirmation Email **/
+                // Register User as a Customer on Stripe
+                StripeLib stripeLib = new StripeLib();
+                users.CustomerId = await stripeLib.CreateCustomer(users);
+                await _context.SaveChangesAsync();
 
-                 insertToRegisterTable();
-                 TempData["Message"] = "Utilizador criado com sucesso!Por favor, o utilizador que verifique o seu email e clique no link para concluir o registo da sua conta e para prosseguir para o login!";
-                 return RedirectToAction(nameof(Index));
+                insertToRegisterTable();
+                TempData["Message"] = "Utilizador criado com sucesso!Por favor, o utilizador que verifique o seu email e clique no link para concluir o registo da sua conta e para prosseguir para o login!";
+                return RedirectToAction(nameof(Index));
             }
             TempData["Message"] = "Por favor, siga os exemplos para continuar!";
             ViewBag.RoleTypes = _context.Roles.AsParallel();
@@ -284,12 +284,13 @@ namespace ESW_Shelter.Controllers
                     DateTime today = DateTime.ParseExact(date31string, "yyyy/MM/dd", null);
 
                     var checkDate = _context.LoginStatistic.Where(e => e.DateStatistic.Equals(today)).FirstOrDefault();
-                    if(checkDate != null)
+                    if (checkDate != null)
                     {
                         LoginStatistic update = checkDate;
                         update.Count += 1;
                         _context.LoginStatistic.Update(update);
-                    } else
+                    }
+                    else
                     {
                         //TimeSpan difference = end - start;
                         LoginStatistic newStatistic = new LoginStatistic
@@ -298,13 +299,13 @@ namespace ESW_Shelter.Controllers
                             Count = 1
                         };
                         var lastDate = _context.LoginStatistic.LastOrDefault();
-                        if(lastDate != null)
+                        if (lastDate != null)
                         {
                             TimeSpan difference = today - lastDate.DateStatistic;
-                            if(difference.Days != 1)
+                            if (difference.Days != 1)
                             {
                                 int daysMissing = difference.Days;
-                                while(daysMissing != 1)
+                                while (daysMissing != 1)
                                 {
                                     LoginStatistic fillTable = new LoginStatistic
                                     {
@@ -326,7 +327,8 @@ namespace ESW_Shelter.Controllers
                 TempData["Message"] = "Email or Password incorreto!";
                 ModelState.AddModelError("Email", "Email or Password incorreto!");
                 return View("~/Views/Home/Index.cshtml");
-            } catch (Exception ex)
+            }
+            catch (Exception ex)
             {
                 TempData["Message"] = "Email or Password incorreto!";
                 ModelState.AddModelError("Email", "Email or Password incorreto!");
@@ -393,7 +395,8 @@ namespace ESW_Shelter.Controllers
             {
                 StripeLib stripeLib = new StripeLib();
                 ViewBag.subscription = stripeLib.GetSubscription(user.CustomerId);
-            } catch (Exception ex)
+            }
+            catch (Exception ex)
             {
                 ViewBag.subscription = "N/A";
             }
@@ -528,9 +531,9 @@ namespace ESW_Shelter.Controllers
                 return NotFound();
             }
             var result = _context.AnimalUsers.Where(e => e.UsersFK == id);
-            if(result.Any())
+            if (result.Any())
             {
-                foreach(AnimalUsers aniUs in result.ToList())
+                foreach (AnimalUsers aniUs in result.ToList())
                 {
                     _context.AnimalUsers.Remove(aniUs);
                     _context.SaveChanges();
@@ -539,7 +542,7 @@ namespace ESW_Shelter.Controllers
             var result2 = _context.Donation.Where(e => e.UsersFK == id);
             if (result2.Any())
             {
-                foreach(Donation don in result2.ToList())
+                foreach (Donation don in result2.ToList())
                 {
                     don.UsersFK = 1;
                     _context.Update(don);
@@ -573,11 +576,12 @@ namespace ESW_Shelter.Controllers
                 HttpContext.Session.SetString("UserID", id);
                 int idint = Int32.Parse(id);
                 int role = _context.Users.Find(idint).RoleID;
-                RoleAuthorization existAcess = _context.RoleAuthorization.Where(e=> e.RoleFK == role).FirstOrDefault();
+                RoleAuthorization existAcess = _context.RoleAuthorization.Where(e => e.RoleFK == role).FirstOrDefault();
                 if (existAcess != null)
                 {
                     HttpContext.Session.SetString("Ad", "Ad");
-                } else
+                }
+                else
                 {
                     int x = -1;
                 }
@@ -602,7 +606,7 @@ namespace ESW_Shelter.Controllers
 
         // GET: Users/Card
         public string Card()
-        { 
+        {
 
             var userId = Int32.Parse(HttpContext.Session.GetString("UserID"));
             var user = _context.Users.Find(userId);
@@ -613,7 +617,7 @@ namespace ESW_Shelter.Controllers
             Stripe.StripeList<Stripe.Card> cards = stripeLib.GetCards(customerId);
 
             if (cards.Count() == 0) return null;
-            
+
             return cards.First().Id;
         }
 
@@ -695,7 +699,8 @@ namespace ESW_Shelter.Controllers
         [HttpPost, ActionName("Card")]
         public string CreateCard(string number, int month, int year, string cvc)
         {
-            try {
+            try
+            {
                 var userId = Int32.Parse(HttpContext.Session.GetString("UserID"));
                 var user = _context.Users.Find(userId);
                 var customerId = user.CustomerId;
@@ -704,7 +709,8 @@ namespace ESW_Shelter.Controllers
                 stripeLib.SetCard(customerId, number, month, year, cvc);
                 return "true";
 
-            }catch (Exception ex)
+            }
+            catch (Exception ex)
             {
                 return "false";
             }

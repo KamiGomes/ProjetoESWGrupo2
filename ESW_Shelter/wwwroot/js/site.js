@@ -85,8 +85,8 @@ $(document).ready(() => {
                 url: "/Users/Card",
                 async: false
             }).done((result) => {
-                    card = result;
-                });
+                card = result;
+            });
 
             if (card == null) {
                 $("#cardModal").modal();

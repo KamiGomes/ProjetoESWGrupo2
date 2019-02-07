@@ -40,9 +40,9 @@
                     </option>
                     @foreach (AnimalType item in ViewBag.AnimalsTypes)
                     {
-                        <option value="@item.AnimalTypeID" @(Model.AnimalType= =item.AnimalTypeID ? "selected" : "" )>
-                            @item.Name
-                        </option>
+                    <option value="@item.AnimalTypeID" @(Model.AnimalType= =item.AnimalTypeID ? "selected" : "" )>
+                        @item.Name
+                    </option>
                     }
                 </select>
                 <span asp-validation-for="AnimalTypeFK" class="text-danger"></span>
@@ -55,9 +55,9 @@
                     </option>
                     @foreach (ProductType item in ViewBag.ProductType)
                     {
-                        <option value="@item.ProductTypeID" @(Model.ProductType= =item.ProductTypeID ? "selected" : "" )>
-                            @item.Name
-                        </option>
+                    <option value="@item.ProductTypeID" @(Model.ProductType= =item.ProductTypeID ? "selected" : "" )>
+                        @item.Name
+                    </option>
                     }
                 </select>
                 <span asp-validation-for="ProductTypeFK" class="text-danger"></span>
