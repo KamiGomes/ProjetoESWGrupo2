@@ -22,7 +22,7 @@ namespace ESW_Shelter.Controllers
         // GET: Statistics
         public ActionResult Index(int graf, int statistic)
         {
-            if (!GetAuthorization(8, 'r'))
+            if (!GetAuthorization(9, 'r'))
             {
                 return NotFound();
             }
@@ -146,7 +146,7 @@ namespace ESW_Shelter.Controllers
 
         public ActionResult IndexStacked(int statistic)
         {
-            if (!GetAuthorization(8, 'r'))
+            if (!GetAuthorization(9, 'r'))
             {
                 return NotFound();
             }
