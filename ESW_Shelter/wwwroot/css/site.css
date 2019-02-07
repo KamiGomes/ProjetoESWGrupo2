@@ -483,18 +483,16 @@ h2 {
 }
 
 .subMenu {
+    top: 50px;
     width: 200px;
     height: 100%;
     position: absolute;
-    margin: -20px;
+    left: 0;
     margin-top: -50px;
     padding: 0;
     background-color: #ff9933;
     box-shadow: black 0px 0px 3px;
-}
-
-.vertical-menu a:first-child {
-    margin-top: 25%;
+    overflow-y: auto;
 }
 
 .vertical-menu a {
@@ -641,3 +639,9 @@ select {
         margin-top: 20px;
         text-align: right;
     }
+
+hr {
+    margin: 10px 12.5% !important;
+    border-top: 1px dashed white;
+    width: 75%;
+}

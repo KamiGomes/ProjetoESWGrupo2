@@ -7,8 +7,7 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 <div class="row">
-    <div class="subMenu">
-        <div class="vertical-menu">
+    <div class="subMenu vertical-menu">
             <a asp-area="" asp-controller="Users" asp-action="Index">Utilizadores</a>
             <a asp-area="" asp-controller="Roles" asp-action="Index">Permissões</a>
             <a asp-area="" asp-controller="Donations" asp-action="Index">Donativos</a>
@@ -17,7 +16,8 @@
             <a asp-area="" asp-controller="Animals" asp-action="Index">Animais</a>
             <a asp-area="" asp-controller="AnimalTypes" asp-action="Index">Tipos de Animais</a>
             <a asp-area="" asp-controller="AnimalRaces" asp-action="Index">Raças de Animais</a>
-        </div>
+            <hr />
+            <a asp-area="" asp-controller="Statistics" asp-action="Index">Estatisticas</a>
     </div>
     <div class="col-md-9 no-float admin"> @RenderBody()</div>
 </div>
