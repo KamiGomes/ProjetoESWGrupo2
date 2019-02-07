@@ -25,6 +25,7 @@ namespace ESW_Shelter.Controllers
             {
                 return NotFound();
             }
+            ViewBag.Permission = getPermissions();
             return View(await _context.AnimalTypes.ToListAsync());
         }
         
@@ -35,6 +36,7 @@ namespace ESW_Shelter.Controllers
             {
                 return NotFound();
             }
+            ViewBag.Permission = getPermissions();
             if (id == null)
             {
                 return NotFound();
@@ -57,6 +59,7 @@ namespace ESW_Shelter.Controllers
             {
                 return NotFound();
             }
+            ViewBag.Permission = getPermissions();
             return View();
         }
 
@@ -71,6 +74,7 @@ namespace ESW_Shelter.Controllers
             {
                 return NotFound();
             }
+            ViewBag.Permission = getPermissions();
             if (!checkValues(animalType))
             {
                 return View(animalType);
@@ -92,6 +96,7 @@ namespace ESW_Shelter.Controllers
             {
                 return NotFound();
             }
+            ViewBag.Permission = getPermissions();
             if (id == null)
             {
                 return NotFound();
@@ -116,6 +121,7 @@ namespace ESW_Shelter.Controllers
             {
                 return NotFound();
             }
+            ViewBag.Permission = getPermissions();
             if (!checkValues(animalType))
             {
                 return View(animalType);
@@ -156,6 +162,7 @@ namespace ESW_Shelter.Controllers
             {
                 return NotFound();
             }
+            ViewBag.Permission = getPermissions();
             if (id == null)
             {
                 return NotFound();
@@ -180,6 +187,7 @@ namespace ESW_Shelter.Controllers
             {
                 return NotFound();
             }
+            ViewBag.Permission = getPermissions();
             var check = _context.Animal.Where(e => e.AnimalTypeFK == id);
             var check2 = _context.Products.Where(e => e.AnimalTypeFK == id);
             if (check.Any() || check2.Any())

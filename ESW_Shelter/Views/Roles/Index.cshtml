@@ -3,12 +3,16 @@
 @{
     ViewData["Title"] = "Index";
     Layout = "~/Views/Shared/_BackLayout.cshtml";
+    IQueryable<RoleAuthorization> getPermissions = ViewBag.Permission;
 }
 
 <h2>Roles</h2>
+@if (getPermissions.Where(e => e.ComponentFK == 2 && e.Create == true).Any())
+{
 <p>
     <a asp-action="Create">Criar um novo Role</a>
 </p>
+}
 <table class="table">
     <thead>
         <tr>
@@ -21,23 +25,34 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.RoleName)
-            </td>
-            <td>
-                @if (item.RoleID != 1 && item.RoleID != 2)
-                {
-                    <a asp-action="Edit" asp-route-id="@item.RoleID">Editar |</a>
-                    <a asp-action="Details" asp-route-id="@item.RoleID">Detalhes |</a>
-                    <a asp-action="Delete" asp-route-id="@item.RoleID">Eliminar</a>
-                } else
-                {
-                    <p>Não pode alterar permissões de raiz</p>
-                }
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.RoleName)
+                </td>
+                <td>
+                    @if (item.RoleID != 1 && item.RoleID != 2)
+                    {
+                        @if (getPermissions.Where(e => e.ComponentFK == 2 && e.Create == true).Any())
+                        {
+                            <a asp-action="Edit" asp-route-id="@item.RoleID">Editar </a>
+                        }
+                        @if (getPermissions.Where(e => e.ComponentFK == 2 && e.Read == true).Any())
+                        {
+                            <a asp-action="Details" asp-route-id="@item.RoleID"> Detalhes </a>
+                        }
+                        @if (getPermissions.Where(e => e.ComponentFK == 2 && e.Delete == true).Any())
+                        {
+                            <a asp-action="Delete" asp-route-id="@item.RoleID"> Eliminar</a>
+                        }
+                    }
+                    else
+                    {
+                        <p>Não pode alterar permissões de raiz</p>
+                    }
+                </td>
+            </tr>
+        }
     </tbody>
 </table>

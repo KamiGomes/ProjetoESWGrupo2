@@ -3,13 +3,16 @@
 @{
     ViewData["Title"] = "Index";
     Layout = "~/Views/Shared/_BackLayout.cshtml";
+    IQueryable<RoleAuthorization> getPermissions = ViewBag.Permission;
 }
 
 <h2>Tipos de Animais</h2>
-
+@if (getPermissions.Where(e => e.ComponentFK == 6 && e.Create == true).Any())
+{
 <p>
     <a asp-action="Create">Criar um novo tipo de animal</a>
 </p>
+}
 <table class="table">
     <thead>
         <tr>
@@ -20,16 +23,23 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.AnimalTypeID">Editar</a> |
-                <a asp-action="Delete" asp-route-id="@item.AnimalTypeID">Eliminar</a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @if (getPermissions.Where(e => e.ComponentFK == 6 && e.Update == true).Any())
+                    {
+                        <a asp-action="Edit" asp-route-id="@item.AnimalTypeID">Editar </a>
+                    }
+                    @if (getPermissions.Where(e => e.ComponentFK == 6 && e.Delete == true).Any())
+                    {
+                        <a asp-action="Delete" asp-route-id="@item.AnimalTypeID"> Eliminar</a>
+                    }
+                </td>
+            </tr>
+        }
     </tbody>
 </table>

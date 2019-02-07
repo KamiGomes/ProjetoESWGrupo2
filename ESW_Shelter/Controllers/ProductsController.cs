@@ -26,6 +26,7 @@ namespace ESW_Shelter.Controllers
             {
                 return NotFound();
             }
+            ViewBag.Permission = getPermissions();
             var query = from product in _context.Products
                         join productsType in _context.ProductTypes on product.ProductTypeFK equals productsType.ProductTypeID
                         join animalsType in _context.AnimalTypes on product.AnimalTypeFK equals animalsType.AnimalTypeID
@@ -94,6 +95,7 @@ namespace ESW_Shelter.Controllers
             {
                 return NotFound();
             }
+            ViewBag.Permission = getPermissions();
             if (id == null)
             {
                 return NotFound();
@@ -116,6 +118,7 @@ namespace ESW_Shelter.Controllers
             {
                 return NotFound();
             }
+            ViewBag.Permission = getPermissions();
             setViewBags();
             return View();
         }
@@ -131,6 +134,7 @@ namespace ESW_Shelter.Controllers
             {
                 return NotFound();
             }
+            ViewBag.Permission = getPermissions();
             if (!checkValues(product))
             {
                 setViewBags();
@@ -155,7 +159,7 @@ namespace ESW_Shelter.Controllers
             {
                 return NotFound();
             }
-
+            ViewBag.Permission = getPermissions();
             if (id == null)
             {
                 return NotFound();
@@ -181,6 +185,7 @@ namespace ESW_Shelter.Controllers
             {
                 return NotFound();
             }
+            ViewBag.Permission = getPermissions();
             if (!checkValues(product))
             {
                 setViewBags();
@@ -223,6 +228,7 @@ namespace ESW_Shelter.Controllers
             {
                 return NotFound();
             }
+            ViewBag.Permission = getPermissions();
             if (id == null)
             {
                 return NotFound();
@@ -269,6 +275,7 @@ namespace ESW_Shelter.Controllers
             {
                 return NotFound();
             }
+            ViewBag.Permission = getPermissions();
             var check = _context.AnimalProduct.Where(e => e.ProductFK == id);
             var check2 = _context.DonationProduct.Where(e => e.ProductFK == id);
             if (check.Any() || check2.Any())

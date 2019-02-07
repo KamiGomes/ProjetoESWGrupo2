@@ -34,6 +34,7 @@ namespace ESW_Shelter.Controllers
             {
                 return NotFound();
             }
+            ViewBag.Permission = getPermissions();
             return View(getAnimalToList(AnimalRace, AnimalType, Neutered, Disinfection, SearchString));
         }
 
@@ -57,6 +58,7 @@ namespace ESW_Shelter.Controllers
             {
                 return NotFound();
             }
+            ViewBag.Permission = getPermissions();
             if (id == null)
             {
                 return NotFound();
@@ -74,6 +76,7 @@ namespace ESW_Shelter.Controllers
             {
                 return NotFound();
             }
+            ViewBag.Permission = getPermissions();
             setViewBags(-1);
             return View();
         }
@@ -89,6 +92,7 @@ namespace ESW_Shelter.Controllers
             {
                 return NotFound();
             }
+            ViewBag.Permission = getPermissions();
             if (!checkValues(animal))
             {
                 setViewBags(-1);
@@ -187,6 +191,7 @@ namespace ESW_Shelter.Controllers
             {
                 return NotFound();
             }
+            ViewBag.Permission = getPermissions();
             if (id == null)
             {
                 return NotFound();
@@ -291,6 +296,7 @@ namespace ESW_Shelter.Controllers
             {
                 return NotFound();
             }
+            ViewBag.Permission = getPermissions();
             if (id != animal.AnimalID)
             {
                 return NotFound();
@@ -410,6 +416,7 @@ namespace ESW_Shelter.Controllers
             {
                 return NotFound();
             }
+            ViewBag.Permission = getPermissions();
             if (id == null)
             {
                 return NotFound();
@@ -434,6 +441,7 @@ namespace ESW_Shelter.Controllers
             {
                 return NotFound();
             }
+            ViewBag.Permission = getPermissions();
             var result = _context.Images.Where(e => e.AnimalFK == id);
             if (result.Any())
             {

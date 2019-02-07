@@ -29,6 +29,7 @@ namespace ESW_Shelter.Controllers
             {
                 return NotFound();
             }
+            ViewBag.Permission = getPermissions();
             var donationUserQuery = from donation in _context.Donation
                         join user in _context.Users on donation.UsersFK equals user.UserID
                         select new
@@ -121,6 +122,7 @@ namespace ESW_Shelter.Controllers
             {
                 return NotFound();
             }
+            ViewBag.Permission = getPermissions();
             if (id == null)
             {
                 return NotFound();
@@ -143,6 +145,7 @@ namespace ESW_Shelter.Controllers
             {
                 return NotFound();
             }
+            ViewBag.Permission = getPermissions();
             List<Product> selectedProducts = new List<Product>();
             if (ViewBag.selectedProducts != null)
             {
@@ -247,7 +250,7 @@ namespace ESW_Shelter.Controllers
             {
                 return NotFound();
             }
-
+            ViewBag.Permission = getPermissions();
             if (!checkValues(donationIVM))
             {
                 return Redirect(nameof(Create));
@@ -308,7 +311,7 @@ namespace ESW_Shelter.Controllers
             {
                 return NotFound();
             }
-
+            ViewBag.Permission = getPermissions();
             if (id == null)
             {
                 return NotFound();
@@ -406,7 +409,7 @@ namespace ESW_Shelter.Controllers
             {
                 return NotFound();
             }
-
+            ViewBag.Permission = getPermissions();
             if (!checkValues(donationIVM))
             {
                 return Redirect(nameof(Edit));
@@ -510,6 +513,7 @@ namespace ESW_Shelter.Controllers
             {
                 return NotFound();
             }
+            ViewBag.Permission = getPermissions();
             if (id == null)
             {
                 return NotFound();
@@ -534,6 +538,7 @@ namespace ESW_Shelter.Controllers
             {
                 return NotFound();
             }
+            ViewBag.Permission = getPermissions();
             var donation = await _context.Donation.FindAsync(id);
             var query = from donationProduct in _context.DonationProduct
                         where donationProduct.DonationFK == id

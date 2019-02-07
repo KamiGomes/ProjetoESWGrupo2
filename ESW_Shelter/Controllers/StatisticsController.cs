@@ -9,12 +9,12 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace ESW_Shelter.Controllers
 {
-    public class StatisticsController : Controller
+    public class StatisticsController : SharedController
     {
 
         private readonly ShelterContext _context;
 
-        public StatisticsController(ShelterContext context) 
+        public StatisticsController(ShelterContext context) : base(context)
         {
             _context = context;
         }
@@ -22,6 +22,11 @@ namespace ESW_Shelter.Controllers
         // GET: Statistics
         public ActionResult Index(int graf, int statistic)
         {
+            if (!GetAuthorization(8, 'r'))
+            {
+                return NotFound();
+            }
+            ViewBag.Permission = getPermissions();
             var lstModel = new List<SimpleReportViewModel>();
             switch (statistic)
             {
@@ -141,6 +146,11 @@ namespace ESW_Shelter.Controllers
 
         public ActionResult IndexStacked(int statistic)
         {
+            if (!GetAuthorization(8, 'r'))
+            {
+                return NotFound();
+            }
+            ViewBag.Permission = getPermissions();
             var lstModel = new List<StackedViewModel>();
             switch (statistic)
             {

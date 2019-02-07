@@ -83,6 +83,14 @@ namespace ESW_Shelter.Controllers
             }
 
         }
+
+        public IQueryable<RoleAuthorization> getPermissions()
+        {
+            int id = Int32.Parse(HttpContext.Session.GetString("UserID"));
+            return _context.RoleAuthorization.Where(e => e.RoleFK == _context.Users.Where(f => f.UserID == id).Select(f => f.RoleID).First());
+
+        }
+
         public ActionResult ErrorNotFoundOrSomeOtherError()
         {
             TempData["Message"] = "Access Denied";

@@ -36,6 +36,7 @@ namespace ESW_Shelter.Controllers
             {
                 return NotFound();
             }
+            ViewBag.Permission = getPermissions();
             var query = from usersJ in _context.Users
                         join rolesJ in _context.Roles on usersJ.RoleID equals rolesJ.RoleID
                         select new
@@ -106,6 +107,7 @@ namespace ESW_Shelter.Controllers
             {
                 return NotFound();
             }
+            ViewBag.Permission = getPermissions();
             if (id == null)
             {
                 return NotFound();
@@ -155,8 +157,10 @@ namespace ESW_Shelter.Controllers
         {
             if (!GetAuthorization(1, 'c'))
             {
+
                 return NotFound();
             }
+            ViewBag.Permission = getPermissions();
             ViewBag.RoleTypes = _context.Roles.AsParallel();
             return View();
         }
@@ -172,6 +176,7 @@ namespace ESW_Shelter.Controllers
             {
                 return NotFound();
             }
+            ViewBag.Permission = getPermissions();
             if (!checkValues(users))
             {
                 ViewBag.RoleTypes = _context.Roles.AsParallel();
@@ -410,7 +415,7 @@ namespace ESW_Shelter.Controllers
             {
                 return NotFound();
             }
-
+            ViewBag.Permission = getPermissions();
             var users = await _context.Users.FindAsync(id);
             if (users == null)
             {
@@ -457,6 +462,7 @@ namespace ESW_Shelter.Controllers
             {
                 return NotFound();
             }
+            ViewBag.Permission = getPermissions();
             if (id != user.UserID)
             {
                 return NotFound();
@@ -508,6 +514,7 @@ namespace ESW_Shelter.Controllers
             {
                 return NotFound();
             }
+            ViewBag.Permission = getPermissions();
             if (id == null)
             {
                 return NotFound();
@@ -530,6 +537,7 @@ namespace ESW_Shelter.Controllers
             {
                 return NotFound();
             }
+            ViewBag.Permission = getPermissions();
             var result = _context.AnimalUsers.Where(e => e.UsersFK == id);
             if (result.Any())
             {

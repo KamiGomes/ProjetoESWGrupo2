@@ -3,13 +3,16 @@
 @{
     ViewData["Title"] = "Index";
     Layout = "~/Views/Shared/_BackLayout.cshtml";
+    IQueryable<RoleAuthorization> getPermissions = ViewBag.Permission;
 }
 
 <h2>Donativos</h2>
-
+@if (getPermissions.Where(e => e.ComponentFK == 5 && e.Create == true).Any())
+{
 <p>
     <a asp-action="Create">Criar um novo Donativo</a>
 </p>
+}
 <form asp-controller="Donations" asp-action="Index" method="get">
     Data do Donativo:  <input type="date" name="DateString" style="color:black;">
     <select asp-for="ClientString" asp-items="Model.UsersNames">
@@ -49,8 +52,15 @@
                         @Html.DisplayFor(modelItem => item.ProductName)
                     </td>
                     <td>
-                        <a asp-action="Edit" asp-route-id="@item.DonationID">Editar</a> |
-                        <a asp-action="Delete" asp-route-id="@item.DonationID">Eliminar</a>
+                        @if (getPermissions.Where(e => e.ComponentFK == 5 && e.Update == true).Any())
+                        {
+                            <a asp-action="Edit" asp-route-id="@item.DonationID">Editar </a>
+                        }
+                        @if (getPermissions.Where(e => e.ComponentFK == 5 && e.Delete == true).Any())
+                        {
+                            <a asp-action="Delete" asp-route-id="@item.DonationID">Eliminar </a>
+                        }
+
                     </td>
                 </tr>
             }

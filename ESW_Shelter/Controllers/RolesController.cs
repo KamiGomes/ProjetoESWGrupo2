@@ -23,6 +23,7 @@ namespace ESW_Shelter.Controllers
             {
                 return NotFound();
             }
+            ViewBag.Permission = getPermissions();
             var roles = await _context.Roles.ToListAsync();
             return View(roles);
         }
@@ -34,6 +35,7 @@ namespace ESW_Shelter.Controllers
             {
                 return NotFound();
             }
+            ViewBag.Permission = getPermissions();
             if (id == null)
             {
                 return NotFound();
@@ -56,6 +58,7 @@ namespace ESW_Shelter.Controllers
             {
                 return NotFound();
             }
+            ViewBag.Permission = getPermissions();
             setViewBags(-1);
             return View();
         }
@@ -67,11 +70,15 @@ namespace ESW_Shelter.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("RoleID,RoleName")] Roles roles)
         {
+            System.Diagnostics.Debug.WriteLine("******************************************************");
+            System.Diagnostics.Debug.WriteLine("Entrou");
+            System.Diagnostics.Debug.WriteLine("******************************************************");
             if (!GetAuthorization(2, 'c'))
             {
                 return NotFound();
             }
-            if (checkValues(roles))
+            ViewBag.Permission = getPermissions();
+            if (!checkValues(roles))
             {
                 setViewBags(-1);
                 return View(roles);
@@ -132,6 +139,7 @@ namespace ESW_Shelter.Controllers
                 TempData["Message"] = "Permissão criada com sucesso!";
                 return RedirectToAction(nameof(Index));
             }
+            TempData["Message"] = "Model de errado aconteceu!";
             setViewBags(-1);
             return View(roles);
         }
@@ -143,6 +151,7 @@ namespace ESW_Shelter.Controllers
             {
                 return NotFound();
             }
+            ViewBag.Permission = getPermissions();
             if (id == null)
             {
                 return NotFound();
@@ -168,11 +177,12 @@ namespace ESW_Shelter.Controllers
             {
                 return NotFound();
             }
+            ViewBag.Permission = getPermissions();
             if (id != roles.RoleID)
             {
                 return NotFound();
             }
-            if (checkValues(roles))
+            if (!checkValues(roles))
             {
                 setViewBags(id);
                 return View(roles);
@@ -269,6 +279,7 @@ namespace ESW_Shelter.Controllers
             {
                 return NotFound();
             }
+            ViewBag.Permission = getPermissions();
             if (id == null)
             {
                 return NotFound();
@@ -293,6 +304,7 @@ namespace ESW_Shelter.Controllers
             {
                 return NotFound();
             }
+            ViewBag.Permission = getPermissions();
             var result = _context.Users.Where(e=> e.RoleID == id);
             foreach(Users user in result.ToList())
             {

@@ -3,13 +3,17 @@
 @{
     ViewData["Title"] = "Index";
     Layout = "~/Views/Shared/_BackLayout.cshtml";
+    IQueryable<RoleAuthorization> getPermissions = ViewBag.Permission;
 }
 
 <h2>Animais</h2>
-
+@if (getPermissions.Where(e => e.ComponentFK == 8 && e.Create == true).Any())
+{
 <p>
     <a asp-action="Create">Criar um novo animal</a>
 </p>
+}
+
 <table class="table">
     <thead>
         <tr>
@@ -46,65 +50,75 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model.Animals) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DateOfBirth)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Disinfection)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Neutered)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Description)
-            </td>
-            <td>
-                @if (Model.Pictures.Exists(e => e.AnimalFK == item.AnimalID))
-                {
-                    var pic = Model.Pictures.Where(e => e.AnimalFK.Equals(item.AnimalID)).FirstOrDefault();
-                    <img src="~/images/Galeria_@item.AnimalID/@pic.FileName" alt="Icon" class="" width="70" height="70" />
-                }
-                else
-                {
-
-                }
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.AnimaltypeName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.AnimalRaceName)
-            </td>
-            <td>
-                @if (item.OwnerFK == 0)
-                {
-                    <p>Por Adoptar</p>
-                }
-                else
-                {
-
-                    foreach(var user in Model.UsersNames)
+        @foreach (var item in Model.Animals)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DateOfBirth)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Disinfection)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Neutered)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Description)
+                </td>
+                <td>
+                    @if (Model.Pictures.Exists(e => e.AnimalFK == item.AnimalID))
                     {
-                        if(user.UserID == item.OwnerFK)
-                        {
-                            item.OwnerName = user.Name;
-                            break;
-                        }
+                        var pic = Model.Pictures.Where(e => e.AnimalFK.Equals(item.AnimalID)).FirstOrDefault();
+                        <img src="~/images/Galeria_@item.AnimalID/@pic.FileName" alt="Icon" class="" width="70" height="70" />
                     }
-                    @Html.DisplayFor(modelItem => item.OwnerName)
-                }
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.AnimalID">Editar</a> |
-                <a asp-action="Details" asp-route-id="@item.AnimalID">Detalhes</a> |
-                <a asp-action="Delete" asp-route-id="@item.AnimalID">Eliminar</a>
-            </td>
-        </tr>
-}
+                    else
+                    {
+
+                    }
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.AnimaltypeName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.AnimalRaceName)
+                </td>
+                <td>
+                    @if (item.OwnerFK == 0)
+                    {
+                        <p>Por Adoptar</p>
+                    }
+                    else
+                    {
+
+                        foreach (var user in Model.UsersNames)
+                        {
+                            if (user.UserID == item.OwnerFK)
+                            {
+                                item.OwnerName = user.Name;
+                                break;
+                            }
+                        }
+                        @Html.DisplayFor(modelItem => item.OwnerName)
+                    }
+                </td>
+                <td>
+                    @if (getPermissions.Where(e => e.ComponentFK == 8 && e.Update == true).Any())
+                    {
+                        <a asp-action="Edit" asp-route-id="@item.AnimalID">Editar </a>
+                    }
+                    @if (getPermissions.Where(e => e.ComponentFK == 8 && e.Read == true).Any())
+                    {
+                        <a asp-action="Details" asp-route-id="@item.AnimalID">Detalhes</a>
+                    }
+                    @if (getPermissions.Where(e => e.ComponentFK == 8 && e.Delete == true).Any())
+                    {
+                        <a asp-action="Delete" asp-route-id="@item.AnimalID"> Eliminar</a>
+                    }
+                </td>
+            </tr>
+        }
     </tbody>
 </table>

@@ -3,13 +3,16 @@
 @{
     ViewData["Title"] = "Index";
     Layout = "~/Views/Shared/_BackLayout.cshtml";
+    IQueryable<RoleAuthorization> getPermissions = ViewBag.Permission;
 }
 
 <h2>Produtos</h2>
-
+@if (getPermissions.Where(e => e.ComponentFK == 4 && e.Create == true).Any())
+{
 <p>
     <a asp-action="Create">Criar um novo produto</a>
 </p>
+}
 <form asp-controller="Products" asp-action="Index" method="get">
     Nome do produto: <input type="text" name="SearchString" style="color:black;" placeholder="Nome do produto">
     <select asp-for="AnimalType" asp-items="Model.AnimalTypes">
@@ -48,31 +51,38 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model.Products) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Quantity)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.WeekStock)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.MonthStock)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.AnimaltypeName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ProductTypeName)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.ProductID">Editar</a> |
-                <a asp-action="Delete" asp-route-id="@item.ProductID">Eliminar</a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model.Products)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Quantity)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.WeekStock)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.MonthStock)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.AnimaltypeName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ProductTypeName)
+                </td>
+                <td>
+                    @if (getPermissions.Where(e => e.ComponentFK == 4 && e.Update == true).Any())
+                    {
+                        <a asp-action="Edit" asp-route-id="@item.ProductID">Editar </a>
+                    }
+                    @if (getPermissions.Where(e => e.ComponentFK == 4 && e.Delete == true).Any())
+                    {
+                        <a asp-action="Delete" asp-route-id="@item.ProductID"> Eliminar</a>
+                    }
+                </td>
+            </tr>
+        }
     </tbody>
 </table>

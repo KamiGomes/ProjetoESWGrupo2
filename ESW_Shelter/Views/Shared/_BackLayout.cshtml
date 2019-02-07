@@ -5,19 +5,47 @@
     ViewData["UserID"] = Context.Session.GetString("UserID");
     ViewData["Title"] = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
+    IQueryable<RoleAuthorization> getPermissions = ViewBag.Permission;
 }
 <div class="row">
     <div class="subMenu vertical-menu">
+        @if (getPermissions.Where(e => e.ComponentFK == 1 && e.Read == true).Any())
+        {
             <a asp-area="" asp-controller="Users" asp-action="Index">Utilizadores</a>
+        }
+        @if (getPermissions.Where(e => e.ComponentFK == 2 && e.Read == true).Any())
+        {
             <a asp-area="" asp-controller="Roles" asp-action="Index">Permissões</a>
+        }
+        @if (getPermissions.Where(e => e.ComponentFK == 5 && e.Read == true).Any())
+        {
             <a asp-area="" asp-controller="Donations" asp-action="Index">Donativos</a>
+        }
+        @if (getPermissions.Where(e => e.ComponentFK == 4 && e.Read == true).Any())
+        {
             <a asp-area="" asp-controller="Products" asp-action="Index">Produtos</a>
+        }
+        @if (getPermissions.Where(e => e.ComponentFK == 3 && e.Read == true).Any())
+        {
             <a asp-area="" asp-controller="ProductTypes" asp-action="Index">Tipos de Produto</a>
+        }
+        @if (getPermissions.Where(e => e.ComponentFK == 8 && e.Read == true).Any())
+        {
             <a asp-area="" asp-controller="Animals" asp-action="Index">Animais</a>
+        }
+        @if (getPermissions.Where(e => e.ComponentFK == 6 && e.Read == true).Any())
+        {
             <a asp-area="" asp-controller="AnimalTypes" asp-action="Index">Tipos de Animais</a>
+        }
+        @if (getPermissions.Where(e => e.ComponentFK == 7 && e.Read == true).Any())
+        {
             <a asp-area="" asp-controller="AnimalRaces" asp-action="Index">Raças de Animais</a>
+        }
+        @if (getPermissions.Where(e => e.ComponentFK == 9 && e.Read == true).Any())
+        {
             <hr />
             <a asp-area="" asp-controller="Statistics" asp-action="Index">Estatisticas</a>
+        }
     </div>
     <div class="col-md-9 no-float admin"> @RenderBody()</div>
 </div>

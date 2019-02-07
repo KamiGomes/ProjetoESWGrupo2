@@ -1,51 +1,54 @@
 ﻿@model ESW_Shelter.Models.UsersIndexViewModel
 
 
-    @{
-        IDictionary<int, string>
-    dict = ViewBag.Subscriptions;
+@{
+    IDictionary<int, string> dict = ViewBag.Subscriptions;
 
     ViewData["Title"] = "Index";
     Layout = "~/Views/Shared/_BackLayout.cshtml";
-    }
-    <div>
-        <h2>Utilizadores</h2>
+    IQueryable<RoleAuthorization> getPermissions = ViewBag.Permission;
+}
+<div>
+    <h2>Utilizadores</h2>
+    @if (getPermissions.Where(e => e.ComponentFK == 1 && e.Create == true).Any())
+    {
         <p>
             <a asp-action="Create">Criar um novo utilizador</a>
         </p>
-        <form asp-controller="Users" asp-action="Index" method="get">
-            <p>Nome do utilizador:</p>
-            <input type="text" name="SearchString" style="color:black;" placeholder="Nome do utilizador">
-            <select asp-for="RoleType" asp-items="Model.RolesType">
-                <option value="">Todos os Roles</option>
-            </select>
-            <input type="submit" value="Pesquisar" style="background-color: coral" />
-        </form>
-        <br />
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>
-                        @Html.DisplayNameFor(model => model.Users[0].Email)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.Users[0].Name)
-                    </th>
-                    <th>
-                        Subscrição
-                    </th>
-                    <th>
-                        Confirmado
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.Users[0].RoleName)
-                    </th>
-                    <th>Opções</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var item in Model.Users)
-                {
+    }
+    <form asp-controller="Users" asp-action="Index" method="get">
+        <p>Nome do utilizador:</p>
+        <input type="text" name="SearchString" style="color:black;" placeholder="Nome do utilizador">
+        <select asp-for="RoleType" asp-items="Model.RolesType">
+            <option value="">Todas as permissões</option>
+        </select>
+        <input type="submit" value="Pesquisar" style="background-color: coral" />
+    </form>
+    <br />
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Users[0].Email)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Users[0].Name)
+                </th>
+                <th>
+                    Subscrição
+                </th>
+                <th>
+                    Confirmado
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Users[0].RoleName)
+                </th>
+                <th>Opções</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Users)
+            {
                 <tr>
                     <td>
                         @Html.DisplayFor(modelItem => item.Email)
@@ -63,15 +66,24 @@
                         @Html.DisplayFor(modelItem => item.RoleName)
                     </td>
                     <td>
-                        <a asp-action="Edit" asp-route-id="@item.UserID">Editar </a>
-                        <a asp-action="Details" asp-route-id="@item.UserID">| Detalhes </a>
-                        @if (item.UserID != 1)
+                        @if (getPermissions.Where(e => e.ComponentFK == 1 && e.Update == true).Any())
                         {
-                        <a asp-action="Delete" asp-route-id="@item.UserID">| Eliminar</a>
+                            <a asp-action="Edit" asp-route-id="@item.UserID">Editar </a>
+                        }
+                        @if (getPermissions.Where(e => e.ComponentFK == 1 && e.Read == true).Any())
+                        {
+                            <a asp-action="Details" asp-route-id="@item.UserID"> Detalhes </a>
+                        }
+                        @if (getPermissions.Where(e => e.ComponentFK == 1 && e.Delete == true).Any())
+                        {
+                            @if (item.UserID != 1)
+                            {
+                                <a asp-action="Delete" asp-route-id="@item.UserID"> Eliminar</a>
+                            }
                         }
                     </td>
                 </tr>
-                }
-            </tbody>
-        </table>
-    </div>
+            }
+        </tbody>
+    </table>
+</div>

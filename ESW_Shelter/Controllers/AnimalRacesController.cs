@@ -22,6 +22,7 @@ namespace ESW_Shelter.Controllers
             {
                 return NotFound();
             }
+            ViewBag.Permission = getPermissions();
             return View(await _context.AnimalRace.ToListAsync());
         }
 
@@ -32,6 +33,7 @@ namespace ESW_Shelter.Controllers
             {
                 return NotFound();
             }
+            ViewBag.Permission = getPermissions();
             if (id == null)
             {
                 return NotFound();
@@ -54,6 +56,7 @@ namespace ESW_Shelter.Controllers
             {
                 return NotFound();
             }
+            ViewBag.Permission = getPermissions();
             return View();
         }
 
@@ -68,6 +71,7 @@ namespace ESW_Shelter.Controllers
             {
                 return NotFound();
             }
+            ViewBag.Permission = getPermissions();
             if (!checkValues(animalRace))
             {
                 return View(animalRace);
@@ -89,6 +93,7 @@ namespace ESW_Shelter.Controllers
             {
                 return NotFound();
             }
+            ViewBag.Permission = getPermissions();
             if (id == null)
             {
                 return NotFound();
@@ -113,6 +118,7 @@ namespace ESW_Shelter.Controllers
             {
                 return NotFound();
             }
+            ViewBag.Permission = getPermissions();
             if (id != animalRace.AnimalRaceID)
             {
                 return NotFound();
@@ -152,6 +158,7 @@ namespace ESW_Shelter.Controllers
             {
                 return NotFound();
             }
+            ViewBag.Permission = getPermissions();
             if (id == null)
             {
                 return NotFound();
@@ -176,6 +183,7 @@ namespace ESW_Shelter.Controllers
             {
                 return NotFound();
             }
+            ViewBag.Permission = getPermissions();
             var check = _context.Animal.Where(e => e.AnimalRaceFK == id);
             if (check.Any())
             {
@@ -202,7 +210,7 @@ namespace ESW_Shelter.Controllers
                 TempData["Message"] = "Por favor insira um nome para a raça!";
                 return false;
             }
-            if (animalRace.AnimalRaceID <= 0)
+            if (animalRace.AnimalRaceID <= -1)
             {
                 TempData["Message"] = "Algo de errado aconteceu!";
                 return false;
