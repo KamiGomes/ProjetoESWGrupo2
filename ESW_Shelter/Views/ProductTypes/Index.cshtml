@@ -6,13 +6,13 @@
     IQueryable<RoleAuthorization> getPermissions = ViewBag.Permission;
 }
 
-<h2>Tipos de Produtos</h2>
-@if (getPermissions.Where(e => e.ComponentFK == 3 && e.Create == true).Any())
-{
-<p>
-    <a asp-action="Create">Criar um novo tipo de produto</a>
-</p>
-}
+<h2>
+    Tipos de Produtos - @if (getPermissions.Where(e => e.ComponentFK == 3 && e.Create == true).Any())
+    {
+            <a asp-action="Create">Criar um novo tipo de produto</a>
+    }
+</h2>
+<hr />
 <table class="table">
     <thead>
         <tr>

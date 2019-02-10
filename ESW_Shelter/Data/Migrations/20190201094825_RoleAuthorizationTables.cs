@@ -71,6 +71,11 @@ namespace ESW_Shelter.Data.Migrations
                 columns: new[] { "Name", "NameFront" },
                 values: new[] { "Animal", "Animais" }
                 );
+            migrationBuilder.InsertData(
+                table: "Components",
+                columns: new[] { "Name", "NameFront" },
+                values: new[] { "Statistics", "Estatísticas" }
+                );
 
             migrationBuilder.InsertData(
                 table: "Roles",
@@ -162,6 +167,12 @@ namespace ESW_Shelter.Data.Migrations
                 table: "RoleAuthorization",
                 columns: new[] { "RoleFK", "ComponentFK", "Create", "Read", "Update", "Delete" },
                 values: new object[] { 1, 8, true, true, true, true }
+                );
+
+            migrationBuilder.InsertData(
+                table: "RoleAuthorization",
+                columns: new[] { "RoleFK", "ComponentFK", "Create", "Read", "Update", "Delete" },
+                values: new object[] { 1, 9, true, true, true, true }
                 );
             /**********************************************************************/
 

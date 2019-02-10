@@ -25,7 +25,7 @@ namespace ESW_Shelter.Models
         [StringLength(256, ErrorMessage = "Email não pode ter mais que 256 caracteres!", MinimumLength = 1)]
         [Required(ErrorMessage = "Email em falta!")]
         [EmailAddress(ErrorMessage = "Formato de email incorreto!")]
-        [Display(Prompt = "Examplo: example@domain.com")]
+        [Display(Prompt = "Examplo: example@domain.com", Name = "Email")]
         public String Email { get; set; }
 
         [StringLength(256, ErrorMessage = "Nome não pode ter mais que 256 caracteres!", MinimumLength = 1)]
@@ -37,7 +37,7 @@ namespace ESW_Shelter.Models
         [StringLength(12, ErrorMessage = "Siga o exemplo disponivel!Tamanho de Password: 6-12 caracteres!", MinimumLength = 6)]
         [Required(ErrorMessage = "Password em falta!")]
         [DataType(DataType.Password)]
-        [Display(Prompt = "Examplo: John_152 (Min: 6 - Max: 12)")]
+        [Display(Prompt = "Examplo: John_152 (Min: 6 - Max: 12)", Name = "Password")]
         public String Password { get; set; }
 
         [Required]
@@ -64,7 +64,7 @@ namespace ESW_Shelter.Models
         public string Phone { get; set; }
 
         [DataType(DataType.Date)]
-        [DisplayFormat(DataFormatString = "{0:yyyy/MM/dd}", ApplyFormatInEditMode = true)]
+        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         [Display(Name = "Data de Nascimento")]
         public DateTime DateOfBirth { get; set; }
 
@@ -79,6 +79,9 @@ namespace ESW_Shelter.Models
 
         [DataType("String")]
         public string CustomerId { get; set; }
+
+        [NotMapped]
+        public DateTime fixDateOfBirth { get; set; }
     }
 
 }

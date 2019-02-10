@@ -12,7 +12,7 @@ namespace ESW_Shelter.Models
 
         [DataType(DataType.Date)]
         [Required(ErrorMessage = "Selecione uma data!")]
-        [DisplayFormat(DataFormatString = "{0:yyyy/MM/dd}", ApplyFormatInEditMode = true)]
+        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         [Display(Name = "Data do Donativo")]
         public DateTime DateOfDonation { get; set; }
 

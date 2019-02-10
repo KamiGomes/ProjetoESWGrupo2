@@ -4,7 +4,7 @@
     var XLabels = Newtonsoft.Json.JsonConvert.SerializeObject(Model.Select(x => x.DimensionOne).ToList());
     var YValues = Newtonsoft.Json.JsonConvert.SerializeObject(Model.Select(x => x.Quantity).ToList());
     ViewData["Title"] = "Estatisticas";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    Layout = "~/Views/Shared/_BackLayout.cshtml";
     string typeOfChart = ViewBag.typeOfChart;
     string labelToUse = ViewBag.labelToUse;
 }

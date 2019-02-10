@@ -6,13 +6,13 @@
     IQueryable<RoleAuthorization> getPermissions = ViewBag.Permission;
 }
 
-<h2>Roles</h2>
-@if (getPermissions.Where(e => e.ComponentFK == 2 && e.Create == true).Any())
-{
-<p>
-    <a asp-action="Create">Criar um novo Role</a>
-</p>
-}
+<h2>
+    Roles - @if (getPermissions.Where(e => e.ComponentFK == 2 && e.Create == true).Any())
+    {
+            <a asp-action="Create">Criar um novo Role</a>
+    }
+</h2>
+<hr />
 <table class="table">
     <thead>
         <tr>

@@ -6,13 +6,13 @@
     IQueryable<RoleAuthorization> getPermissions = ViewBag.Permission;
 }
 
-<h2>Raças de animais</h2>
-@if (getPermissions.Where(e => e.ComponentFK == 7 && e.Create == true).Any())
-{
-    <p>
-        <a asp-action="Create">Criar uma nova raça animal</a>
-    </p>
-}
+<h2>
+    Raças de animais - @if (getPermissions.Where(e => e.ComponentFK == 7 && e.Create == true).Any())
+    {
+            <a asp-action="Create">Criar uma nova raça animal</a>
+    }
+</h2>
+<hr />
 <table class="table">
     <thead>
         <tr>

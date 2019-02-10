@@ -34,7 +34,7 @@ namespace ESW_Shelter.Models
         //Create Donation
         [DataType(DataType.Date)]
         [Required(ErrorMessage = "Escolha uma data para a doação!")]
-        [DisplayFormat(DataFormatString = "{0:yyyy/MM/dd}", ApplyFormatInEditMode = true)]
+        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         [Display(Name = "Data do Donativo")]
         public DateTime DateOfDonation { get; set; }
 

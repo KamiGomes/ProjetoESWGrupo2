@@ -285,8 +285,8 @@ namespace ESW_Shelter.Controllers
                     LoginSV(user.Name, user.UserID.ToString());
                     TempData["Message"] = "Login efetuado com sucesso!";
 
-                    string date31string = DateTime.Today.ToString("yyyy/MM/dd");
-                    DateTime today = DateTime.ParseExact(date31string, "yyyy/MM/dd", null);
+                    string date31string = DateTime.Today.ToString("yyyy-MM-dd");
+                    DateTime today = DateTime.ParseExact(date31string, "yyyy-MM-dd", null);
 
                     var checkDate = _context.LoginStatistic.Where(e => e.DateStatistic.Equals(today)).FirstOrDefault();
                     if (checkDate != null)
@@ -314,7 +314,7 @@ namespace ESW_Shelter.Controllers
                                 {
                                     LoginStatistic fillTable = new LoginStatistic
                                     {
-                                        DateStatistic = DateTime.ParseExact(DateTime.Today.AddDays(-daysMissing).ToString("yyyy/MM/dd"), "yyyy/MM/dd", null),
+                                        DateStatistic = DateTime.ParseExact(DateTime.Today.AddDays(-daysMissing).ToString("yyyy-MM-dd"), "yyyy-MM-dd", null),
                                         Count = 0
                                     };
                                     _context.LoginStatistic.Add(fillTable);
@@ -393,8 +393,8 @@ namespace ESW_Shelter.Controllers
                 return NotFound();
             }
 
-            string date31string = user.DateOfBirth.ToString("yyyy/MM/dd");
-            user.DateOfBirth = DateTime.ParseExact(date31string, "yyyy/MM/dd", null);
+            string date31string = user.DateOfBirth.ToString("yyyy-MM-dd");
+            user.DateOfBirth = DateTime.ParseExact(date31string, "yyyy-MM-dd", null);
 
             try
             {
@@ -421,8 +421,8 @@ namespace ESW_Shelter.Controllers
             {
                 return NotFound();
             }
-            string date31string = users.DateOfBirth.ToString("yyyy/MM/dd");
-            users.DateOfBirth = DateTime.ParseExact(date31string, "yyyy/MM/dd", null);
+            string date31string = users.DateOfBirth.ToString("yyyy-MM-dd");
+            users.DateOfBirth = DateTime.ParseExact(date31string, "yyyy-MM-dd", null);
 
             ViewBag.RoleTypes = _context.Roles.AsParallel();
             return View(users);
@@ -634,8 +634,8 @@ namespace ESW_Shelter.Controllers
 
         private void insertToRegisterTable()
         {
-            string date31string = DateTime.Today.ToString("yyyy/MM/dd");
-            DateTime today = DateTime.ParseExact(date31string, "yyyy/MM/dd", null);
+            string date31string = DateTime.Today.ToString("yyyy-MM-dd");
+            DateTime today = DateTime.ParseExact(date31string, "yyyy-MM-dd", null);
 
             var checkDate = _context.RegisterStatistics.Where(e => e.DateStatistic.Equals(today)).FirstOrDefault();
             if (checkDate != null)
@@ -663,7 +663,7 @@ namespace ESW_Shelter.Controllers
                         {
                             RegisterStatistics fillTable = new RegisterStatistics
                             {
-                                DateStatistic = DateTime.ParseExact(DateTime.Today.AddDays(-daysMissing).ToString("yyyy/MM/dd"), "yyyy/MM/dd", null),
+                                DateStatistic = DateTime.ParseExact(DateTime.Today.AddDays(-daysMissing).ToString("yyyy-MM-dd"), "yyyy-MM-dd", null),
                                 Count = 0
                             };
                             _context.RegisterStatistics.Add(fillTable);

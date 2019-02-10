@@ -9,13 +9,13 @@
     IQueryable<RoleAuthorization> getPermissions = ViewBag.Permission;
 }
 <div>
-    <h2>Utilizadores</h2>
-    @if (getPermissions.Where(e => e.ComponentFK == 1 && e.Create == true).Any())
-    {
-        <p>
-            <a asp-action="Create">Criar um novo utilizador</a>
-        </p>
-    }
+    <h2>
+        Utilizadores -     @if (getPermissions.Where(e => e.ComponentFK == 1 && e.Create == true).Any())
+        {
+                <a asp-action="Create">Criar um novo utilizador</a>
+        }
+    </h2>
+    <hr />
     <form asp-controller="Users" asp-action="Index" method="get">
         <p>Nome do utilizador:</p>
         <input type="text" name="SearchString" style="color:black;" placeholder="Nome do utilizador">

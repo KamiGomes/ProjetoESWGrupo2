@@ -6,13 +6,13 @@
     IQueryable<RoleAuthorization> getPermissions = ViewBag.Permission;
 }
 
-<h2>Produtos</h2>
-@if (getPermissions.Where(e => e.ComponentFK == 4 && e.Create == true).Any())
-{
-<p>
-    <a asp-action="Create">Criar um novo produto</a>
-</p>
-}
+<h2>
+    Produtos - @if (getPermissions.Where(e => e.ComponentFK == 4 && e.Create == true).Any())
+    {
+            <a asp-action="Create">Criar um novo produto</a>
+    }
+</h2>
+<hr />
 <form asp-controller="Products" asp-action="Index" method="get">
     Nome do produto: <input type="text" name="SearchString" style="color:black;" placeholder="Nome do produto">
     <select asp-for="AnimalType" asp-items="Model.AnimalTypes">
