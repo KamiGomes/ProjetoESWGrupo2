@@ -80,7 +80,7 @@ using Microsoft.AspNetCore.Http;
             WriteLiteral("<div class=\"row\">\r\n    <div class=\"subMenu\">\r\n        <div class=\"vertical-menu\">\r\n            ");
             EndContext();
             BeginContext(352, 73, false);
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "b88a71c1959b41b88d310227cfe3b7c0", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "3af1fe21ccdb42fdb86e126f9ca5709e", async() => {
                 BeginContext(409, 12, true);
                 WriteLiteral("Utilizadores");
                 EndContext();
@@ -106,7 +106,7 @@ using Microsoft.AspNetCore.Http;
             WriteLiteral("\r\n            ");
             EndContext();
             BeginContext(439, 71, false);
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "242b5e98e6634c3582d3d35f00e8c66c", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "a12e77c2c96a40f8b1ee2f771f3e7c18", async() => {
                 BeginContext(496, 10, true);
                 WriteLiteral("Permissões");
                 EndContext();
@@ -132,7 +132,7 @@ using Microsoft.AspNetCore.Http;
             WriteLiteral("\r\n            ");
             EndContext();
             BeginContext(524, 74, false);
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "814e406f3d20469299d502ad6163543e", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "d9c0f16b82f44658b54ff443546b41cb", async() => {
                 BeginContext(585, 9, true);
                 WriteLiteral("Donativos");
                 EndContext();
@@ -158,7 +158,7 @@ using Microsoft.AspNetCore.Http;
             WriteLiteral("\r\n            ");
             EndContext();
             BeginContext(612, 72, false);
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "8ee3db85246d4a80851d18fbe8c5d2a8", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "acb094e2688c4e00bdf7adb47200550f", async() => {
                 BeginContext(672, 8, true);
                 WriteLiteral("Produtos");
                 EndContext();
@@ -184,7 +184,7 @@ using Microsoft.AspNetCore.Http;
             WriteLiteral("\r\n            ");
             EndContext();
             BeginContext(698, 84, false);
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "d30f03e0f15f4d6fa735bfa8403d8f18", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "126f37abfb544746bba59f350bf8aaa7", async() => {
                 BeginContext(762, 16, true);
                 WriteLiteral("Tipos de Produto");
                 EndContext();
@@ -210,7 +210,7 @@ using Microsoft.AspNetCore.Http;
             WriteLiteral("\r\n            ");
             EndContext();
             BeginContext(796, 70, false);
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "ee89f3d78a554e11a2cc3d701bf844e7", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "35b7b17a5db1417b9920731183318aa2", async() => {
                 BeginContext(855, 7, true);
                 WriteLiteral("Animais");
                 EndContext();
@@ -236,7 +236,7 @@ using Microsoft.AspNetCore.Http;
             WriteLiteral("\r\n            ");
             EndContext();
             BeginContext(880, 83, false);
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "3189a2dc46e34cb78557599e8985ecdb", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "0af23402e5ac47f39a4714f6e38dc74d", async() => {
                 BeginContext(943, 16, true);
                 WriteLiteral("Tipos de Animais");
                 EndContext();
@@ -262,7 +262,7 @@ using Microsoft.AspNetCore.Http;
             WriteLiteral("\r\n            ");
             EndContext();
             BeginContext(977, 83, false);
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "271f1ab41fea4917bc5e6c96c3b95e15", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "02a1ef236b2b441ea95ccae8086e0222", async() => {
                 BeginContext(1040, 16, true);
                 WriteLiteral("Raças de Animais");
                 EndContext();

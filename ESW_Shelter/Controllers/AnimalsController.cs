@@ -16,10 +16,10 @@ namespace ESW_Shelter.Controllers
     {
         private readonly ShelterContext _context;
         private readonly IHostingEnvironment hostingEnvironment;
-        public AnimalsController(ShelterContext context, IHostingEnvironment environment) : base(context)
+        public AnimalsController(ShelterContext context/*, IHostingEnvironment environment*/) : base(context)
         {
             _context = context;
-            hostingEnvironment = environment;
+            /*hostingEnvironment = environment;*/
         }
 
         //FrontEnd

@@ -54,7 +54,7 @@ using ESW_Shelter.Models;
             WriteLiteral("<!DOCTYPE html>\r\n<html>\r\n");
             EndContext();
             BeginContext(25, 344, false);
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("head", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "3896db514a764b3683bc3b3b8f0e3053", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("head", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "d2318eb877044c71b2a69985cdf180d9", async() => {
                 BeginContext(31, 331, true);
                 WriteLiteral(@"
     <meta name=""viewport"" content=""width=device-width, initial-scale=1"">
@@ -87,7 +87,7 @@ using ESW_Shelter.Models;
             WriteLiteral("\r\n");
             EndContext();
             BeginContext(371, 184, false);
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("body", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "430fb63188ca4c33b18e488ab782e7f7", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("body", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "fcd8263b2fb44afab2f931dcc75069a1", async() => {
                 BeginContext(377, 171, true);
                 WriteLiteral("\r\n\r\n    <h2>Fixed/Sticky Footer Example</h2>\r\n    <p>The footer is placed at the bottom of the page.</p>\r\n\r\n    <div class=\"footer\">\r\n        <p>Footer</p>\r\n    </div>\r\n\r\n");
                 EndContext();

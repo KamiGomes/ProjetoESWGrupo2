@@ -19,10 +19,10 @@ namespace ESW_Shelter.Controllers
         // GET: Roles
         public async Task<IActionResult> Index()
         {
-            if (!GetAuthorization(2, 'r'))
+           /* if (!GetAuthorization(2, 'r'))
             {
                 return NotFound();
-            }
+            }*/
             var roles = await _context.Roles.ToListAsync();
             return View(roles);
         }
@@ -30,10 +30,10 @@ namespace ESW_Shelter.Controllers
         // GET: Roles/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (!GetAuthorization(2, 'r'))
+            /*if (!GetAuthorization(2, 'r'))
             {
                 return NotFound();
-            }
+            }*/
             if (id == null)
             {
                 return NotFound();
@@ -52,10 +52,10 @@ namespace ESW_Shelter.Controllers
         // GET: Roles/Create
         public IActionResult Create()
         {
-            if (!GetAuthorization(2, 'c'))
+           /* if (!GetAuthorization(2, 'c'))
             {
                 return NotFound();
-            }
+            }*/
             setViewBags(-1);
             return View();
         }
@@ -67,10 +67,10 @@ namespace ESW_Shelter.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("RoleID,RoleName")] Roles roles)
         {
-            if (!GetAuthorization(2, 'c'))
+           /* if (!GetAuthorization(2, 'c'))
             {
                 return NotFound();
-            }
+            }*/
             if (checkValues(roles))
             {
                 setViewBags(-1);
@@ -129,7 +129,7 @@ namespace ESW_Shelter.Controllers
                     _context.SaveChanges();
                 }
                 await _context.SaveChangesAsync();
-                TempData["Message"] = "Permissão criada com sucesso!";
+               // TempData["Message"] = "Permissão criada com sucesso!";
                 return RedirectToAction(nameof(Index));
             }
             setViewBags(-1);
@@ -139,10 +139,10 @@ namespace ESW_Shelter.Controllers
         // GET: Roles/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (!GetAuthorization(2, 'u'))
+            /*if (!GetAuthorization(2, 'u'))
             {
                 return NotFound();
-            }
+            }*/
             if (id == null)
             {
                 return NotFound();
@@ -164,10 +164,10 @@ namespace ESW_Shelter.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("RoleID,RoleName")] Roles roles)
         {
-            if (!GetAuthorization(2, 'u'))
+            /*if (!GetAuthorization(2, 'u'))
             {
                 return NotFound();
-            }
+            }*/
             if (id != roles.RoleID)
             {
                 return NotFound();
@@ -184,14 +184,14 @@ namespace ESW_Shelter.Controllers
                     _context.Update(roles);
                     var componenets = _context.Components.ToList();
                     var roleRules = _context.RoleAuthorization.Where(e => e.RoleFK == id);
-
+                    /*
                     foreach (RoleAuthorization roleAutho in roleRules.ToList())
                     {
                         _context.Remove(roleAutho);
                         _context.SaveChanges();
-                    }
+                    }*/
 
-                    foreach (var comp in componenets)
+                    /*foreach (var comp in componenets)
                     {
                         string selectedOptions = Request.Form[comp.Name].ToString();
                         string[] selectedOptionsList = selectedOptions.Split(',');
@@ -237,7 +237,7 @@ namespace ESW_Shelter.Controllers
                         }
                         _context.Add(rAutho);
                         _context.SaveChanges();
-                    }
+                    }*/
 
                     await _context.SaveChangesAsync();
                 }
@@ -255,7 +255,7 @@ namespace ESW_Shelter.Controllers
                         throw;
                     }
                 }
-                TempData["Message"] = "Permissão editada com sucesso!";
+                //TempData["Message"] = "Permissão editada com sucesso!";
                 return RedirectToAction(nameof(Index));
             }
             setViewBags(id);
@@ -265,10 +265,10 @@ namespace ESW_Shelter.Controllers
         // GET: Roles/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (!GetAuthorization(2, 'd'))
+           /* if (!GetAuthorization(2, 'd'))
             {
                 return NotFound();
-            }
+            }*/
             if (id == null)
             {
                 return NotFound();
@@ -289,10 +289,10 @@ namespace ESW_Shelter.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            if (!GetAuthorization(2, 'd'))
+           /* if (!GetAuthorization(2, 'd'))
             {
                 return NotFound();
-            }
+            }*/
             var result = _context.Users.Where(e=> e.RoleID == id);
             foreach(Users user in result.ToList())
             {
@@ -309,7 +309,7 @@ namespace ESW_Shelter.Controllers
             var roles = await _context.Roles.FindAsync(id);
             _context.Roles.Remove(roles);
             await _context.SaveChangesAsync();
-            TempData["Message"] = "Permissão eliminada com sucesso!";
+            //TempData["Message"] = "Permissão eliminada com sucesso!";
             return RedirectToAction(nameof(Index));
         }
 
@@ -334,12 +334,12 @@ namespace ESW_Shelter.Controllers
         {
             if (string.IsNullOrEmpty(role.RoleName))
             {
-                TempData["Message"] = "Por favor insira um nome para a permissão!";
+             //   TempData["Message"] = "Por favor insira um nome para a permissão!";
                 return false;
             }
             if (role.RoleID <= -1)
             {
-                TempData["Message"] = "Algo de errado aconteceu!";
+              //  TempData["Message"] = "Algo de errado aconteceu!";
                 return false;
             }
             return true;

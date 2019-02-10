@@ -23,19 +23,19 @@ namespace ESW_Shelter.Controllers
         private readonly IConfiguration _configuration;
 
 
-        public UsersController(ShelterContext context, IConfiguration configuration) : base(context)
+        public UsersController(ShelterContext context/*, IConfiguration configuration*/) : base(context)
         {
             
             _context = context;
-            _configuration = configuration;
+           // _configuration = configuration;
         }
 
         public async Task<IActionResult> Index(string searchString, string roleType)
         {
-            if (!GetAuthorization(1, 'r'))
+            /*if (!GetAuthorization(1, 'r'))
             {
                 return NotFound();
-            }
+            }*/
             var query = from usersJ in _context.Users
                         join rolesJ in _context.Roles on usersJ.RoleID equals rolesJ.RoleID
                         select new
@@ -83,10 +83,10 @@ namespace ESW_Shelter.Controllers
 
         public async Task<IActionResult> Details(int? id)
         {
-            if (!GetAuthorization(1, 'r'))
+           /* if (!GetAuthorization(1, 'r'))
             {
                 return NotFound();
-            }
+            }*/
             if (id == null)
             {
                 return NotFound();
@@ -134,10 +134,10 @@ namespace ESW_Shelter.Controllers
 
         public IActionResult Create()
         {
-            if (!GetAuthorization(1, 'c'))
+           /* if (!GetAuthorization(1, 'c'))
             {
                 return NotFound();
-            }
+            }*/
             ViewBag.RoleTypes = _context.Roles.AsParallel();
             return View();
         }
@@ -149,10 +149,10 @@ namespace ESW_Shelter.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("UserID,Email,Name,Password,ConfirmedEmail,Street,PostalCode,City,Phone,DateOfBirth,RoleID")] Users users)
         {
-            if (!GetAuthorization(1, 'c'))
+           /* if (!GetAuthorization(1, 'c'))
             {
                 return NotFound();
-            }
+            }*/
             if (!checkValues(users))
             {
                 ViewBag.RoleTypes = _context.Roles.AsParallel();
@@ -173,10 +173,10 @@ namespace ESW_Shelter.Controllers
                  await _context.SaveChangesAsync();
 
                  insertToRegisterTable();
-                 TempData["Message"] = "Utilizador criado com sucesso!Por favor, o utilizador que verifique o seu email e clique no link para concluir o registo da sua conta e para prosseguir para o login!";
+                // TempData["Message"] = "Utilizador criado com sucesso!Por favor, o utilizador que verifique o seu email e clique no link para concluir o registo da sua conta e para prosseguir para o login!";
                  return RedirectToAction(nameof(Index));
             }
-            TempData["Message"] = "Por favor, siga os exemplos para continuar!";
+           // TempData["Message"] = "Por favor, siga os exemplos para continuar!";
             ViewBag.RoleTypes = _context.Roles.AsParallel();
             return View();
         }
@@ -424,10 +424,10 @@ namespace ESW_Shelter.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("UserID,Email,Name,Password,ConfirmedEmail,Street,PostalCode,City,Phone,DateOfBirth,RoleID")] Users user)
         {
-            if (!GetAuthorization(1, 'u'))
+            /*if (!GetAuthorization(1, 'u'))
             {
                 return NotFound();
-            }
+            }*/
             if (id != user.UserID)
             {
                 return NotFound();
@@ -456,7 +456,7 @@ namespace ESW_Shelter.Controllers
                 }
 
                 await _context.SaveChangesAsync();
-                TempData["Message"] = "Utilizador editado com sucesso!";
+                //TempData["Message"] = "Utilizador editado com sucesso!";
                 return RedirectToAction(nameof(Index));
             }
             ViewBag.RoleTypes = _context.Roles.AsParallel();
@@ -475,10 +475,10 @@ namespace ESW_Shelter.Controllers
         /// </returns>
         public async Task<IActionResult> Delete(int? id)
         {
-            if (!GetAuthorization(1, 'd'))
+            /*if (!GetAuthorization(1, 'd'))
             {
                 return NotFound();
-            }
+            }*/
             if (id == null)
             {
                 return NotFound();
@@ -497,10 +497,10 @@ namespace ESW_Shelter.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            if (!GetAuthorization(1, 'd'))
+            /*if (!GetAuthorization(1, 'd'))
             {
                 return NotFound();
-            }
+            }*/
             var result = _context.AnimalUsers.Where(e => e.UsersFK == id);
             if(result.Any())
             {
@@ -640,27 +640,27 @@ namespace ESW_Shelter.Controllers
         {
             if (string.IsNullOrEmpty(user.Name))
             {
-                TempData["Message"] = "Por favor insira um nome!";
+               // TempData["Message"] = "Por favor insira um nome!";
                 return false;
             }
             if (string.IsNullOrEmpty(user.Email))
             {
-                TempData["Message"] = "Por favor insira um email!";
+               // TempData["Message"] = "Por favor insira um email!";
                 return false;
             }
             if (string.IsNullOrEmpty(user.Password))
             {
-                TempData["Message"] = "Por favor insira uma password!";
+               // TempData["Message"] = "Por favor insira uma password!";
                 return false;
             }
             if (user.RoleID <= 0)
             {
-                TempData["Message"] = "Por favor escolha uma permissão!";
+               // TempData["Message"] = "Por favor escolha uma permissão!";
                 return false;
             }
             if (user.UserID <= -1)
             {
-                TempData["Message"] = "Algo de errado aconteceu!";
+               // TempData["Message"] = "Algo de errado aconteceu!";
                 return false;
             }
             return true;

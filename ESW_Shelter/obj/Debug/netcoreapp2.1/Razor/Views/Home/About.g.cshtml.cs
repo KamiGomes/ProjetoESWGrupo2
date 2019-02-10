@@ -85,7 +85,7 @@ using ESW_Shelter.Models;
             WriteLiteral("v>\r\n    <div class=\"col-md-2 picture\">\r\n        ");
             EndContext();
             BeginContext(1209, 42, false);
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("img", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.SelfClosing, "0f65e826c60242bfaafa829a12098546", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("img", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.SelfClosing, "023b16ad23814dbd825903f19d837436", async() => {
             }
             );
             __Microsoft_AspNetCore_Mvc_Razor_TagHelpers_UrlResolutionTagHelper = CreateTagHelper<global::Microsoft.AspNetCore.Mvc.Razor.TagHelpers.UrlResolutionTagHelper>();

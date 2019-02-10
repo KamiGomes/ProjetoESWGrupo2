@@ -136,7 +136,6 @@ C:\Users\David Afonso\Desktop\ESW\ProjetoESWGrupo2\ESW_Shelter\obj\Debug\netcore
 C:\Users\David Afonso\Desktop\ESW\ProjetoESWGrupo2\ESW_Shelter\obj\Debug\netcoreapp2.1\Razor\Views\AnimalTypes\Details.g.cshtml.cs
 C:\Users\David Afonso\Desktop\ESW\ProjetoESWGrupo2\ESW_Shelter\obj\Debug\netcoreapp2.1\Razor\Views\AnimalTypes\Edit.g.cshtml.cs
 C:\Users\David Afonso\Desktop\ESW\ProjetoESWGrupo2\ESW_Shelter\obj\Debug\netcoreapp2.1\Razor\Views\AnimalTypes\Index.g.cshtml.cs
-C:\Users\David Afonso\Desktop\ESW\ProjetoESWGrupo2\ESW_Shelter\obj\Debug\netcoreapp2.1\Razor\Views\Backend\Index.g.cshtml.cs
 C:\Users\David Afonso\Desktop\ESW\ProjetoESWGrupo2\ESW_Shelter\obj\Debug\netcoreapp2.1\Razor\Views\Donations\Create.g.cshtml.cs
 C:\Users\David Afonso\Desktop\ESW\ProjetoESWGrupo2\ESW_Shelter\obj\Debug\netcoreapp2.1\Razor\Views\Donations\CreateStripe.g.cshtml.cs
 C:\Users\David Afonso\Desktop\ESW\ProjetoESWGrupo2\ESW_Shelter\obj\Debug\netcoreapp2.1\Razor\Views\Donations\Delete.g.cshtml.cs
@@ -184,3 +183,11 @@ C:\Users\David Afonso\Desktop\ESW\ProjetoESWGrupo2\ESW_Shelter\obj\Debug\netcore
 C:\Users\David Afonso\Desktop\ESW\ProjetoESWGrupo2\ESW_Shelter\obj\Debug\netcoreapp2.1\ESW_Shelter.RazorTargetAssemblyInfo.cs
 C:\Users\David Afonso\Desktop\ESW\ProjetoESWGrupo2\ESW_Shelter\obj\Debug\netcoreapp2.1\ESW_Shelter.Views.pdb
 C:\Users\David Afonso\Desktop\ESW\ProjetoESWGrupo2\ESW_Shelter\obj\Debug\netcoreapp2.1\ESW_Shelter.csproj.CopyComplete
+C:\Users\David Afonso\Desktop\ESW\ProjetoESWGrupo2\ESW_Shelter\obj\Debug\netcoreapp2.1\Razor\Views\Administration\Index.g.cshtml.cs
+C:\Users\David Afonso\Desktop\ESW\ProjetoESWGrupo2\ESW_Shelter\obj\Debug\netcoreapp2.1\Razor\Views\Shared\_StatisticsMenu.g.cshtml.cs
+C:\Users\David Afonso\Desktop\ESW\ProjetoESWGrupo2\ESW_Shelter\obj\Debug\netcoreapp2.1\Razor\Views\Statistics\Bar.g.cshtml.cs
+C:\Users\David Afonso\Desktop\ESW\ProjetoESWGrupo2\ESW_Shelter\obj\Debug\netcoreapp2.1\Razor\Views\Statistics\Index.g.cshtml.cs
+C:\Users\David Afonso\Desktop\ESW\ProjetoESWGrupo2\ESW_Shelter\obj\Debug\netcoreapp2.1\Razor\Views\Statistics\IndexStacked.g.cshtml.cs
+C:\Users\David Afonso\Desktop\ESW\ProjetoESWGrupo2\ESW_Shelter\obj\Debug\netcoreapp2.1\Razor\Views\Statistics\Line.g.cshtml.cs
+C:\Users\David Afonso\Desktop\ESW\ProjetoESWGrupo2\ESW_Shelter\obj\Debug\netcoreapp2.1\Razor\Views\Statistics\Pie.g.cshtml.cs
+C:\Users\David Afonso\Desktop\ESW\ProjetoESWGrupo2\ESW_Shelter\obj\Debug\netcoreapp2.1\Razor\Views\Statistics\Stacked.g.cshtml.cs

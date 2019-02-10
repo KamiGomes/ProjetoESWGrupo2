@@ -66,7 +66,7 @@ using ESW_Shelter.Models;
             WriteLiteral("\r\n<h2>Tipos de Produtos</h2>\r\n\r\n<p>\r\n    ");
             EndContext();
             BeginContext(187, 56, false);
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "54391ab330fb47b6ad6e08f376186224", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "690c7c6c38c64b7bb4b8648cf0512914", async() => {
                 BeginContext(210, 29, true);
                 WriteLiteral("Criar um novo tipo de produto");
                 EndContext();
@@ -116,7 +116,7 @@ using ESW_Shelter.Models;
             WriteLiteral("\r\n            </td>\r\n            <td>\r\n                ");
             EndContext();
             BeginContext(643, 66, false);
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "2bfcee0ad1944c13b6d460d90aa77524", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "cccf3f8403ab4b87bad383255ea39133", async() => {
                 BeginContext(699, 6, true);
                 WriteLiteral("Editar");
                 EndContext();
@@ -151,7 +151,7 @@ using ESW_Shelter.Models;
             WriteLiteral(" |\r\n                ");
             EndContext();
             BeginContext(729, 70, false);
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "774971409c214ab1b84d84310c70a346", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "55aef4fc055b40fe8d6416a970f3a6ce", async() => {
                 BeginContext(787, 8, true);
                 WriteLiteral("Eliminar");
                 EndContext();
