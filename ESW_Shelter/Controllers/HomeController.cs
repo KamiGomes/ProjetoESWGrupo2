@@ -1,16 +1,25 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using ESW_Shelter.Models;
+using Microsoft.AspNetCore.Http;
+using System;
+using System.Collections.Generic;
 
 namespace ESW_Shelter.Controllers
 {
     public class HomeController : Controller
     {
+        public ActionResult Menu()
+        {
+            return PartialView("~/Views/Shared/_Menu.cshtml");
+        }
+
         public IActionResult Index()
+        {
+            return View();
+        }
+
+        public IActionResult FrontEndLayout()
         {
             return View();
         }
@@ -18,14 +27,12 @@ namespace ESW_Shelter.Controllers
         public IActionResult About()
         {
             ViewData["Message"] = "Your application description page.";
-
             return View();
         }
 
         public IActionResult Contact()
         {
             ViewData["Message"] = "Your contact page.";
-
             return View();
         }
 
@@ -34,6 +41,10 @@ namespace ESW_Shelter.Controllers
             return View();
         }
 
+        public IActionResult Register()
+        {
+            return View();
+        }
 
         public IActionResult Account()
         {
@@ -45,5 +56,6 @@ namespace ESW_Shelter.Controllers
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
+
     }
 }

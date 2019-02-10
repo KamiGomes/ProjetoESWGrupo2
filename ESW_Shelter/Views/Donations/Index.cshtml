@@ -1,0 +1,69 @@
+﻿@model ESW_Shelter.Models.DonationIndexViewModel
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_BackLayout.cshtml";
+    IQueryable<RoleAuthorization> getPermissions = ViewBag.Permission;
+}
+
+<h2>
+    Donativos - @if (getPermissions.Where(e => e.ComponentFK == 5 && e.Create == true).Any())
+    {
+            <a asp-action="Create">Criar um novo Donativo</a>
+    }
+</h2>
+<hr />
+<form asp-controller="Donations" asp-action="Index" method="get">
+    Data do Donativo:  <input type="date" name="DateString" style="color:black;">
+    <select asp-for="ClientString" asp-items="Model.UsersNames">
+        <option value="">Todos os Clientes</option>
+    </select>
+    <input type="submit" value="Pesquisar" style="background-color: coral" />
+</form>
+<div class="row profile">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Donation[0].DateOfDonation)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Donation[0].UsersFK)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Donation[0].ProductName)
+                </th>
+                <th>
+                    Opções
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Donation)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.DateOfDonation)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.UsersName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ProductName)
+                    </td>
+                    <td>
+                        @if (getPermissions.Where(e => e.ComponentFK == 5 && e.Update == true).Any())
+                        {
+                            <a asp-action="Edit" asp-route-id="@item.DonationID">Editar </a>
+                        }
+                        @if (getPermissions.Where(e => e.ComponentFK == 5 && e.Delete == true).Any())
+                        {
+                            <a asp-action="Delete" asp-route-id="@item.DonationID">Eliminar </a>
+                        }
+
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

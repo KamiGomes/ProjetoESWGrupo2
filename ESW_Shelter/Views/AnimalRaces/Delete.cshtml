@@ -1,0 +1,27 @@
+﻿@model ESW_Shelter.Models.AnimalRace
+
+@{
+    ViewData["Title"] = "Delete";
+    Layout = "~/Views/Shared/_BackLayout.cshtml";
+}
+
+<h2>Eliminar - @Model.Name</h2>
+
+<h3>Têm a certeza que quer elminar @Model.Name? Avisa-se que se algum animal tiver relacionado com esta raça, terá que alterar antes de eliminar!</h3>
+<div>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+    </dl>
+
+    <form asp-action="Delete">
+        <input type="hidden" asp-for="AnimalRaceID" />
+        <input type="submit" value="Eliminar" class="btn btn-default" /> |
+        <a asp-action="Index">Voltar atrás</a>
+    </form>
+</div>

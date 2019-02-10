@@ -1,0 +1,51 @@
+﻿@model ESW_Shelter.Models.Animal
+
+@{
+    ViewData["Title"] = "Delete";
+    Layout = "~/Views/Shared/_BackLayout.cshtml";
+}
+
+<h2>Eliminar - @Model.Name</h2>
+
+<h3>Têm a certeza que quer elminar @Model.Name? Após a eliminação,tudo o que envolva este animal (Produtos, Padrinhos e Fotografias) não pode ser recuperados! </h3>
+<div>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.DateOfBirth)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.DateOfBirth)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Disinfection)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Disinfection)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Neutered)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Neutered)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Description)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Description)
+        </dd>
+    </dl>
+
+    <form asp-action="Delete">
+        <input type="hidden" asp-for="AnimalID" />
+        <input type="submit" value="Eliminar" class="btn btn-default" /> |
+        <a asp-action="Index">Voltar atrás</a>
+    </form>
+</div>

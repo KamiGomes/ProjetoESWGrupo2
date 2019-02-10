@@ -1,73 +1,108 @@
 ﻿@using Microsoft.AspNetCore.Http;
+
 @{
     ViewData["User_Name"] = Context.Session.GetString("User_Name");
     ViewData["UserID"] = Context.Session.GetString("UserID");
-    ViewData["Title"] = "Index";
+    ViewData["Ad"] = Context.Session.GetString("Ad");
 }
 <!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - ESW_Shelter</title>
-
+    <title>@System.Reflection.Assembly.GetEntryAssembly().GetName().Name</title>
     <environment include="Development">
         <!-- Manter aqui o  css e o js quando abrir no visual studio -->
         <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
-        <!-- <link rel="stylesheet" href="~/css/site.css" />
+        <link rel="stylesheet" href="~/css/site.css" />
+        <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
         <script src="~/js/site.js" asp-append-version="true"></script>
-        <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script> -->
+        <link rel="stylesheet" href="~/css/site.css" />
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.bundle.min.js"></script>
+        <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+
     </environment>
     <environment exclude="Development">
         <link rel="stylesheet" href="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.7/css/bootstrap.min.css"
               asp-fallback-href="~/lib/bootstrap/dist/css/bootstrap.min.css"
               asp-fallback-test-class="sr-only" asp-fallback-test-property="position" asp-fallback-test-value="absolute" />
-        <link rel="stylesheet" href="~/css/site.min.css" asp-append-version="true" />
-        <!-- Manter aqui o  css e o js quando abrir no azure -->
+        <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+        <!--Manter aqui o  css e o js quando abrir no azure -->
         <link rel="stylesheet" href="~/css/site.css" />
+        <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
         <script src="~/js/site.js" asp-append-version="true"></script>
-        <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.bundle.min.js"></script>
+        <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
     </environment>
-    </head>
+</head>
 <body>
-    <nav class="navbar navbar-inverse navbar-fixed-top" style="background-image: linear-gradient(to bottom left, #ff9933 21%, #ffffcc 103%); border-bottom-color: transparent">
+    <div id="loader-modal" class="modal" data-backdrop="static" data-keyboard="false"><img src="~/images/loader.gif" /></div>
+    <nav class="navbar navbar-static-top">
         <div class="container">
             <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand" style="color: black;font-weight: bold;">ESW_Shelter</a>
+                <a class="navbar-brand" asp-action="Index">
+                    <img src="~/images/navIcon.png" alt="Icon" class="" width="30" />
+                </a>
             </div>
-            <div class="navbar-collapse collapse">
-                <ul class="nav navbar-nav" style="background: linear-gradient(to bottom, #ff9933 32%, #ffcc99 88%);">
-                    <li><a asp-area="" asp-controller="Home" asp-action="Index" style="color: black;">Home</a></li>
-                    <li><a asp-area="" asp-controller="Home" asp-action="About" style="color: black;">About</a></li>
-                    <li><a asp-area="" asp-controller="Home" asp-action="Contact" style="color: black;">Contact</a></li>
+            <button class="navbar-toggle" type="button" data-toggle="collapse" data-target="#myNavBar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <div class="navbar-collapse collapse" id="myNavBar">
+                <ul class="nav navbar-nav">
+                    <li class="nav-item"><a class="nav-item nav-link active" asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
+                    <!--<li class="nav-item"><a class="nav-item nav-link active" asp-area="" asp-controller="Statistics" asp-action="Index">Estatisticas</a></li>-->
+                    <li class="nav-item"><a class="nav-item nav-link active" asp-area="" asp-controller="Animals" asp-action="Animals">Os nossos animais</a></li>
+                    <li class="nav-item"><a class="nav-item nav-link active" asp-area="" asp-controller="Home" asp-action="Contact">Contactos</a></li>
+                    <li class="nav-item"><a class="nav-item nav-link active" asp-area="" asp-controller="Home" asp-action="About">Sobre nós</a></li>
                     @if (ViewData["User_Name"] != null)
                     {
-                        <li><a asp-area="" asp-controller="Users" asp-action="Edit" asp-route-id="@ViewData["UserID"]" style="color: black;font-weight: bold;">Welcome @ViewData["User_Name"]!</a></li>
+                        if (ViewData["Ad"] != null)
+                        {
+                            <li class="navbar-right"><a class="nav-item nav-link active" asp-area="" asp-controller="Administration" asp-action="Index">Administração</a></li>
+                        }
+                        <li class="navbar-right"><a class="nav-item nav-link active" asp-area="" asp-controller="Users" asp-action="Profile" asp-route-id="@ViewData["UserID"]">Benvindo, @ViewData["User_Name"]!</a></li>
+                        <li class="navbar-right"><a class="nav-item nav-link active" asp-area="" asp-controller="Users" asp-action="Logout" asp-route-id="@ViewData["UserID"]">Logout</a></li>
                     }
                     else
                     {
-                        <li><a asp-area="" asp-controller="Home" asp-action="Account" style="color: black;">Account</a></li>
+                        Html.RenderPartial("_Menu");
                     }
                 </ul>
             </div>
         </div>
     </nav>
+    <a class="food" asp-controller="Donations" asp-action="StripeIndex">
+        <div>
+            <img title="Doações" class="donations-image" width="40px" alt="Doações" src="~/images/dog-food.png" />
+        </div>
+    </a>
+
+
 
     <partial name="_CookieConsentPartial" />
 
-    <div class="container body-content">
+    <div class="body-content">
         @RenderBody()
-        <hr />
-        <footer>
-            <p>&copy; ESW 2018/19 - Grupo 2 {Roberto Pato, Miguel Gomes, Rafael Botas, David Antunes, David Afonso}</p>
-        </footer>
     </div>
+
+    <!-- Footer -->
+    <footer class="page-footer font-small blue">
+
+        <!-- Copyright -->
+        <div class="footer-copyright text-center py-3">
+            <p>
+                &copy; 2018 Copyright:
+                <a href="https://mdbootstrap.com/education/bootstrap/"> MDBootstrap.com</a>
+                </br>
+                &copy; ESW 2018/19 - Grupo 2 { Roberto Pato, Miguel Gomes, Rafael Botas, David Antunes, David Afonso }
+            </p>
+        </div>
+        <!-- Copyright -->
+
+    </footer>
 
     <environment include="Development">
         <script src="~/lib/jquery/dist/jquery.js"></script>
@@ -90,8 +125,8 @@
     </environment>
     @if (TempData["Message"] != null)
     {
-    <script> $(document).ready(function () { alert('@TempData["Message"].ToString()'); }); </script>
+        <script> $(document).ready(function () { alert('@Html.Raw(TempData["Message"].ToString())'); }); </script>
     }
     @RenderSection("Scripts", required: false)
 </body>
-    </html>
+</html>

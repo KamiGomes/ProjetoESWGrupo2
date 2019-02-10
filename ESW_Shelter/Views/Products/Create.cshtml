@@ -1,0 +1,70 @@
+﻿@model ESW_Shelter.Models.Product
+
+@{
+    ViewData["Title"] = "Create";
+    Layout = "~/Views/Shared/_BackLayout.cshtml";
+}
+
+<h2>Criar um novo Produto</h2>
+
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Quantity" class="control-label"></label>
+                <input asp-for="Quantity" class="form-control" />
+                <span asp-validation-for="Quantity" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="WeekStock" class="control-label"></label>
+                <input asp-for="WeekStock" class="form-control" />
+                <span asp-validation-for="WeekStock" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="MonthStock" class="control-label"></label>
+                <input asp-for="MonthStock" class="form-control" />
+                <span asp-validation-for="MonthStock" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="AnimalTypeFK" class="control-label"></label>
+                <select class="input-md" name="AnimalTypeFK" id="AnimalTypeFK">
+                    <option value="0" style="color:#ccc !important;">
+                        Por favor seleccione um tipo de animal!
+                    </option>
+                    @foreach (AnimalType item in ViewBag.AnimalsTypes)
+                    {
+                    <option value="@item.AnimalTypeID" @(Model.AnimalType= =item.AnimalTypeID ? "selected" : "" )>
+                        @item.Name
+                    </option>
+                    }
+                </select>
+                <span asp-validation-for="AnimalTypeFK" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ProductTypeFK" class="control-label"></label>
+                <select class="input-md" name="ProductTypeFK" id="ProductTypeFK">
+                    <option value="0" style="color:#ccc !important;">
+                        Por Favor seleccione um tipo de produto!
+                    </option>
+                    @foreach (ProductType item in ViewBag.ProductType)
+                    {
+                    <option value="@item.ProductTypeID" @(Model.ProductType= =item.ProductTypeID ? "selected" : "" )>
+                        @item.Name
+                    </option>
+                    }
+                </select>
+                <span asp-validation-for="ProductTypeFK" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Guardar" class="btn btn-default" />
+            </div>
+        </form>
+    </div>
+</div>

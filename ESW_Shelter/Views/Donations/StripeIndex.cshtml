@@ -1,0 +1,65 @@
+﻿@using Microsoft.AspNetCore.Http;
+
+@{
+    var username = Context.Session.GetString("User_Name");
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var plans = ViewData["plans"] as Stripe.Plan[];
+}
+
+<div class="row donations">
+    <h2>Doações:</h2>
+    <div class="col-md-6 donations-data">
+        <p>
+            Traga aos nossos patudos comida, brinquedos ou mantas ou opte por ser associado da Associação dos Amigos dos Animais Abandonados da Moita:
+        </p>
+        <h4>Planos de Associado:</h4>
+        <ul id="planList">
+            @for (var i = 0; i < plans.Length; i++)
+            {
+                double value = Math.Truncate((double)plans[i].Amount) / 100;
+                <li data-id=@plans[@i].Id>@plans[@i].Nickname - @value.ToString("0.00")€</li>
+            }
+        </ul>
+        <div class="button-wrapper">
+            @if (string.IsNullOrEmpty(username))
+            {
+                <p class="not-logged-in">Para poder aderir ao nosso sistema de doações mensais terá de se registar!</p>
+            }
+            else
+            {
+                <div id="planCancel" class="btn button-image" style="display:none;">Cancelar</div>
+                <div id="planSelector" class="btn btn-primary button-image" data-enabled="false">Ativar seleção</div>
+            }
+        </div>
+    </div>
+    <div class="col-md-6">
+        <img src="~/images/dog_food.png">
+    </div>
+    <div id="cardModal" class="modal">
+        <form asp-action="Card" asp-controller="Users">
+            <h3>Adicionar Cartão:</h3>
+            <div class="form-group">
+                <label for="cardNumber" class="control-label">Número do Cartão:</label>
+                <input id="cardNumber" class="form-control" placeholder="1111 2222 3333 4444" maxlength="16" />
+            </div>
+            <div class="form-group date">
+                <div>
+                    <label for="cardMonth" class="control-label">Mês:</label>
+                    <input id="cardMonth" class="form-control" placeholder="12" maxlength="2" />
+                </div>
+                <div>
+                    <label for="cardYear" class="control-label">Ano:</label>
+                    <input id="cardYear" class="form-control" placeholder="19" maxlength="2" />
+                </div>
+                <div>
+                    <label for="cardCvc" class="control-label">CVC:</label>
+                    <input id="cardCvc" class="form-control" placeholder="123" maxlength="3" />
+                </div>
+            </div>
+            <div class="form-group buttons">
+                <div class="btn button-image cancel">Cancelar</div>
+                <div class="btn btn-primary button-image add-card">Adicionar</div>
+            </div>
+        </form>
+    </div>
+</div>

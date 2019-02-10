@@ -1,0 +1,49 @@
+﻿@model ESW_Shelter.Models.Users
+@{
+    ViewData["Title"] = "Account";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="row register">
+    <div class="col-md-2 message">
+        <h2>Comece por ajudar os nossos patudos efetuando o registo!</h2>
+    </div>
+    <div class="col-md-2">
+        <form asp-action="Register" asp-controller="Users">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Email" class="control-label"></label>
+                <input asp-for="Email" class="form-control" />
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Password" class="control-label"></label>
+                <input asp-for="Password" id="password" class="form-control" />
+                <span asp-validation-for="Password" class="text-danger"></span><br />
+                <input type="checkbox" onchange="document.getElementById('password').type = this.checked ? 'text' : 'password'">
+                Mostrar Password
+            </div>
+            <div class="form-group">
+                <input asp-for="RoleID" class="form-control" value="1" type="hidden" />
+            </div>
+            <div class="form-group">
+                <input asp-for="ConfirmedEmail" class="form-control" value="false" type="hidden" />
+                <input asp-for="Phone" class="form-control" value="000000000" type="hidden" />
+                <input asp-for="PostalCode" class="form-control" value="0000-000" type="hidden" />
+                <input asp-for="Street" class="form-control" value="" type="hidden" />
+                <input asp-for="City" class="form-control" value="" type="hidden" />
+                <input asp-for="DateOfBirth" class="form-control" value="1990/01/01" type="hidden" />
+            </div>
+            <div class="form-group buttons">
+                <input type="reset" value="Limpar" class="btn btn-primary button-image right" />
+                <input type="submit" value="Registar" class="btn btn-primary button-image right" />
+            </div>
+        </form>
+    </div>
+</div>
+
+

@@ -1,0 +1,58 @@
+﻿@model ESW_Shelter.Models.Product
+
+@{
+    ViewData["Title"] = "Delete";
+    Layout = "~/Views/Shared/_BackLayout.cshtml";
+}
+
+<h2>Eliminar - @Model.Name</h2>
+
+<h3>Têm a certeza que quer elminar @Model.Name? Avisa-se que se algum Donativo ou Animal que tiver relacionado com este Produto, terá que alterar antes de eliminar!</h3>
+<div>
+    <h4>Product</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Quantity)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Quantity)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.WeekStock)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.WeekStock)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.MonthStock)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.MonthStock)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.AnimalTypeFK)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.AnimaltypeName)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.ProductTypeFK)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ProductTypeName)
+        </dd>
+    </dl>
+    
+    <form asp-action="Delete">
+        <input type="hidden" asp-for="ProductID" />
+        <input type="submit" value="Eliminar" class="btn btn-default" /> |
+        <a asp-action="Index">Voltar atrás</a>
+    </form>
+</div>

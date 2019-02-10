@@ -1,0 +1,117 @@
+﻿
+@model List<SimpleReportViewModel>
+@{
+    var XLabels = Newtonsoft.Json.JsonConvert.SerializeObject(Model.Select(x => x.DimensionOne).ToList());
+    var YValues = Newtonsoft.Json.JsonConvert.SerializeObject(Model.Select(x => x.Quantity).ToList());
+    ViewData["Title"] = "Estatisticas";
+    Layout = "~/Views/Shared/_BackLayout.cshtml";
+    string typeOfChart = ViewBag.typeOfChart;
+    string labelToUse = ViewBag.labelToUse;
+}
+
+<div class="row">
+    <div class="col-lg-2">
+        <form asp-controller="Statistics" asp-action="Index" class="form-statistics">
+            <select id="statsSelect" name="statistic">
+                <option value="-1">Selecionar dados</option>
+                <option value="0">Animais Sem Donos</option>
+                <option value="1">Animais Sem Padrinhos</option>
+                <option value="2">Animais Com Necessidades Especiais</option>
+                <option value="3">Logins Efetuados Por Dia</option>
+                <option value="5">Doações Efetuados Por Dia</option>
+                <option value="0">Produtos Mais Doados Por Dia</option>
+                <option value="7">Registos Efetuados Por Dia</option>
+                <!-- <option value="8">Quantidade do Stock de Produtos Existentes [Para semana e Mês]</option>-->
+            </select>
+
+            <select id="grafSelect" name="graf">
+                <option value="-1">Tipo de Gráfico</option>
+                <option value="0">Gráfico de Barras</option>
+                <option value="1">Gráfico Circular</option>
+                <option value="2">Gráfico Linear</option>
+            </select>
+
+            <input type="submit" disabled class="btn btn-primary button-image right" id="statisticsSubmit" value="Enviar" />
+        </form>
+    </div>
+    <div class="col-lg-8">
+        <div class="chart-container">
+            <canvas id="chart" style="width:100%; height:500px"></canvas>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+
+            $(function () {
+        var chartName = "chart";
+            var ctx = document.getElementById(chartName).getContext('2d');
+            var data = {
+                    labels: @Html.Raw(XLabels),
+                    datasets: [{
+                        label: "@Html.Raw(labelToUse)",
+                        backgroundColor: [
+                            'rgba(255, 99, 132, 0.2)',
+                            'rgba(54, 162, 235, 0.2)',
+                            'rgba(255, 206, 86, 0.2)',
+                            'rgba(75, 192, 192, 0.2)',
+                            'rgba(153, 102, 255, 0.2)',
+                            'rgba(255, 159, 64, 0.2)',
+                            'rgba(255, 0, 0)',
+                            'rgba(0, 255, 0)',
+                            'rgba(0, 0, 255)',
+                            'rgba(192, 192, 192)',
+                            'rgba(255, 255, 0)',
+                            'rgba(255, 0, 255)'
+                        ],
+                        borderColor: [
+                            'rgba(255,99,132,1)',
+                            'rgba(54, 162, 235, 1)',
+                            'rgba(255, 206, 86, 1)',
+                            'rgba(75, 192, 192, 1)',
+                            'rgba(153, 102, 255, 1)',
+                            'rgba(255, 159, 64, 1)',
+                            'rgba(255, 0, 0)',
+                            'rgba(0, 255, 0)',
+                            'rgba(0, 0, 255)',
+                            'rgba(192, 192, 192)',
+                            'rgba(255, 255, 0)',
+                            'rgba(255, 0, 255)'
+                        ],
+                        borderWidth: 1,
+                        data: @Html.Raw(YValues)
+        }]
+                };
+
+    var options = {
+                    maintainAspectRatio: false,
+                    scales: {
+                        yAxes: [{
+                            ticks: {
+                                min: 0,
+                                beginAtZero: true
+                            },
+                            gridLines: {
+                                display: true,
+                                color: "rgba(255,99,164,0.2)"
+                            }
+    }],
+                        xAxes: [{
+                            ticks: {
+                                min: 0,
+                                beginAtZero: true
+                            },
+                            gridLines: {
+                                display: false
+                            }
+                        }]
+                    }
+                };
+
+           var myChart = new  Chart(ctx, {
+                    options: options,
+                    data: data,
+                    type: '@typeOfChart'
+
+                });
+            });
+</script>

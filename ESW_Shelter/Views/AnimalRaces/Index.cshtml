@@ -1,0 +1,45 @@
+﻿@model IEnumerable<ESW_Shelter.Models.AnimalRace>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_BackLayout.cshtml";
+    IQueryable<RoleAuthorization> getPermissions = ViewBag.Permission;
+}
+
+<h2>
+    Raças de animais - @if (getPermissions.Where(e => e.ComponentFK == 7 && e.Create == true).Any())
+    {
+            <a asp-action="Create">Criar uma nova raça animal</a>
+    }
+</h2>
+<hr />
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @if (getPermissions.Where(e => e.ComponentFK == 7 && e.Update == true).Any())
+                    {
+                        <a asp-action="Edit" asp-route-id="@item.AnimalRaceID">Editar </a>
+                    }
+                    @if (getPermissions.Where(e => e.ComponentFK == 7 && e.Delete == true).Any())
+                    {
+                        <a asp-action="Delete" asp-route-id="@item.AnimalRaceID"> Eliminar</a>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
