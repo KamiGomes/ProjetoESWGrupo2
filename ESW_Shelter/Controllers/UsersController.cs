@@ -421,6 +421,9 @@ namespace ESW_Shelter.Controllers
             {
                 return NotFound();
             }
+            string date31string = users.DateOfBirth.ToString("yyyy/MM/dd");
+            users.DateOfBirth = DateTime.ParseExact(date31string, "yyyy/MM/dd", null);
+
             ViewBag.RoleTypes = _context.Roles.AsParallel();
             return View(users);
         }
